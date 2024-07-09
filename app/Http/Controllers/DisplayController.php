@@ -13,7 +13,7 @@ class DisplayController extends Controller
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
         $today = $now->format('d-m-Y');
-        $data = JadwalOK::where('tgl_operasi', $today)->get();
+        $data = JadwalOK::where('tgl_operasi', $today)->orderBy('jam_operasi')->get();
         return view('pages.display', compact('data', 'today'));
     }
 }

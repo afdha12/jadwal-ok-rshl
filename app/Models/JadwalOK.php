@@ -12,6 +12,6 @@ class JadwalOK extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [ 'tgl_operasi', 'jam_operasi', 'nama_pasien', 'usia', 'no_cm', 'diagnosa','tindakan', 'operator', 'ruang_operasi'];
+    protected $fillable = [ 'tgl_operasi', 'jam_operasi', 'nama_pasien', 'usia', 'no_cm', 'diagnosa','tindakan', 'operator', 'ruang_operasi', 'jaminan', 'profilaksis'];
 
 }
