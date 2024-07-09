@@ -78,6 +78,20 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label for="colFormLabel" class="col-sm-4 col-form-label">Jaminan</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="jaminan" name="jaminan"
+                                value="{{ $data->jaminan }}">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="colFormLabel" class="col-sm-4 col-form-label">Profilaksis</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="profilaksis" name="profilaksis"
+                                value="{{ $data->profilaksis }}">
+                            </div>
+                        </div>
                         <table class="table table-borderless">
                             <tr>
                                 <td class="text-center"><a class="btn btn-danger mt-2"

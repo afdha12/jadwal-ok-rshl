@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('tindakan');
             $table->string('operator');
             $table->string('ruang_operasi');
+            $table->string('jaminan');
+            $table->string('profilaksis');
             // $table->timestamps();
         });
     }

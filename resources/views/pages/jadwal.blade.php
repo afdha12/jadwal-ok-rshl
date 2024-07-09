@@ -17,6 +17,8 @@
                     <th class="text-center">Tindakan</th>
                     <th class="text-center">Operator</th>
                     <th class="text-center">Ruang Operasi</th>
+                    <th class="text-center">Jaminan</th>
+                    <th class="text-center">Profilaksis</th>
                     <th colspan="2" class="text-center">Action</th>
                     <!-- Add more table headers as needed -->
                 </tr>
@@ -34,6 +36,8 @@
                         <td>{{ $item->tindakan }}</td>
                         <td class="text-center">{{ $item->operator }}</td>
                         <td class="text-center">{{ $item->ruang_operasi }}</td>
+                        <td class="text-center">{{ $item->jaminan }}</td>
+                        <td class="text-center">{{ $item->profilaksis }}</td>
                         <td class="text-center">
                             <a href="{{ route('schedule.edit', $item->id) }}"
                                 class="btn btn-outline-primary btn-sm mr-2"><i class="bi bi-pencil"></i></i></a>

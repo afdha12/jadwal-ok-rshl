@@ -1,6 +1,6 @@
 @extends('components.layout')
 
-@section('title', 'Dashboard')
+@section('title', 'Input Jadwal Operasi')
 
 @section('content')
 
@@ -55,17 +55,34 @@
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-4 col-form-label">Operator</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="operator" name="operator">
+                                {{-- <input type="text" class="form-control" id="operator" name="operator"> --}}
+                                <select name="operator" class="form-control">
+                                    @foreach ($operators as $operator)
+                                        <option value="{{ $operator }}">{{ $operator }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                        <div class="row mb-5">
+                        <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-4 col-form-label">Ruang Operasi</label>
                             <div class="col-sm-8">
                                 <select name="ruang_operasi" class="form-control">
-                                    <option value="Kamar 1">Kamar 1</option>
-                                    <option value="Kamar 2">Kamar 2</option>
-                                    <option value="Kamar 3">Kamar 3</option>
+                                    @foreach ($optionKamar as $ruang_operasi)
+                                        <option value="{{ $ruang_operasi }}">{{ $ruang_operasi }}</option>
+                                    @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="colFormLabel" class="col-sm-4 col-form-label">Jaminan</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="jaminan" name="jaminan">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <label for="colFormLabel" class="col-sm-4 col-form-label">Profilaksis</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="profilaksis" name="profilaksis">
                             </div>
                         </div>
                         <table class="table table-borderless">

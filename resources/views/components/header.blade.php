@@ -4,7 +4,7 @@
             <button class="btn btn-outline" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
                 aria-controls="offcanvasWithBothOptions"><span class="navbar-toggler-icon"></span></button>
         </div>
-        <div class="col align-self-center">
+        <div class="col mt-1">
             <h3>JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG</h3>
         </div>
     </div>

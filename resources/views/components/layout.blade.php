@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="css/app.css">
 
     <title>@yield('title')</title>
+    <link rel="icon" type="image/x-icon" href="img/hermina.png">
 
     <style>
         /* Chrome, Safari, Edge, Opera */
@@ -47,6 +48,7 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
     <div>
         @include('components.header')
         <div class="row mt-4 mx-1">
@@ -83,8 +85,8 @@
             noCalendar: true,
             dateFormat: "H:i", // Format waktu
             time_24hr: true, // Format waktu 24 jam
-            defaultHour: 12, // Jam default saat pemilihan waktu
-            defaultMinute: 30
+            defaultHour: 08, // Jam default saat pemilihan waktu
+            defaultMinute: 00
         });
     </script>
 
