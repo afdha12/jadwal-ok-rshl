@@ -10,10 +10,12 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
+
 
     <div class="wrapper">
-        <div class="title">
-            Login Form
+        <div class="title p-3">
+            <img src="img/logo.jpg" width="150" alt="">
         </div>
         <form action="{{ route('auth') }}" method="post">
             @csrf
