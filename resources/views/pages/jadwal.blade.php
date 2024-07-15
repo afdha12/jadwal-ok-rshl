@@ -39,7 +39,7 @@
                         <td class="text-center">{{ $item->ruang_operasi }}</td>
                         <td class="text-center">{{ $item->jaminan }}</td>
                         <td class="text-center">{{ $item->profilaksis }}</td>
-                        <td class="text-center" style="background-color: {{ $item->status == 'Terlaksana' ? 'green' : 'red' }}; color: white;">{{ $item->status }}</td>
+                        <td class="text-center" style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : 'red' }}; color: white;">{{ $item->status }}</td>
                         <td class="text-center">
                             <a href="{{ route('schedule.edit', $item->id) }}"
                                 class="btn btn-outline-primary btn-sm mr-2"><i class="bi bi-pencil"></i></i></a>
