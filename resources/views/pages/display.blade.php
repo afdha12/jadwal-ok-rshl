@@ -55,7 +55,9 @@
                             <td>{{ $item->tindakan }}</td>
                             <td class="text-center">{{ $item->operator }}</td>
                             <td class="text-center">{{ $item->ruang_operasi }}</td>
-                            <td class="text-center">{{ $item->status }}</td>
+                            <td class="text-center"
+                                style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : 'red' }}; color: white;">
+                                {{ $item->status }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -87,6 +89,7 @@
                             <td>${data.data.tindakan}</td>
                             <td class="text-center">${data.data.operator}</td>
                             <td class="text-center">${data.data.ruang_operasi}</td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : 'red'}; color: white;">${data.data.status}</td>
                           </tr>`;
             $('#data-table-body').append(newRow);
             updateRowNumbers();
@@ -105,6 +108,9 @@
                     row.find('td:eq(6)').text(data.data.tindakan);
                     row.find('td:eq(7)').text(data.data.operator);
                     row.find('td:eq(8)').text(data.data.ruang_operasi);
+                    row.find('td:eq(9)').text(data.data.status)
+                        .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : 'red')
+                        .css('color', 'white');
                 } else {
                     var newRow = `<tr data-id="${data.data.id}">
                             <td class="text-center"></td>
@@ -116,6 +122,7 @@
                             <td>${data.data.tindakan}</td>
                             <td class="text-center">${data.data.operator}</td>
                             <td class="text-center">${data.data.ruang_operasi}</td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : 'red'}; color: white;">${data.data.status}</td>
                           </tr>`;
                     $('#data-table-body').append(newRow);
                     updateRowNumbers();
