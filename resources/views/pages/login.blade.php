@@ -12,7 +12,6 @@
 <body>
     @include('sweetalert::alert')
 
-
     <div class="wrapper">
         <div class="title p-3">
             <img src="img/logo.jpg" width="150" alt="">
@@ -20,14 +19,14 @@
         <form action="{{ route('auth') }}" method="post">
             @csrf
             <div class="field">
-                <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                <input type="text" name="username" class="form-control"
                     id="username" autofocus required value="{{ old('username') }}">
                 <label>Username</label>
-                @error('username')
+                {{-- @error('username')
                     <div class="invalid-feedbaack">
                         {{ $message }}
                     </div>
-                @enderror
+                @enderror --}}
             </div>
             <div class="field">
                 <input type="password" name="password" class="form-control" id="password" required>
@@ -49,21 +48,6 @@
                 Not a member? <a href="#">Signup now</a>
             </div> --}}
         </form>
-        @if (session()->has('success'))
-            <div class = "alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class = "btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session()->has('loginError'))
-            <div class = "alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('loginError') }}
-                <button type="button" class = "btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        {{-- <div class="row justify-content-center">
-        </div> --}}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">

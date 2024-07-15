@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class UserController extends Controller
 {
@@ -21,6 +23,13 @@ class UserController extends Controller
             $request->session()->regenerate();
             return redirect()->intended('/schedule');
         };
-        return back()->with('loginError', 'Login Failed : Wrong username or password');
+        return back()->withErrors('Username atau Password salah !');
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }

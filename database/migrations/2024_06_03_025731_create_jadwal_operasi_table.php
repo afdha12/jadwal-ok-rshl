@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('ruang_operasi');
             $table->string('jaminan');
             $table->string('profilaksis');
+            $table->string('status');
             // $table->timestamps();
         });
     }

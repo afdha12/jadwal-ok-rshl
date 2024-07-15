@@ -40,6 +40,7 @@
                         <th class="text-center">Tindakan</th>
                         <th class="text-center">Operator</th>
                         <th class="text-center">Ruang Operasi</th>
+                        <th class="text-center">Status</th>
                     </tr>
                 </thead>
                 <tbody id="data-table-body" class="px-3">
@@ -54,6 +55,7 @@
                             <td>{{ $item->tindakan }}</td>
                             <td class="text-center">{{ $item->operator }}</td>
                             <td class="text-center">{{ $item->ruang_operasi }}</td>
+                            <td class="text-center">{{ $item->status }}</td>
                         </tr>
                     @endforeach
                 </tbody>

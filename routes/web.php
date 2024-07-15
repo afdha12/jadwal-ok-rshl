@@ -18,8 +18,9 @@ use App\Http\Controllers\DisplayController;
 |
 */
 
-Route::get('/', [UserController::class, 'index'])->name('login');
-Route::post('/', [UserController::class, 'auth'])->name('auth');
+Route::get('/', [UserController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/', [UserController::class, 'auth'])->name('auth')->middleware('guest');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::resource('schedule', JadwalController::class);
+Route::resource('schedule', JadwalController::class)->middleware('auth');
 Route::get('/display', [DisplayController::class, 'display'])->name('display');

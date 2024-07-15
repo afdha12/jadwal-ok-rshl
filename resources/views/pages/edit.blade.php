@@ -67,7 +67,7 @@
                                     value="{{ $data->operator }}">
                             </div>
                         </div>
-                        <div class="row mb-5">
+                        <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-4 col-form-label">Ruang Operasi</label>
                             <div class="col-sm-8">
                                 <select name="ruang_operasi" class="form-control">
@@ -90,6 +90,17 @@
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="profilaksis" name="profilaksis"
                                 value="{{ $data->profilaksis }}">
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <label for="colFormLabel" class="col-sm-4 col-form-label">Status</label>
+                            <div class="col-sm-8">
+                                <select name="status" class="form-control">
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status }}"
+                                            @if ($status == $data->status) selected @endif>{{ $status }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <table class="table table-borderless">

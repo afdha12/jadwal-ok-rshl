@@ -25,6 +25,11 @@
     <link rel="icon" type="image/x-icon" href="img/hermina.png">
 
     <style>
+        body {
+            padding-top: 64px;
+            /* Sesuaikan dengan tinggi navbar */
+        }
+
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
@@ -36,7 +41,6 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
-        
     </style>
 
     <script>
@@ -51,7 +55,7 @@
     @include('sweetalert::alert')
     <div>
         @include('components.header')
-        <div class="row mt-4 mx-1">
+        <div>
             {{-- @include('components.sidebar') --}}
             <main>
                 @yield('content')

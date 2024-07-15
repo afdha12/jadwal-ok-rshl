@@ -1,13 +1,25 @@
-<nav class="navbar sticky-top" style="background-color: #618264">
-    <div class="row align-items-start text-center">
-        <div class="col-1">
-            <button class="btn btn-outline" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-                aria-controls="offcanvasWithBothOptions"><span class="navbar-toggler-icon"></span></button>
-        </div>
-        <div class="col mt-1">
-            <h3>JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG</h3>
+<header class="fixed-top" style="background-color: #F3EEEA">
+    {{-- <nav class="navbar sticky-top" style="background-color: #F3EEEA"> --}}
+    <div class="container-fluid">
+        <div class="d-flex align-items-center">
+            <div class="px-2">
+                <button class="btn btn-outline" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+                    aria-controls="offcanvasWithBothOptions"><i class="bi bi-list fs-3"></i></button>
+            </div>
+            <div class="align-self-center font-monospace fs-4 fw-bold">JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG</div>
+            <div class="ms-auto me-2 px-2 justify-content-end">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button class="btn btn-sm btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
+                </form>
+            </div>
         </div>
     </div>
+    {{-- <div class="d-flex">
+        <div class="p-2">Flex item</div>
+        <div class="p-2">Flex item</div>
+        <div class="ms-auto p-2 justify-content-end">Flex item</div>
+    </div> --}}
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
         aria-labelledby="offcanvasWithBothOptionsLabel">
@@ -25,24 +37,25 @@
                     <a class="nav-link active" href="{{ route('display') }}" target="blank">Link Display</a>
                 </li>
                 {{-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li> --}}
+                        <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li> --}}
             </ul>
             {{-- <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form> --}}
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form> --}}
         </div>
     </div>
-</nav>
+    {{-- </nav> --}}
+</header>

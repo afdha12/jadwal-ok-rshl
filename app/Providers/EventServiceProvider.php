@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\JadwalOK;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,7 +28,16 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        JadwalOK::saving(function ($data) {
+            // List of columns to convert to uppercase
+            $columnsToUppercase = [ 'tgl_operasi', 'jam_operasi', 'nama_pasien', 'usia', 'no_cm', 'diagnosa','tindakan', 'operator', 'ruang_operasi', 'jaminan', 'profilaksis', 'status'];
+
+            foreach ($columnsToUppercase as $column) {
+                if (isset($data->{$column})) {
+                    $data->{$column} = strtoupper($data->{$column});
+                }
+            }
+        });
     }
 
     /**
