@@ -62,10 +62,12 @@
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-4 col-form-label">Operator</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="operator" name="operator"
-                                    value="{{ $data->operator }}">
-                            </div>
+                            <select name="operator" class="form-control">
+                                @foreach ($operators as $ruang_operasi)
+                                    <option value="{{ $operator }}"
+                                        @if ($operator == $data->operator) selected @endif>{{ $operator }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-4 col-form-label">Ruang Operasi</label>
