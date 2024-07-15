@@ -30,7 +30,7 @@ class EventServiceProvider extends ServiceProvider
     {
         JadwalOK::saving(function ($data) {
             // List of columns to convert to uppercase
-            $columnsToUppercase = [ 'tgl_operasi', 'jam_operasi', 'nama_pasien', 'usia', 'no_cm', 'diagnosa','tindakan', 'operator', 'ruang_operasi', 'jaminan', 'profilaksis', 'status'];
+            $columnsToUppercase = [ 'tgl_operasi', 'jam_operasi', 'nama_pasien', 'usia', 'no_cm', 'diagnosa','tindakan', 'ruang_operasi', 'jaminan', 'profilaksis', 'status'];
 
             foreach ($columnsToUppercase as $column) {
                 if (isset($data->{$column})) {
