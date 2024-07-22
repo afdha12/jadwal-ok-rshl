@@ -6,11 +6,15 @@
                 <button class="btn btn-outline" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
                     aria-controls="offcanvasWithBothOptions"><i class="bi bi-list fs-3"></i></button>
             </div>
-            <div class="align-self-center font-monospace fs-4 fw-bold">JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG</div>
+            <a href="{{ route('schedule.index') }}" class="text-decoration-none text-reset">
+                <div class="align-self-center font-monospace fs-4 fw-bold">JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG
+                </div>
+            </a>
             <div class="ms-auto me-2 px-2 justify-content-end">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button class="btn btn-sm btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
+                    <button class="btn btn-sm btn-outline-danger font-monospace">Logout <i
+                            class="bi bi-box-arrow-right"></i></button>
                 </form>
             </div>
         </div>
