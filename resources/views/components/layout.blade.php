@@ -77,7 +77,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-        flatpickr("#tgl_operasi", {
+        flatpickr("#tgl_operasi, #start_date, #end_date", {
             dateFormat: "d-m-Y", // Format tanggal yang diinginkan (misalnya: YYYY-MM-DD)
             // Opsi tambahan jika diperlukan
             // onChange: function(selectedDates, dateStr, instance) {

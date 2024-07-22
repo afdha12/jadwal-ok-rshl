@@ -16,9 +16,25 @@ class JadwalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = JadwalOK::orderBy('tgl_operasi', 'desc')->get();
+        $query = JadwalOK::query();
+
+        // Filter berdasarkan rentang tanggal lahir
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->start_date;
+            $endDate = $request->end_date;
+            $query->whereBetween('tgl_operasi', [$startDate, $endDate]);
+        }
+        // Filter berdasarkan alamat
+        if ($request->filled('ruang_operasi')) {
+            $query->where('ruang_operasi', 'LIKE', '%' . $request->ruang_operasi . '%');
+        }
+
+        $title = 'Delete User!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        $data = $query->orderBy('tgl_operasi', 'desc')->paginate(3);
         return view('pages.jadwal', compact('data'));
     }
 
@@ -125,7 +141,7 @@ class JadwalController extends Controller
         if ($newDate === $today) {
             broadcast(new DataUpdated($data));
         }
-        return redirect()->route('schedule.index');
+        return redirect()->route('schedule.index')->with('success', 'Data berhasil diubah.');
     }
 
     /**
@@ -144,9 +160,6 @@ class JadwalController extends Controller
             broadcast(new DataDeleted($id));
         }
         $data->delete();
-        Alert::error('Error Title', 'Error Message');
-
         return redirect()->back()->with('success', 'Data Pasien berhasil dihapus');
-
     }
 }
