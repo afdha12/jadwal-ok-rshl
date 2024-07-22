@@ -34,7 +34,7 @@ class JadwalController extends Controller
         $title = 'Delete User!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        $data = $query->orderBy('tgl_operasi', 'desc')->paginate(3);
+        $data = $query->orderBy('tgl_operasi', 'desc')->paginate(30);
         return view('pages.jadwal', compact('data'));
     }
 
