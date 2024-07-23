@@ -73,7 +73,7 @@
                         <td class="text-center">{{ $item->jaminan }}</td>
                         <td class="text-center">{{ $item->profilaksis }}</td>
                         <td class="text-center"
-                            style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : 'red' }}; color: white;">
+                            style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : 'red') }}; color: white;">
                             {{ $item->status }}</td>
                         <td class="text-center">
                             <a href="{{ route('schedule.edit', $item->id) }}"

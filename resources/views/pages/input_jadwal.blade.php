@@ -13,43 +13,54 @@
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Tanggal Operasi</label>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control required text-uppercase" id="tgl_operasi" name="tgl_operasi">
+                                <input type="date" class="form-control required text-uppercase" id="tgl_operasi"
+                                    name="tgl_operasi">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Jam Operasi</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control required text-uppercase" id="jam_operasi" name="jam_operasi">
+                                <input type="text" class="form-control required text-uppercase" id="jam_operasi"
+                                    name="jam_operasi">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Nama Pasien</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control required text-uppercase" id="nama_pasien" name="nama_pasien">
+                                <input type="text" class="form-control required text-uppercase" id="nama_pasien"
+                                    name="nama_pasien">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="colFormLabel" class="col-sm-3 col-form-label">Usia</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control required text-uppercase" id="usia" name="usia">
+                            <div class="col-auto">
+                                <label for="colFormLabel" class="col-form-label">Usia</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control required col-sm-2" aria-describedby="tahun" id="usiaTahun" name="usiaTahun">
+                                    <span class="input-group-text col-sm-2" id="tahun"> tahun</span>
+                                    <input type="number" class="form-control required col-sm-2" aria-describedby="bulan" id="usiaBulan" name="usiaBulan">
+                                    <span class="input-group-text col-sm-2" id="bulan"> bulan</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">No. CM</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control required text-uppercase" id="no_cm" name="no_cm">
+                                <input type="number" class="form-control required text-uppercase" id="no_cm"
+                                    name="no_cm">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Diagnosa</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control required text-uppercase" id="diagnosa" name="diagnosa">
+                                <input type="text" class="form-control required text-uppercase" id="diagnosa"
+                                    name="diagnosa">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Tindakan</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control required text-uppercase" id="tindakan" name="tindakan">
+                                <input type="text" class="form-control required text-uppercase" id="tindakan"
+                                    name="tindakan">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -76,13 +87,15 @@
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Jaminan</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control required text-uppercase" id="jaminan" name="jaminan">
+                                <input type="text" class="form-control required text-uppercase" id="jaminan"
+                                    name="jaminan">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Keterangan</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control required text-uppercase" id="profilaksis" name="profilaksis">
+                                <input type="text" class="form-control required text-uppercase" id="profilaksis"
+                                    name="profilaksis">
                             </div>
                         </div>
                         <div class="row mb-4">
@@ -97,8 +110,10 @@
                         </div>
                         <table class="table table-borderless">
                             <tr>
-                                <td class="text-center"><a class="btn btn-danger mt-2" href = "{{ route('schedule.index') }}">Batal</a></td>
-                                <td class="text-center"><button type="submit" class="btn btn-success mt-2">Simpan</button></td>
+                                <td class="text-center"><a class="btn btn-danger mt-2"
+                                        href = "{{ route('schedule.index') }}">Batal</a></td>
+                                <td class="text-center"><button type="submit"
+                                        class="btn btn-success mt-2">Simpan</button></td>
                             </tr>
                         </table>
                     </form>
