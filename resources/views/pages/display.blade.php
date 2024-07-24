@@ -25,7 +25,7 @@
 <body>
     <div class="m-2">
         <div class="table-responsive">
-            <table class="table table-sm table-bordered align-middle" style="width:100%" id="myTable">
+            <table class="table table-sm table-bordered table-striped align-middle" style="width:100%" id="myTable">
                 <thead class="table-secondary align-middle">
                     <tr>
                         <h3 class="text-center py-3">JADWAL OPERASI RS HERMINA LAMPUNG</h3>
