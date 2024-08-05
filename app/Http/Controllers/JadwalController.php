@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DokterAnestesi;
 use Carbon\Carbon;
 use App\Models\JadwalOK;
 use App\Events\DataAdded;
@@ -31,11 +32,16 @@ class JadwalController extends Controller
             $query->where('ruang_operasi', 'LIKE', '%' . $request->ruang_operasi . '%');
         }
 
+        $now = Carbon::now();
+        $now->setTimezone('Asia/Jakarta');
+        $today = $now->format('d-m-Y');
+        $dokter = DokterAnestesi::where('tanggal', $today)->get();
+
         $title = 'Delete User!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        $data = $query->orderBy('tgl_operasi', 'desc')->paginate(30);
-        return view('pages.jadwal', compact('data'));
+        $data = $query->orderBy('created_at', 'desc')->paginate(30);
+        return view('pages.jadwal', compact('data', 'dokter'));
     }
 
     /**

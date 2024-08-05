@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('jaminan');
             $table->string('profilaksis');
             $table->string('status');
-            // $table->timestamps();
+            $table->timestamps();
         });
     }
 
