@@ -26,9 +26,15 @@
     <div class="m-2">
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped align-middle" style="width:100%" id="myTable">
+                <tr>
+                    <h3 class="text-center py-3">JADWAL OPERASI RS HERMINA LAMPUNG</h3>
+                </tr>
                 <thead class="table-secondary align-middle">
                     <tr>
-                        <h3 class="text-center py-3">JADWAL OPERASI RS HERMINA LAMPUNG</h3>
+                        <td colspan="10" class="pe-1">Dokter Anestesi hari ini : @foreach ($dokter as $anesthesiologist)
+                                {{ $anesthesiologist->nama_dokter }}
+                            @endforeach
+                        </td>
                     </tr>
                     <tr>
                         <th class="text-center">No.</th>

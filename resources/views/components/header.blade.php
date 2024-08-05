@@ -38,6 +38,10 @@
                         Operasi</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ route('dokter.index') }}">Jadwal Dokter
+                        Anestesi</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link active" href="{{ route('display') }}" target="blank">Link Display</a>
                 </li>
                 {{-- <li class="nav-item dropdown">

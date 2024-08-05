@@ -42,17 +42,9 @@
             -moz-appearance: textfield;
         }
     </style>
-
-    <script>
-        function delete() {
-            document.getElementById("deleteForm").submit();
-        }
-    </script>
-
 </head>
 
 <body>
-    @include('sweetalert::alert')
     <div>
         @include('components.header')
         <div>
@@ -62,6 +54,9 @@
             </main>
         </div>
     </div>
+
+    @include('sweetalert::alert')
+
 
     {{-- <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/sidebars.js"></script> --}}
@@ -76,8 +71,11 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
     <script>
-        flatpickr("#tgl_operasi, #start_date, #end_date", {
+        flatpickr("#tgl_operasi, #start_date, #end_date, #tanggal", {
             dateFormat: "d-m-Y", // Format tanggal yang diinginkan (misalnya: YYYY-MM-DD)
             // Opsi tambahan jika diperlukan
             // onChange: function(selectedDates, dateStr, instance) {
@@ -91,6 +89,47 @@
             time_24hr: true, // Format waktu 24 jam
             defaultHour: 08, // Jam default saat pemilihan waktu
             defaultMinute: 00
+        });
+
+        $(document).ready(function() {
+            $('.edit-button').on('click', function() {
+                var id = $(this).data('id');
+                $.get('/dokter-anestesi/' + id + '/edit', function(data) {
+                    // var dataDokter = data.dataDokter;
+                    // var operators = data.operators;
+
+                    // $('#dokterId').val(dataDokter.id);
+                    // $('#tanggal').val(dataDokter.tanggal);
+                    
+                    // $('#nama_dokter').empty();
+                    // if (Array.isArray(operators)){
+                    //     operators.forEach(function(operator) {
+                    //         var selected = (dataDokter.operator === operator) ? 'selected' : '';
+                    //         $('#nama_dokter').append(`<option value="${operator}" ${selected}>${operator}</option>`);
+                    //     });
+                    // }
+                    // $('#editForm').attr('action', '/dokter-anestesi/' + id + '/update');
+                    $('#editModal').modal('show');
+                });
+            });
+
+            // $('#editForm').on('submit', function(e) {
+            //     e.preventDefault();
+            //     var id = $('#dokterId').val();
+            //     $.ajax({
+            //         url: '/dokter-anestesi/' + id + '/update',
+            //         type: 'POST',
+            //         data: {
+            //             _token: $('input[name=_token]').val(),
+            //             tanggal: $('#tanggal').val(),
+            //             nama_dokter: $('#nama_dokter').val()
+            //         },
+            //         success: function(response) {
+            //             alert(response.success);
+            //             location.reload();
+            //         }
+            //     });
+            // });
         });
     </script>
 
