@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\DokterController;
 use Carbon\Carbon;
 use App\Models\JadwalOK;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DokterController;
+use App\Http\Controllers\DokterAnestesiController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\DisplayController;
 
@@ -24,11 +25,13 @@ Route::post('/', [UserController::class, 'auth'])->name('auth')->middleware('gue
 Route::post('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::resource('schedule', JadwalController::class)->middleware('auth');
+Route::resource('dokter-anestesi', DokterAnestesiController::class)->middleware('auth');
 Route::resource('dokter', DokterController::class)->middleware('auth');
+
 Route::get('/display', [DisplayController::class, 'display'])->name('display');
 
-// Route::get('/dokter-anestesi', [DokterController::class, 'index'])->name('dokter.index')->middleware('auth');
-// Route::post('/dokter-anestesi/store', [DokterController::class, 'store'])->name('dokter.store')->middleware('auth');
-// Route::get('/dokter-anestesi/{id}/edit', [DokterController::class, 'edit'])->name('dokter.edit')->middleware('auth');
-// Route::put('/dokter-anestesi/{id}', [DokterController::class, 'update'])->name('dokter.update')->middleware('auth');
-// Route::post('/dokter-anestesi/{id}', [DokterController::class, 'destroy'])->name('dokter.destroy')->middleware('auth');
+// Route::get('/dokter-anestesi', [DokterAnestesiController::class, 'index'])->name('dokter.index')->middleware('auth');
+// Route::post('/dokter-anestesi/store', [DokterAnestesiController::class, 'store'])->name('dokter.store')->middleware('auth');
+// Route::get('/dokter-anestesi/{id}/edit', [DokterAnestesiController::class, 'edit'])->name('dokter.edit')->middleware('auth');
+// Route::put('/dokter-anestesi/{id}', [DokterAnestesiController::class, 'update'])->name('dokter.update')->middleware('auth');
+// Route::post('/dokter-anestesi/{id}', [DokterAnestesiController::class, 'destroy'])->name('dokter.destroy')->middleware('auth');

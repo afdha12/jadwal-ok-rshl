@@ -34,11 +34,15 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ route('schedule.create') }}">Tambah Data
+                    <a class="nav-link active" aria-current="page" href="{{ route('schedule.index') }}">Data
                         Operasi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{ route('dokter.index') }}">Jadwal Dokter
+                    <a class="nav-link active" aria-current="page" href="{{ route('dokter.index') }}">Data Dokter
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ route('dokter-anestesi.index') }}">Dokter
                         Anestesi</a>
                 </li>
                 <li class="nav-item">

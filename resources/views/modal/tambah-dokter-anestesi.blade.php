@@ -2,7 +2,7 @@
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{{ route('dokter.store') }}" method="POST">
+                <form action="{{ route('dokter-anestesi.store') }}" method="POST">
                     @csrf
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Jadwal Anestesi</h1>
@@ -18,7 +18,7 @@
                             {{-- <input type="text" class="form-control" id="nama_dokter" name="nama_dokter"> --}}
                             <select name="nama_dokter" id="nama_dokter" class="form-control required">
                                 @foreach ($operators as $operator)
-                                    <option value="{{ $operator }}">{{ $operator }}</option>
+                                    <option value="{{ $operator->nama_dokter }}">{{ $operator->nama_dokter }}</option>
                                 @endforeach
                             </select>
                         </div>

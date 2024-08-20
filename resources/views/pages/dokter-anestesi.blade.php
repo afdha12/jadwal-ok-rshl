@@ -30,18 +30,18 @@
                             <td class="text-center">{{ $item->tanggal }}</td>
                             <td class="text-center">{{ $item->nama_dokter }}</td>
                             <td class="text-center">
-                                <a href="{{ route('dokter.edit', $item->id) }}" class="btn btn-outline-primary btn-sm mr-2" data-bs-toggle="modal"
+                                <a href="{{ route('dokter-anestesi.edit', $item->id) }}" class="btn btn-outline-primary btn-sm mr-2" data-bs-toggle="modal"
                                     data-bs-target="#editDokter{{ $item->id }}"><i
                                         class="bi bi-pencil"></i></i></a>
                             </td>
                             <td class="text-center">
-                                {{-- <form id="deleteForm" action="{{ route('dokter.destroy', $item->id) }}" method="POST">
+                                {{-- <form id="deleteForm" action="{{ route('dokter-anestesi.destroy', $item->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-outline-danger btn-sm"
                                         data-confirm-delete="true"><i class="bi bi-trash"></i></button>
                                 </form> --}}
-                                <a href="{{ route('dokter.destroy', $item->id) }}" class="btn btn-outline-danger btn-sm"
+                                <a href="{{ route('dokter-anestesi.destroy', $item->id) }}" class="btn btn-outline-danger btn-sm"
                                     data-confirm-delete="true"><i class="bi bi-trash"></i></a>
                             </td>
                         </tr>
