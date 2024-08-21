@@ -1,5 +1,5 @@
 @foreach ($data as $data)
-    <form id="editForm" action="{{ route('dokter.update', $data->id) }}" method="POST">
+    <form id="editForm" action="{{ route('dokter-anestesi.update', $data->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="modal fade" id="editDokter{{ $data->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -21,10 +21,14 @@
                             <label for="textNamaDokter" class="form-label">Dokter Anestesi</label>
                             {{-- <input type="text" class="form-control" id="nama_dokter" name="nama_dokter"> --}}
                             <select name="nama_dokter" id="nama_dokter" class="form-control required">
-                                @foreach ($operators as $nama_dokter)
-                                    <option value="{{ $nama_dokter }}"
-                                        @if ($nama_dokter == $data->nama_dokter) selected @endif>
-                                        {{ $nama_dokter }}</option>
+                                @foreach ($operators as $operator)
+                                    @if (old('nama_dokter', $data->nama_dokter) == $operator->nama_dokter)
+                                        <option value="{{ $operator->nama_dokter }}" selected>
+                                            {{ $operator->nama_dokter }}</option>
+                                    @else
+                                        <option value="{{ $operator->nama_dokter }}">{{ $operator->nama_dokter }}
+                                        </option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>

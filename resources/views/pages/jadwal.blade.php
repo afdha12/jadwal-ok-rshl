@@ -8,29 +8,27 @@
             @csrf
             <div class="container-fluid">
                 <div class="d-flex align-items-center">
-                    <div class="pe-3 align-self-center font-monospace">
+                    <div class="pe-3 font-monospace">
                         Filter Jadwal Operasi
                     </div>
-                    <div class="px-3 align-self-center font-monospace">
+                    <div class="px-3 font-monospace">
                         <input type="text" class="form-control-sm datepicker" placeholder="Pilih Tanggal Mulai"
                             id="start_date" name="start_date" value="{{ request('start_date') }}">
                     </div>
-                    <div class="px-3 align-self-center font-monospace">
+                    <div class="px-3 font-monospace">
                         <input type="text" class="form-control-sm datepicker" placeholder="Sampai Tanggal" id="end_date"
                             name="end_date" value="{{ request('end_date') }}">
                     </div>
 
-                    <div class="px-3 justify-content-end">
+                    <div class="px-3">
                         <button type="submit" class="btn btn-sm btn-primary font-monospace">Cari</button>
                     </div>
-                    <div class="px-3 justify-content-end">
+                    <div class="px-3">
                         <a href="{{ route('schedule.index') }}" class="btn btn-sm btn-secondary">Hapus Filter</a>
                     </div>
-                    <table class="ms-auto justify-content-end">
-                        <tr>
-
-                        </tr>
-                    </table>
+                    <div class="ms-auto justify-content-end">
+                        <a href="{{ route('schedule.create') }}" class="btn btn-sm btn-success">Tambah Data</a>
+                    </div>
                 </div>
             </div>
         </form>

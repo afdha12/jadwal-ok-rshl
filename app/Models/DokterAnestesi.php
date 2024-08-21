@@ -15,4 +15,9 @@ class DokterAnestesi extends Model
 
     protected $fillable = [ 'tanggal', 'nama_dokter'];
 
+    public function dokter()
+    {
+        return $this->belongsTo(Dokter::class);
+    }
+
 }

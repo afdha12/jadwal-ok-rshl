@@ -14,4 +14,8 @@ class JadwalOK extends Model
 
     protected $fillable = [ 'tgl_operasi', 'jam_operasi', 'nama_pasien', 'usia', 'no_cm', 'diagnosa','tindakan', 'operator', 'ruang_operasi', 'jaminan', 'profilaksis', 'status'];
 
+    public function dokter()
+    {
+        return $this->belongsTo(Dokter::class);
+    }
 }
