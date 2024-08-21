@@ -67,21 +67,30 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-        // $data = new JadwalOK();
-        // $data->tgl_operasi = $request->input('tgl_operasi');
-        // $data->jam_operasi = $request->input('jam_operasi');
-        // $data->nama_pasien = $request->input('nama_pasien');
-        // $data->usia = $request->input('usia');
-        // $data->no_cm = $request->input('no_cm');
-        // $data->diagnosa = $request->input('diagnosa');
-        // $data->tindakan = $request->input('tindakan');
-        // $data->operator = $request->input('operator');
-        // $data->ruang_operasi = $request->input('ruang_operasi');
-        // $data->save();
+        $validated = $request->validate([
+            'tgl_operasi' => 'required',
+            'jam_operasi' => 'required',
+            'nama_pasien' => 'required',
+            'age' => 'required',
+            'satuan_usia' => 'required',
+            'no_cm' => 'required',
+            'diagnosa' => 'required',
+            'tindakan' => 'required',
+            'operator' => 'required',
+            'ruang_operasi' => 'required',
+            'jaminan' => 'required',
+            'profilaksis' => 'required',
+            'status' => 'required',
+        ]);
+
+        // Gabungkan usia dengan satuan dan masukkan ke dalam array $validated
+        $validated['usia'] = $validated['age'] . ' ' . $validated['satuan_usia'];
+        unset($validated['age'], $validated['satuan_usia']); // Hapus field 'usia' dan 'satuan_usia' dari array $validated
+
+        $data = JadwalOK::create($validated);
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
         $today = $now->format('d-m-Y');
-        $data = JadwalOK::create($request->all());
         // broadcast(new DataUpdated($data));
         if ($data->tgl_operasi === $today) {
             broadcast(new DataAdded($data));
