@@ -12,8 +12,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="textNamaDokter" class="form-label">Dokter Anestesi</label>
-                            <input type="text" class="form-control" id="nama_dokter" name="nama_dokter">
+                            <label for="textNamaDokter" class="form-label">Nama Dokter</label>
+                            <input type="text" class="form-control" id="nama_dokter" name="nama_dokter" value="{{ $data->nama_dokter }}">
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">

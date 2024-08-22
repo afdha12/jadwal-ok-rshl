@@ -50,7 +50,7 @@
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Usia</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    <input type="text" class="form-control required @error('age') is-invalid @enderror" id="age"
+                                    <input type="number" class="form-control required @error('age') is-invalid @enderror" id="age"
                                         name="age" aria-label="age" aria-describedby="basic-addon1">
                                     {{-- <input type="text" class="form-control" placeholder="Username" aria-label="Username"
                                         aria-describedby="basic-addon1"> --}}
