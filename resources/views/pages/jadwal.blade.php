@@ -67,8 +67,8 @@
                     @foreach ($data as $item)
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $item->tgl_operasi }}</td>
-                            <td class="text-center">{{ $item->jam_operasi }}</td>
+                            <td class="text-center">{{ \Carbon\Carbon::createFromFormat('Y-m-d', $item->tgl_operasi)->format('d-m-Y') }}</td>
+                            <td class="text-center">{{ $item->jam_operasi ??'-' }}</td>
                             <td class="text-center">{{ $item->nama_pasien }}</td>
                             <td class="text-center">{{ $item->usia }}</td>
                             <td class="text-center">{{ $item->no_cm }}</td>
@@ -77,9 +77,9 @@
                             <td class="text-center">{{ $item->operator }}</td>
                             <td class="text-center">{{ $item->ruang_operasi }}</td>
                             <td class="text-center">{{ $item->jaminan }}</td>
-                            <td class="text-center">{{ $item->profilaksis }}</td>
+                            <td class="text-center">{{ $item->profilaksis ??'-' }}</td>
                             <td class="text-center"
-                                style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : 'red') }}; color: white;">
+                                style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : ($item->status === 'RESCHEDULE' ? '#FF6500' : '#697565')) }}; color: white;">
                                 {{ $item->status }}</td>
                             <td class="text-center">
                                 <a href="{{ route('schedule.edit', $item->id) }}"

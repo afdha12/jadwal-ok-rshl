@@ -62,7 +62,7 @@
                             <td class="text-center">{{ $item->operator }}</td>
                             <td class="text-center">{{ $item->ruang_operasi }}</td>
                             <td class="text-center"
-                                style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : 'red') }}; color: white;">
+                                style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : ($item->status === 'RESCHEDULE' ? '#FF6500' : '#697565')) }}; color: white;">
                                 {{ $item->status }}</td>
                         </tr>
                     @endforeach
@@ -95,7 +95,7 @@
                             <td>${data.data.tindakan}</td>
                             <td class="text-center">${data.data.operator}</td>
                             <td class="text-center">${data.data.ruang_operasi}</td>
-                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : 'red')}; color: white;">${data.data.status}</td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? 'blue' : '#697565'))}; color: white;">${data.data.status}</td>
                           </tr>`;
             $('#data-table-body').append(newRow);
             updateRowNumbers();
@@ -115,7 +115,7 @@
                     row.find('td:eq(7)').text(data.data.operator);
                     row.find('td:eq(8)').text(data.data.ruang_operasi);
                     row.find('td:eq(9)').text(data.data.status)
-                        .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : 'red'))
+                        .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565')))
                         .css('color', 'white');
                 } else {
                     var newRow = `<tr data-id="${data.data.id}">
@@ -128,7 +128,7 @@
                             <td>${data.data.tindakan}</td>
                             <td class="text-center">${data.data.operator}</td>
                             <td class="text-center">${data.data.ruang_operasi}</td>
-                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : 'red')}; color: white;">${data.data.status}</td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565'))}; color: white;">${data.data.status}</td>
                           </tr>`;
                     $('#data-table-body').append(newRow);
                     updateRowNumbers();
