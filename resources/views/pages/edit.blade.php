@@ -15,7 +15,7 @@
                             <label for="colFormLabel" class="col-sm-4 col-form-label">Tanggal Operasi</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="tgl_operasi" name="tgl_operasi"
-                                    value="{{ $data->tgl_operasi }}">
+                                    value="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_operasi)->format('d-m-Y') }}">
                             </div>
                         </div>
                         <div class="row mb-3">
