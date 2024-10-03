@@ -41,7 +41,7 @@ class JadwalController extends Controller
         $title = 'Delete User!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        $data = $query->orderBy('created_at', 'desc')->paginate(30);
+        $data = $query->orderBy('tgl_operasi', 'desc')->orderBy('jam_operasi', 'asc')->paginate(30);
         return view('pages.jadwal', compact('data', 'dokter'));
     }
 
@@ -55,7 +55,7 @@ class JadwalController extends Controller
         // $operators = ['dr. Ade Aria Nugraha, Sp.An', 'dr. Ahmad Angga Luthfi, Sp.An', 'dr. Ali Satria, Sp.B', 'dr. Ary Rachmanto, Sp.B', 'dr. Bima Ananta Bukhori, Sp.OG', 'dr. Budi Syamhudi, Sp.OG', 'dr. Defayudina Dafilianty R., Sp.M', 'dr. Dino Rinaldi, Sp.OG(Onk)', 'dr. Gunawan Yudhistira, Sp.THT-KL', 'dr. Ikrizal, Sp.U', 'drg. Irsan Kurniawan, Sp.BM,Subsp.T.M.T.M.J(K)', 'dr. Joel Purba, Sp.OG', 'drg. Kustini Indah S, Sp.KGA', 'dr. Muhammad Dwi Nugroho, Sp.M', 'dr. Muhammad Fajrin Armin F, Sp.OT', 'dr. Muhammad Zulkarnain Hussein, Sp.OG(K)', 'dr. Nurul Islami, Sp.OG', 'dr. Nurul Azizah Busatam, Sp.BA', 'dr. Putu Junita, Sp.An (K)IC', 'dr. Ratna Dewi Puspita Sari, Sp.OG', 'dr. Ratu Fajaria, Sp.THT-KL', 'dr.  Risal Wintoko, Sp.B', 'dr. Rodiani, Sp.OG', 'dr. Sabasdin Harahap, Sp.B, MARS, FICS', 'dr. Sarlita Indah Permatasari, Sp.OG', 'dr. Taufiqurahman Rahim, Sp.OG(K)', 'dr. Teguh Astanto, Sp. B', 'dr. Fachry Rafiq Iwan, Sp.B', 'dr. Idris, Sp.OG', 'dr. Zulfadli, Sp.OG'];
         $operators = Dokter::orderBy('nama_dokter')->get();
         $optionKamar = ['Kamar 1', 'Kamar 2', 'Kamar 3'];
-        $statuses = ['Belum Terlaksana', 'Terlaksana', 'On-Process'];
+        $statuses = ['Belum Terlaksana', 'Terlaksana', 'On-Process', 'Reschedule'];
         return view('pages.input_jadwal', compact('operators', 'optionKamar', 'statuses'));
     }
 
@@ -67,9 +67,14 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
+
+        $now = Carbon::now();
+        $now->setTimezone('Asia/Jakarta');
+        $today = $now->format('d-m-Y');
+
         $validated = $request->validate([
             'tgl_operasi' => 'required',
-            'jam_operasi' => 'required',
+            'jam_operasi' => 'nullable',
             'nama_pasien' => 'required',
             'age' => 'required',
             'satuan_usia' => 'required',
@@ -79,18 +84,18 @@ class JadwalController extends Controller
             'operator' => 'required',
             'ruang_operasi' => 'required',
             'jaminan' => 'required',
-            'profilaksis' => 'required',
-            'status' => 'required',
+            'profilaksis' => 'nullable',
+            'status' => 'nullable',
         ]);
 
         // Gabungkan usia dengan satuan dan masukkan ke dalam array $validated
         $validated['usia'] = $validated['age'] . ' ' . $validated['satuan_usia'];
         unset($validated['age'], $validated['satuan_usia']); // Hapus field 'usia' dan 'satuan_usia' dari array $validated
 
+        $validated['tgl_operasi'] = Carbon::createFromFormat('d-m-Y', $validated['tgl_operasi'])->format('Y-m-d'); // Konversi ke format Y-m-d
+
         $data = JadwalOK::create($validated);
-        $now = Carbon::now();
-        $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
+        
         // broadcast(new DataUpdated($data));
         if ($data->tgl_operasi === $today) {
             broadcast(new DataAdded($data));
@@ -120,7 +125,7 @@ class JadwalController extends Controller
     {
         $data = JadwalOK::find($id);
         $optionKamar = ['KAMAR 1', 'KAMAR 2', 'KAMAR 3'];
-        $statuses = ['BELUM TERLAKSANA', 'TERLAKSANA', 'ON-PROCESS'];
+        $statuses = ['BELUM TERLAKSANA', 'TERLAKSANA', 'ON-PROCESS', 'RESCHEDULE'];
         $operators = ['dr. Ade Aria Nugraha, Sp.An', 'dr. Ahmad Angga Luthfi, Sp.An', 'dr. Ali Satria, Sp.B', 'dr. Ary Rachmanto, Sp.B', 'dr. Bima Ananta Bukhori, Sp.OG', 'dr. Budi Syamhudi, Sp.OG', 'dr. Defayudina Dafilianty R., Sp.M', 'dr. Dino Rinaldi, Sp.OG(Onk)', 'dr. Gunawan Yudhistira, Sp.THT-KL', 'dr. Ikrizal, Sp.U', 'drg. Irsan Kurniawan, Sp.BM,Subsp.T.M.T.M.J(K)', 'dr. Joel Purba, Sp.OG', 'drg. Kustini Indah S, Sp.KGA', 'dr. Muhammad Dwi Nugroho, Sp.M', 'dr. Muhammad Fajrin Armin F, Sp.OT', 'dr. Muhammad Zulkarnain Hussein, Sp.OG(K)', 'dr. Nurul Islami, Sp.OG', 'dr. Nurul Azizah Busatam, Sp.BA', 'dr. Putu Junita, Sp.An (K)IC', 'dr. Ratna Dewi Puspita Sari, Sp.OG', 'dr. Ratu Fajaria, Sp.THT-KL', 'dr.  Risal Wintoko, Sp.B', 'dr. Rodiani, Sp.OG', 'dr. Sabasdin Harahap, Sp.B, MARS, FICS', 'dr. Sarlita Indah Permatasari, Sp.OG', 'dr. Taufiqurahman Rahim, Sp.OG(K)', 'dr. Teguh Astanto, Sp. B', 'dr. Fachry Rafiq Iwan, Sp.B', 'dr. Idris, Sp.OG', 'dr. Zulfadli, Sp.OG'];
         return view('pages.edit', compact('data', 'optionKamar', 'statuses', 'operators'));
     }
@@ -140,8 +145,33 @@ class JadwalController extends Controller
 
         $data = JadwalOK::find($id);
         $oldDate = $data->tgl_operasi;
-        $data->update($request->all());
-        $newDate = $data->tgl_operasi;
+        // $data->update($request->all());
+
+        $validated = $request->validate([
+            'tgl_operasi' => 'required',
+            'jam_operasi' => 'nullable',
+            'nama_pasien' => 'required',
+            'age' => 'required',
+            'satuan_usia' => 'required',
+            'no_cm' => 'required',
+            'diagnosa' => 'required',
+            'tindakan' => 'required',
+            'operator' => 'required',
+            'ruang_operasi' => 'required',
+            'jaminan' => 'required',
+            'profilaksis' => 'nullable',
+            'status' => 'nullable',
+        ]);
+
+        // Gabungkan usia dengan satuan dan masukkan ke dalam array $validated
+        $validated['usia'] = $validated['age'] . ' ' . $validated['satuan_usia'];
+        unset($validated['age'], $validated['satuan_usia']); // Hapus field 'usia' dan 'satuan_usia' dari array $validated
+
+        $validated['tgl_operasi'] = Carbon::createFromFormat('d-m-Y', $validated['tgl_operasi'])->format('Y-m-d'); // Konversi ke format Y-m-d
+
+        $data = JadwalOK::update($validated);
+
+        $newDate = $validated['tgl_operasi'];
         // if ($data->tgl_operasi === $today) {
         //     broadcast(new DataUpdated($data));
         // }

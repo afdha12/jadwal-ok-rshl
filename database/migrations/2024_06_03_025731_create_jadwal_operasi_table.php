@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('jadwal_operasi', function (Blueprint $table) {
             $table->id();
-            $table->string('tgl_operasi');
-            $table->string('jam_operasi');
+            $table->date('tgl_operasi');
+            $table->string('jam_operasi')->nullable();
             $table->string('nama_pasien');
             $table->string('usia');
             $table->string('no_cm');
@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('operator');
             $table->string('ruang_operasi');
             $table->string('jaminan');
-            $table->string('profilaksis');
-            $table->string('status');
+            $table->string('profilaksis')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
