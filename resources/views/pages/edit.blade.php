@@ -65,8 +65,9 @@
                             <div class="col-sm-8">
                                 <select name="operator" class="form-control">
                                     @foreach ($operators as $operator)
-                                        <option value="{{ $operator }}"
-                                            @if ($operator == $data->operator) selected @endif>{{ $operator }}</option>
+                                        <option value="{{ $operator->nama_dokter }}">{{ $operator->nama_dokter }}</option>
+                                        {{-- <option value="{{ $operator }}"
+                                            @if ($operator == $data->operator) selected @endif>{{ $operator }}</option> --}}
                                     @endforeach
                                 </select>
                             </div>
