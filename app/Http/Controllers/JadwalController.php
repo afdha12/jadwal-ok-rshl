@@ -24,8 +24,8 @@ class JadwalController extends Controller
 
         // Filter berdasarkan rentang tanggal lahir
         if ($request->filled('start_date') && $request->filled('end_date')) {
-            $startDate = $request->start_date;
-            $endDate = $request->end_date;
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d');
             $query->whereBetween('tgl_operasi', [$startDate, $endDate]);
         }
         // Filter berdasarkan alamat
@@ -35,7 +35,7 @@ class JadwalController extends Controller
 
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
+        $today = $now->format('Y-m-d');
         $dokter = DokterAnestesi::where('tanggal', $today)->get();
 
         $title = 'Delete User!';
@@ -70,7 +70,7 @@ class JadwalController extends Controller
 
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
+        $today = $now->format('Y-m-d');
 
         $validated = $request->validate([
             'tgl_operasi' => 'required',
@@ -139,20 +139,16 @@ class JadwalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $now = Carbon::now();
-        $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
-
         $data = JadwalOK::find($id);
         $oldDate = $data->tgl_operasi;
+
         // $data->update($request->all());
 
         $validated = $request->validate([
             'tgl_operasi' => 'required',
             'jam_operasi' => 'nullable',
             'nama_pasien' => 'required',
-            'age' => 'required',
-            'satuan_usia' => 'required',
+            'usia' => 'required',
             'no_cm' => 'required',
             'diagnosa' => 'required',
             'tindakan' => 'required',
@@ -164,13 +160,16 @@ class JadwalController extends Controller
         ]);
 
         // Gabungkan usia dengan satuan dan masukkan ke dalam array $validated
-        $validated['usia'] = $validated['age'] . ' ' . $validated['satuan_usia'];
-        unset($validated['age'], $validated['satuan_usia']); // Hapus field 'usia' dan 'satuan_usia' dari array $validated
+        // $validated['usia'] = $validated['age'] . ' ' . $validated['satuan_usia'];
+        // unset($validated['age'], $validated['satuan_usia']); // Hapus field 'usia' dan 'satuan_usia' dari array $validated
 
         $validated['tgl_operasi'] = Carbon::createFromFormat('d-m-Y', $validated['tgl_operasi'])->format('Y-m-d'); // Konversi ke format Y-m-d
 
-        $data = JadwalOK::update($validated);
+        $data->update($validated);
 
+        $now = Carbon::now();
+        $now->setTimezone('Asia/Jakarta');
+        $today = $now->format('Y-m-d');
         $newDate = $validated['tgl_operasi'];
         // if ($data->tgl_operasi === $today) {
         //     broadcast(new DataUpdated($data));
@@ -201,7 +200,7 @@ class JadwalController extends Controller
     {
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
+        $today = $now->format('Y-m-d');
         $data = JadwalOK::find($id);
         if ($data->tgl_operasi === $today) {
             broadcast(new DataDeleted($id));
