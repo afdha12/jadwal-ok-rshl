@@ -108,6 +108,7 @@
                             <div class="col-sm-8">
                                 {{-- <input type="text" class="form-control required text-uppercase" id="operator" name="operator"> --}}
                                 <select name="operator" class="form-control required">
+                                    <option value="">-- Pilih Operator --</option>
                                     @foreach ($operators as $operator)
                                         <option value="{{ $operator->nama_dokter }}">{{ $operator->nama_dokter }}</option>
                                     @endforeach

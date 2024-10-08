@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <meta http-equiv="refresh" content="60"> -->
+    <meta http-equiv="refresh" content="180">
     <title>Display</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -84,7 +84,7 @@
         var today = '{{ $today }}';
 
         var dataAddedChannel = pusher.subscribe('data-added.' + today);
-        dataAddedChannel.bind('App\\Events\\DataUpdated', function(data) {
+        dataAddedChannel.bind('App\\Events\\DataAdded', function(data) {
             var newRow = `<tr data-id="${data.data.id}">
                             <td class="text-center"></td>
                             <td class="text-center">${data.data.jam_operasi}</td>
