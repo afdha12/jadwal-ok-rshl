@@ -26,8 +26,14 @@
                         <div class="row mb-3 d-flex justify-content-between">
                             <label for="colFormLabel" class="col-sm-3 col-form-label">Jam Operasi</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control text-uppercase" id="jam_operasi"
-                                    name="jam_operasi">
+                                <div class="input-group">
+                                    <input type="text" class="form-control text-uppercase" id="jam_operasi"
+                                        name="jam_operasi">
+                                    <input class="input-group-text col-2" type="text" value="s.d."
+                                        aria-label="Disabled input example" disabled readonly>
+                                    <input type="text" class="form-control text-uppercase" id="jam_operasi"
+                                        name="jam_operasi2">
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3 d-flex justify-content-between">

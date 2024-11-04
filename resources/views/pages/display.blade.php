@@ -53,7 +53,7 @@
                     @foreach ($data as $item)
                         <tr data-id="{{ $item->id }}">
                             <td class="text-center">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $item->jam_operasi }}</td>
+                            <td class="text-center">{{ $item->jam_operasi }} - {{ $item->jam_operasi2 }}</td>
                             <td class="text-center">{{ $item->nama_pasien }}</td>
                             <td class="text-center">{{ $item->usia }}</td>
                             <td class="text-center">{{ $item->no_cm }}</td>

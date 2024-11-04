@@ -34,13 +34,11 @@
             </div>
         </form>
 
-
-
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped align-middle" style="width:100%" id="myTable">
                 <thead class="table-secondary align-middle">
                     <tr>
-                        <td colspan="15" class="pe-1">Dokter Anestesi hari ini : @foreach ($dokter as $anesthesiologist)
+                        <td colspan="16" class="pe-1">Dokter Anestesi hari ini : @foreach ($dokter as $anesthesiologist)
                                 {{ $anesthesiologist->nama_dokter }}
                             @endforeach
                         </td>
@@ -49,6 +47,7 @@
                         <th class="text-center">No.</th>
                         <th class="text-center">Tanggal Operasi</th>
                         <th class="text-center">Jam Operasi</th>
+                        {{-- <th class="text-center">Operasi Berakhir</th> --}}
                         <th class="text-center">Nama Pasien</th>
                         <th class="text-center">Usia</th>
                         <th class="text-center">No. CM</th>
@@ -68,7 +67,8 @@
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="text-center">{{ \Carbon\Carbon::createFromFormat('Y-m-d', $item->tgl_operasi)->format('d-m-Y') }}</td>
-                            <td class="text-center">{{ $item->jam_operasi ??'-' }}</td>
+                            <td class="text-center">{{ $item->jam_operasi ??'Belum Ditentukan' }} - {{ $item->jam_operasi2 ??'Belum Ditentukan' }}</td>
+                            {{-- <td class="text-center">{{ $item->jam_operasi2 ??'-' }}</td> --}}
                             <td class="text-center">{{ $item->nama_pasien }}</td>
                             <td class="text-center">{{ $item->usia }}</td>
                             <td class="text-center">{{ $item->no_cm }}</td>

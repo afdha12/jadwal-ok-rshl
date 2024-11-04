@@ -75,6 +75,7 @@ class JadwalController extends Controller
         $validated = $request->validate([
             'tgl_operasi' => 'required',
             'jam_operasi' => 'nullable',
+            'jam_operasi2' => 'nullable',
             'nama_pasien' => 'required',
             'age' => 'required',
             'satuan_usia' => 'required',
@@ -148,6 +149,7 @@ class JadwalController extends Controller
         $validated = $request->validate([
             'tgl_operasi' => 'required',
             'jam_operasi' => 'nullable',
+            'jam_operasi2' => 'nullable',
             'nama_pasien' => 'required',
             'usia' => 'required',
             'no_cm' => 'required',
