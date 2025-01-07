@@ -30,9 +30,9 @@
                             <td class="text-center">{{ $item->tanggal }}</td>
                             <td class="text-center">{{ $item->nama_dokter }}</td>
                             <td class="text-center">
-                                <a href="{{ route('dokter-anestesi.edit', $item->id) }}" class="btn btn-outline-primary btn-sm mr-2" data-bs-toggle="modal"
-                                    data-bs-target="#editDokter{{ $item->id }}"><i
-                                        class="bi bi-pencil"></i></i></a>
+                                <a href="{{ route('dokter-anestesi.edit', $item->id) }}"
+                                    class="btn btn-outline-primary btn-sm mr-2" data-bs-toggle="modal"
+                                    data-bs-target="#editDokter{{ $item->id }}"><i class="bi bi-pencil"></i></a>
                             </td>
                             <td class="text-center">
                                 {{-- <form id="deleteForm" action="{{ route('dokter-anestesi.destroy', $item->id) }}" method="POST">
@@ -41,16 +41,17 @@
                                     <button type="submit" class="btn btn-outline-danger btn-sm"
                                         data-confirm-delete="true"><i class="bi bi-trash"></i></button>
                                 </form> --}}
-                                <a href="{{ route('dokter-anestesi.destroy', $item->id) }}" class="btn btn-outline-danger btn-sm"
-                                    data-confirm-delete="true"><i class="bi bi-trash"></i></a>
+                                <a href="{{ route('dokter-anestesi.destroy', $item->id) }}"
+                                    class="btn btn-outline-danger btn-sm" data-confirm-delete="true"><i
+                                        class="bi bi-trash"></i></a>
                             </td>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div>
-                    @include('modal.edit-dokter-anestesi')
-                </div>
+                    @endforeach
+                </tbody>
+            </table>
+            <div>
+                @include('modal.edit-dokter-anestesi')
+            </div>
             <div class="d-flex justify-content-end">
                 {{ $data->links('pagination::bootstrap-5') }}
             </div>

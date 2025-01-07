@@ -115,7 +115,9 @@
                     row.find('td:eq(7)').text(data.data.operator);
                     row.find('td:eq(8)').text(data.data.ruang_operasi);
                     row.find('td:eq(9)').text(data.data.status)
-                        .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565')))
+                        .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status ===
+                            'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565')
+                        ))
                         .css('color', 'white');
                 } else {
                     var newRow = `<tr data-id="${data.data.id}">
@@ -145,6 +147,25 @@
         dataDeletedChannel.bind('App\\Events\\DataDeleted', function(data) {
             $(`tr[data-id="${data.dataId}"]`).remove();
             updateRowNumbers();
+        });
+
+        var statusUpdatedChannel = pusher.subscribe('status-updated');
+        dataUpdatedChannel.bind('App\\Events\\DataUpdated', function(data) {
+            var row = $(`tr[data-id="${data.data.id}"]`);
+            if (row.length) {
+                row.find('td:eq(9)').text(data.data.status)
+                    .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status ===
+                        'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565')
+                    ))
+                    .css('color', 'white');
+            } else {
+                var newRow = `<tr data-id="${data.data.id}">
+                            <td class="text-center"></td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565'))}; color: white;">${data.data.status}</td>
+                          </tr>`;
+                $('#data-table-body').append(newRow);
+                updateRowNumbers();
+            }
         });
 
         function updateRowNumbers() {

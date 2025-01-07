@@ -13,7 +13,7 @@ class JadwalOK extends Model
 
     // public $timestamps = false;
 
-    protected $fillable = [ 'tgl_operasi', 'jam_operasi', 'nama_pasien', 'usia', 'no_cm', 'diagnosa','tindakan', 'operator', 'ruang_operasi', 'jaminan', 'profilaksis', 'status'];
+    protected $fillable = ['tgl_operasi', 'jam_operasi', 'jam_operasi2', 'nama_pasien', 'usia', 's_usia', 'no_cm', 'diagnosa', 'tindakan', 'dokter_id', 'ruang_operasi', 'jaminan', 'profilaksis', 'status', 'bb', 'asisten', 'instrumentator', 'sirkulasi', 'anestesi', 'p_anestesi', 'anak', 'jam_puasa', 'jam_kedatangan', 'lab', 'ro', 'ct_scan', 'tgl_ipd', 'hasil_ipd', 'tgl_jantung', 'hasil_jantung', 'tgl_anasthesi', 'hasil_anasthesi', 'tgl_lain', 'hasil_lain', 'pkkt', 'verifikasi', 'pengingat', 'keterangan'];
 
     public function dokter()
     {
