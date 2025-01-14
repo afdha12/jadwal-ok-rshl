@@ -24,7 +24,7 @@
                     <div class="font-monospace">
                         <div class="input-group">
                             <input type="text" class="form-control-sm datepicker" placeholder="Pilih Tanggal Mulai"
-                                id="start_date" name="start_date" value="{{ request('start_date') }}">
+                                id="start_date" name="start_date" value="{{ request('start_date') ?? session('date') }}">
                             {{-- <input type="text" class="form-control-sm datepicker" placeholder="Sampai Tanggal"
                                 id="end_date" name="end_date" value="{{ request('end_date') }}"> --}}
                             <button type="submit" class="btn btn-sm btn-primary font-monospace">Cari</button>
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="ps-3 font-monospace">
-                        <a href="{{ route('schedule.index') }}" class="btn btn-sm btn-secondary">Hapus Filter</a>
+                        <a href="{{ route('schedule.index', ['clear_filter' => true]) }}" class="btn btn-sm btn-secondary">Hapus Filter</a>
                     </div>
                 </div>
             </div>

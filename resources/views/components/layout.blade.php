@@ -26,7 +26,7 @@
 
     <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="img/hermina.png">
-    <script src="js/functions.js"></script>
+    {{-- <script src="js/functions.js"></script> --}}
 
     <style>
         body {
@@ -45,7 +45,14 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .required::after {
+            content: " *";
+            color: red;
+            font-weight: bold;
+        }
     </style>
+    
 </head>
 
 <body>
@@ -79,6 +86,27 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script>
+        function updateStatus(id, status) {
+            fetch(`/update-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        status: status
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Status berhasil diubah');
+                    } else {
+                        alert('Gagal mengubah status');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
         // flatpickr("#tgl_operasi, #start_date, #end_date, #tanggal, #tgl_ipd, #tgl_jantung, #tgl_lain, #tgl_anasthesi", {
         //     dateFormat: "d-m-Y", // Format tanggal yang diinginkan (misalnya: YYYY-MM-DD)
         //     // Opsi tambahan jika diperlukan
@@ -91,7 +119,7 @@
             dateFormat: 'd-m-Y', // Format tanggal menjadi d-m-Y
         });
 
-        flatpickr("#jam_puasa, #jam_kedatangan, #jam_operasiEdit", {
+        flatpickr("#jam_puasa, #jam_kedatangan, #jam_operasi2", {
             enableTime: true,
             noCalendar: true,
             dateFormat: "H:i", // Format waktu
@@ -141,31 +169,36 @@
         //     // });
         // });
 
-        document.getElementById('ruang_operasi').addEventListener('change', getAvailableTimes);
-        document.getElementById('tgl_operasi').addEventListener('change', getAvailableTimes);
+        // Ambil ID dari URL
+        // const urlSegments = window.location.pathname.split('/');
+        // const editId = urlSegments[urlSegments.length - 2]; // Ambil ID dari URL sebelum 'edit'
 
-        function getAvailableTimes() {
-            const room = document.getElementById('ruang_operasi').value;
-            const date = document.getElementById('tgl_operasi').value;
-            const editId = {{ $jadwal->id }};
+        // AJAX untuk mengambil data jam operasi yang tersedia
+        // document.getElementById('ruang_operasi').addEventListener('change', getAvailableTimes);
+        // document.getElementById('tgl_operasi').addEventListener('change', getAvailableTimes);
 
-            if (room && date) {
-                fetch(`/api/get-available-times?ruang_operasi=${room}&tgl_operasi=${date}&id=${editId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const startDropdown = document.getElementById('jam_operasi');
-                        const endDropdown = document.getElementById('jam_operasi2');
+        // function getAvailableTimes() {
+        //     const room = document.getElementById('ruang_operasi').value;
+        //     const date = document.getElementById('tgl_operasi').value;
 
-                        startDropdown.innerHTML = '';
-                        endDropdown.innerHTML = '';
+        //     if (room && date) {
+        //         fetch(`/api/get-available-times?ruang_operasi=${room}&tgl_operasi=${date}&id=${editId}`)
+        //             .then(response => response.json())
+        //             .then(data => {
+        //                 const startDropdown = document.getElementById('jam_operasi');
+        //                 const endDropdown = document.getElementById('jam_operasi2');
 
-                        data.forEach(time => {
-                            startDropdown.innerHTML += `<option value="${time}">${time}</option>`;
-                            endDropdown.innerHTML += `<option value="${time}">${time}</option>`;
-                        });
-                    });
-            }
-        }
+        //                 startDropdown.innerHTML = '';
+        //                 endDropdown.innerHTML = '';
+
+        //                 data.forEach(time => {
+        //                     startDropdown.innerHTML += `<option value="${time}">${time}</option>`;
+        //                     endDropdown.innerHTML += `<option value="${time}">${time}</option>`;
+        //                 });
+        //             });
+        //     }
+        // }
+
 
 
         document.querySelector('#jam_operasi').addEventListener('input', function() {

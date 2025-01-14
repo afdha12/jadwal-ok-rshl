@@ -15,12 +15,12 @@
                     <div class="col">
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Tanggal Operasi</label>
+                                <label for="colFormLabel" class="col-form-label required">Tanggal Operasi</label>
                             </div>
                             <div class="col-sm-5">
                                 <input type="date"
-                                    class="form-control form-control-sm required text-uppercase @error('tgl_operasi') is-invalid @enderror"
-                                    id="tgl_operasi" name="tgl_operasi">
+                                    class="form-control form-control-sm text-uppercase @error('tgl_operasi') is-invalid @enderror"
+                                    id="tgl_operasi" name="tgl_operasi" required>
                                 @error('tgl_operasi')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -30,10 +30,11 @@
                         </div>
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Ruang Operasi</label>
+                                <label for="colFormLabel" class="col-form-label required">Ruang Operasi</label>
                             </div>
                             <div class="col-sm-5">
-                                <select name="ruang_operasi" id="ruang_operasi" class="form-control form-control-sm" required>
+                                <select name="ruang_operasi" id="ruang_operasi" class="form-control form-control-sm"
+                                    required>
                                     @foreach ($optionKamar as $room)
                                         <option value="{{ $room }}">{{ $room }}</option>
                                     @endforeach
@@ -49,19 +50,20 @@
                     <div class="col ms-auto">
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Jam Operasi</label>
+                                <label for="colFormLabel" class="col-form-label required">Jam Operasi</label>
                             </div>
                             <div class="col-sm-5">
                                 <div class="input-group input-group-sm">
-                                    <select name="jam_operasi" id="jam_operasi" class="form-control form-control-sm required">
+                                    <select name="jam_operasi" id="jam_operasi"
+                                        class="form-control form-control-sm required">
                                         <option value="">-- Pilih jam --</option>
                                     </select>
                                     {{-- <input type="text" class="form-control form-control-sm text-uppercase"
                                         id="jam_operasi" name="jam_operasi"> --}}
                                     <input class="input-group-text col-2" type="text" value="s.d."
                                         aria-label="Disabled input example" disabled readonly>
-                                    <input type="text" class="form-control form-control-sm"
-                                        id="jam_operasi2" name="jam_operasi2">
+                                    <input type="text" class="form-control form-control-sm" id="jam_operasi2"
+                                        name="jam_operasi2">
                                 </div>
                             </div>
                         </div>
@@ -76,7 +78,7 @@
                     <div class="col">
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">No. CM</label>
+                                <label for="colFormLabel" class="col-form-label required">No. CM</label>
                             </div>
                             <div class="col-sm-5">
                                 <input type="number"
@@ -92,7 +94,7 @@
 
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Nama Pasien</label>
+                                <label for="colFormLabel" class="col-form-label required">Nama Pasien</label>
                             </div>
                             <div class="col-sm-5">
                                 <input type="text"
@@ -107,7 +109,7 @@
                         </div>
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Usia</label>
+                                <label for="colFormLabel" class="col-form-label required">Usia</label>
                             </div>
                             <div class="col-sm-5">
                                 <div class="input-group input-group-sm">
@@ -132,7 +134,7 @@
 
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">BB</label>
+                                <label for="colFormLabel" class="col-form-label required">BB</label>
                             </div>
                             <div class="col-sm-5">
                                 <input type="text" class="form-control form-control-sm text-uppercase" id="bb"
@@ -144,7 +146,7 @@
                     <div class="col ms-auto">
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Diagnosa</label>
+                                <label for="colFormLabel" class="col-form-label required">Diagnosa</label>
                             </div>
                             <div class="col-sm-5">
                                 <input type="text"
@@ -160,7 +162,7 @@
 
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Jaminan</label>
+                                <label for="colFormLabel" class="col-form-label required">Jaminan</label>
                             </div>
                             <div class="col-sm-5">
                                 <select name="jaminan" class="form-control form-control-sm required">
@@ -183,7 +185,7 @@
 
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Tindakan</label>
+                                <label for="colFormLabel" class="col-form-label required">Tindakan</label>
                             </div>
                             <div class="col-sm-5">
                                 <input type="text"
@@ -208,16 +210,16 @@
                     <div class="col">
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label">Operator</label>
+                                <label for="colFormLabel" class="col-form-label required">Operator</label>
                             </div>
                             <div class="col-sm-5">
                                 {{-- <input type="text" class="form-control form-control-sm required text-uppercase" id="operator" name="operator"> --}}
-                                <select name="dokter_id" class="form-control form-control-sm required">
+                                <select name="dokter_id" id="dokter_id" class="form-control form-control-sm required">
                                     <option value="">-- Pilih Operator --</option>
-                                    @foreach ($operators as $operator)
+                                    {{-- @foreach ($operators as $operator)
                                         <option value="{{ $operator->id }}">{{ $operator->nama_dokter }}
                                         </option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                                 @error('operator')
                                     <div class="invalid-feedback">
@@ -567,5 +569,63 @@
             </table>
         </div> --}}
     </form>
+
+    <script>
+        const dateInput = document.querySelector('#tgl_operasi');
+        const roomInput = document.querySelector('#ruang_operasi');
+        const timeInput = document.querySelector('#jam_operasi');
+        const timeSelect = document.querySelector('#jam_operasi');
+        const doctorSelect = document.querySelector('#dokter_id');
+
+        // Fungsi untuk mengambil waktu tersedia pada halaman input
+        function fetchAvailableTimesForInput() {
+            const date = dateInput.value;
+            const room = roomInput.value;
+
+            if (!date || !room) {
+                timeSelect.innerHTML = '<option value="">Pilih tanggal dan ruang operasi terlebih dahulu</option>';
+                return;
+            }
+
+            fetch(`/get-available-times?tgl_operasi=${date}&ruang_operasi=${room}`)
+                .then(response => response.json())
+                .then(data => {
+                    timeSelect.innerHTML = '<option value="">Pilih Jam</option>';
+                    data.forEach(time => {
+                        timeSelect.innerHTML += `<option value="${time}">${time}</option>`;
+                    });
+                });
+        }
+
+        function fetchAvailableDoctors() {
+            const date = dateInput.value;
+            const room = roomInput.value;
+            const time = timeInput.value;
+
+            if (!date || !room || !time) {
+                doctorSelect.innerHTML =
+                    '<option value="">Pilih tanggal, ruangan, dan jam operasi terlebih dahulu</option>';
+                return;
+            }
+
+            fetch(`/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}`)
+                .then(response => response.json())
+                .then(data => {
+                    doctorSelect.innerHTML = '<option value="">Pilih Dokter</option>';
+                    data.forEach(doctor => {
+                        doctorSelect.innerHTML +=
+                            `<option value="${doctor.id}">${doctor.nama_dokter}</option>`;
+                    });
+                });
+        }
+
+        // Tambahkan event listener untuk halaman input
+        dateInput.addEventListener('change', fetchAvailableTimesForInput);
+        roomInput.addEventListener('change', fetchAvailableTimesForInput);
+        dateInput.addEventListener('change', fetchAvailableDoctors);
+        roomInput.addEventListener('change', fetchAvailableDoctors);
+        timeInput.addEventListener('change', fetchAvailableDoctors);
+
+    </script>
 
 @endsection

@@ -43,11 +43,6 @@ function updateStatus(id, status) {
 //     });
 // });
 
-
-
-
-
-
 // document.addEventListener('DOMContentLoaded', function () {
 //     const datePicker = document.getElementById('tgl_operasi');
 //     const roomSelect = document.getElementById('ruang_operasi');
@@ -104,43 +99,43 @@ function updateStatus(id, status) {
 // });
 
 
-$(document).ready(function () {
-    $('.edit-button').on('click', function () {
-        var id = $(this).data('id');
-        $.get('/dokter-anestesi/' + id + '/edit', function (data) {
-            // var dataDokter = data.dataDokter;
-            // var operators = data.operators;
+// $(document).ready(function () {
+//     $('.edit-button').on('click', function () {
+//         var id = $(this).data('id');
+//         $.get('/dokter-anestesi/' + id + '/edit', function (data) {
+//             // var dataDokter = data.dataDokter;
+//             // var operators = data.operators;
 
-            // $('#dokterId').val(dataDokter.id);
-            // $('#tanggal').val(dataDokter.tanggal);
+//             // $('#dokterId').val(dataDokter.id);
+//             // $('#tanggal').val(dataDokter.tanggal);
 
-            // $('#nama_dokter').empty();
-            // if (Array.isArray(operators)){
-            //     operators.forEach(function(operator) {
-            //         var selected = (dataDokter.operator === operator) ? 'selected' : '';
-            //         $('#nama_dokter').append(`<option value="${operator}" ${selected}>${operator}</option>`);
-            //     });
-            // }
-            // $('#editForm').attr('action', '/dokter-anestesi/' + id + '/update');
-            $('#editModal').modal('show');
-        });
-    });
+//             // $('#nama_dokter').empty();
+//             // if (Array.isArray(operators)){
+//             //     operators.forEach(function(operator) {
+//             //         var selected = (dataDokter.operator === operator) ? 'selected' : '';
+//             //         $('#nama_dokter').append(`<option value="${operator}" ${selected}>${operator}</option>`);
+//             //     });
+//             // }
+//             // $('#editForm').attr('action', '/dokter-anestesi/' + id + '/update');
+//             $('#editModal').modal('show');
+//         });
+//     });
 
-    // $('#editForm').on('submit', function(e) {
-    //     e.preventDefault();
-    //     var id = $('#dokterId').val();
-    //     $.ajax({
-    //         url: '/dokter-anestesi/' + id + '/update',
-    //         type: 'POST',
-    //         data: {
-    //             _token: $('input[name=_token]').val(),
-    //             tanggal: $('#tanggal').val(),
-    //             nama_dokter: $('#nama_dokter').val()
-    //         },
-    //         success: function(response) {
-    //             alert(response.success);
-    //             location.reload();
-    //         }
-    //     });
-    // });
-});
+//     $('#editForm').on('submit', function(e) {
+//         e.preventDefault();
+//         var id = $('#dokterId').val();
+//         $.ajax({
+//             url: '/dokter-anestesi/' + id + '/update',
+//             type: 'POST',
+//             data: {
+//                 _token: $('input[name=_token]').val(),
+//                 tanggal: $('#tanggal').val(),
+//                 nama_dokter: $('#nama_dokter').val()
+//             },
+//             success: function(response) {
+//                 alert(response.success);
+//                 location.reload();
+//             }
+//         });
+//     });
+// });

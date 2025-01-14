@@ -29,9 +29,11 @@ Route::resource('dokter-anestesi', DokterAnestesiController::class)->middleware(
 Route::resource('dokter', DokterController::class)->middleware('auth');
 
 Route::get('/display', [DisplayController::class, 'display'])->name('display');
+Route::get('/display-data', [DisplayController::class, 'displayData'])->name('schedule.displayData');
 Route::post('/update-status/{id}', [JadwalController::class, 'updateStatus'])->name('updateStatus');
 
 Route::get('/get-available-times', [JadwalController::class, 'getAvailableTimes']);
+Route::get('/get-available-doctors', [JadwalController::class, 'getAvailableDoctors']);
 
 
 

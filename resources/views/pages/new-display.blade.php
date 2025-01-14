@@ -59,7 +59,7 @@
                             <td class="text-center">{{ $item->no_cm }}</td>
                             <td>{{ $item->diagnosa }}</td>
                             <td>{{ $item->tindakan }}</td>
-                            <td class="text-center">{{ $item->dokter['nama_dokter'] }}</td>
+                            <td class="text-center">{{ $item->operator }}</td>
                             <td class="text-center">{{ $item->ruang_operasi }}</td>
                             <td class="text-center"
                                 style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : ($item->status === 'RESCHEDULE' ? '#FF6500' : '#697565')) }}; color: white;">
@@ -93,7 +93,7 @@
                             <td class="text-center">${data.data.no_cm}</td>
                             <td>${data.data.diagnosa}</td>
                             <td>${data.data.tindakan}</td>
-                            <td class="text-center">${data.data.dokter.nama_dokter}</td>
+                            <td class="text-center">${data.data.operator}</td>
                             <td class="text-center">${data.data.ruang_operasi}</td>
                             <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? 'blue' : '#697565'))}; color: white;">${data.data.status}</td>
                           </tr>`;
@@ -112,7 +112,7 @@
                     row.find('td:eq(4)').text(data.data.no_cm);
                     row.find('td:eq(5)').text(data.data.diagnosa);
                     row.find('td:eq(6)').text(data.data.tindakan);
-                    row.find('td:eq(7)').text(data.data.dokter.nama_dokter);
+                    row.find('td:eq(7)').text(data.data.operator);
                     row.find('td:eq(8)').text(data.data.ruang_operasi);
                     row.find('td:eq(9)').text(data.data.status)
                         .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status ===
@@ -128,7 +128,7 @@
                             <td class="text-center">${data.data.no_cm}</td>
                             <td>${data.data.diagnosa}</td>
                             <td>${data.data.tindakan}</td>
-                            <td class="text-center">${data.data.dokter.nama_dokter}</td>
+                            <td class="text-center">${data.data.operator}</td>
                             <td class="text-center">${data.data.ruang_operasi}</td>
                             <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565'))}; color: white;">${data.data.status}</td>
                           </tr>`;
