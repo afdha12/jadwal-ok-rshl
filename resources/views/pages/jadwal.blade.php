@@ -15,7 +15,7 @@
                     <div class="pe-3 font-monospace">
                         <a href="{{ route('schedule.create') }}" class="btn btn-sm btn-success">Tambah Data</a>
                     </div>
-
+        
                     <div class="ms-auto justify-content-end font-monospace">
                         <div class="pe-3 font-monospace">
                             Filter Jadwal Operasi
@@ -25,12 +25,11 @@
                         <div class="input-group">
                             <input type="text" class="form-control-sm datepicker" placeholder="Pilih Tanggal Mulai"
                                 id="start_date" name="start_date" value="{{ request('start_date') ?? session('date') }}">
-                            {{-- <input type="text" class="form-control-sm datepicker" placeholder="Sampai Tanggal"
-                                id="end_date" name="end_date" value="{{ request('end_date') }}"> --}}
+                            <input type="text" class="form-control-sm" placeholder="Cari No. CM" id="no_cm" name="no_cm" value="{{ request('no_cm') }}">
                             <button type="submit" class="btn btn-sm btn-primary font-monospace">Cari</button>
                         </div>
                     </div>
-
+        
                     <div class="ps-3 font-monospace">
                         <a href="{{ route('schedule.index', ['clear_filter' => true]) }}" class="btn btn-sm btn-secondary">Hapus Filter</a>
                     </div>
@@ -114,7 +113,7 @@
                                 {{ $item->jam_operasi2 ?? 'Belum Ditentukan' }}</td>
                             {{-- <td class="text-center">{{ $item->jam_operasi2 ??'-' }}</td> --}}
                             <td class="text-center px-2 text-nowrap">{{ $item->ruang_operasi }}</td>
-                            <td class="text-center px-2 text-nowrap">{{ $item->nama_pasien }}</td>
+                            <td class="text-center px-2 text-nowrap text-uppercase">{{ $item->prefix .'. '. $item->nama_pasien }}</td>
                             <td class="text-center px-2 text-nowrap">{{ $item->usia .' '. $item->s_usia }}</td>
                             <td class="text-center px-2">{{ $item->no_cm }}</td>
                             <td class="text-center px-2">{{ $item->bb }}</td>
@@ -181,8 +180,16 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="d-flex justify-content-start">
+            {{-- <div class="d-flex justify-content-start">
                 {{ $data->links('pagination::bootstrap-5') }}
+            </div> --}}
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    Menampilkan {{ $data->firstItem() }} sampai {{ $data->lastItem() }} dari {{ $data->total() }} data
+                </div>
+                <div>
+                    {{ $data->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
     </div>

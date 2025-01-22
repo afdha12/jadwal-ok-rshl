@@ -35,7 +35,7 @@ class DataDeleted implements ShouldBroadcast
     {
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
+        $today = $now->format('Y-m-d');
         return new Channel('data-deleted.' . $today);
     }
 }

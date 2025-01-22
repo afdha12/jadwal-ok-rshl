@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('keterangan')->nullable();
             $table->string('s_usia')->nullable();
             $table->string('jam_operasi2')->nullable();
+            $table->string('prefix')->nullable();
         });
     }
 

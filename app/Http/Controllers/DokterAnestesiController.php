@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Dokter;
 use Illuminate\Http\Request;
 use App\Models\DokterAnestesi;
@@ -19,7 +20,7 @@ class DokterAnestesiController extends Controller
         $text = "Apakah anda yakin ingin menghapusnya?";
         confirmDelete($title, $text);
         $operators = Dokter::all();
-        $data = DokterAnestesi::orderBy('tanggal', 'desc')->paginate(30);
+        $data = DokterAnestesi::with('dokter')->orderBy('tanggal', 'desc')->paginate(30);
         return view('pages.dokter-anestesi' , compact('data', 'operators'));
     }
 
@@ -41,7 +42,14 @@ class DokterAnestesiController extends Controller
      */
     public function store(Request $request)
     {
-        DokterAnestesi::create($request->all());
+        $validated = $request->validate([
+            'tanggal' => 'required',
+            'dokter_id' => 'nullable',
+        ]);
+
+        $validated['tanggal'] = Carbon::createFromFormat('d-m-Y', $validated['tanggal'])->format('Y-m-d'); // Konversi ke format Y-m-d
+
+        DokterAnestesi::create($validated);
         return redirect()->route('dokter-anestesi.index')->with('success', 'Data berhasil disimpan.');
     }
 
@@ -83,8 +91,15 @@ class DokterAnestesiController extends Controller
         // $now->setTimezone('Asia/Jakarta');
         // $today = $now->format('d-m-Y');
         $data = DokterAnestesi::find($id);
+        $validated = $request->validate([
+            'tanggal' => 'required',
+            'dokter_id' => 'nullable',
+        ]);
         // $oldDate = $data->tgl_operasi;
-        $data->update($request->all());
+        
+        $validated['tanggal'] = Carbon::createFromFormat('d-m-Y', $validated['tanggal'])->format('Y-m-d'); // Konversi ke format Y-m-d
+        $data->update($validated);
+
         return redirect()->route('dokter-anestesi.index')->with('success', 'Data berhasil diubah.');
     }
 

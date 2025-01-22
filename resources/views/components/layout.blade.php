@@ -25,7 +25,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <title>@yield('title')</title>
-    <link rel="icon" type="image/x-icon" href="img/hermina.png">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/hermina.png') }}">
     {{-- <script src="js/functions.js"></script> --}}
 
     <style>

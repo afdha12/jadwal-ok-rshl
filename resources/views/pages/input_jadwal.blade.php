@@ -97,14 +97,21 @@
                                 <label for="colFormLabel" class="col-form-label required">Nama Pasien</label>
                             </div>
                             <div class="col-sm-5">
-                                <input type="text"
-                                    class="form-control form-control-sm required text-uppercase @error('nama_pasien') is-invalid @enderror"
-                                    id="nama_pasien" name="nama_pasien">
-                                @error('nama_pasien')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                                <div class="input-group input-group-sm">
+                                    <select class="input-group-text" id="prefix" name="prefix">
+                                        <option value="an">AN.</option>
+                                        <option value="ny">NY.</option>
+                                        <option value="tn">TN.</option>
+                                    </select>
+                                    <input type="text"
+                                        class="form-control form-control-sm required text-uppercase @error('nama_pasien') is-invalid @enderror"
+                                        id="nama_pasien" name="nama_pasien">
+                                    @error('nama_pasien')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <div class="row d-flex justify-content-start align-items-center">
@@ -144,14 +151,16 @@
                     </div>
 
                     <div class="col ms-auto">
-                        <div class="row d-flex justify-content-start align-items-center">
+                        <div class="row d-flex justify-content-start align-items-center mb-1">
                             <div class="col-sm-4">
                                 <label for="colFormLabel" class="col-form-label required">Diagnosa</label>
                             </div>
                             <div class="col-sm-5">
-                                <input type="text"
+                                <textarea class="form-control form-control-sm required text-uppercase @error('diagnosa') is-invalid @enderror"
+                                    id="diagnosa" name="diagnosa" style="height: 70px"></textarea>
+                                {{-- <input type="text"
                                     class="form-control form-control-sm required text-uppercase @error('diagnosa') is-invalid @enderror"
-                                    id="diagnosa" name="diagnosa">
+                                    id="diagnosa" name="diagnosa"> --}}
                                 @error('diagnosa')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -262,7 +271,7 @@
                                 <label for="colFormLabel" class="col-form-label">Anestesi</label>
                             </div>
                             <div class="col-sm-5">
-                                <select name="anestesi" class="form-control form-control-sm required">
+                                <select name="anestesi" id="" class="form-control form-control-sm required">
                                     <option value="">-- Pilih Anestesiologis --</option>
                                     @foreach ($operators as $operator)
                                         <option value="{{ $operator->nama_dokter }}">{{ $operator->nama_dokter }}
@@ -625,7 +634,6 @@
         dateInput.addEventListener('change', fetchAvailableDoctors);
         roomInput.addEventListener('change', fetchAvailableDoctors);
         timeInput.addEventListener('change', fetchAvailableDoctors);
-
     </script>
 
 @endsection

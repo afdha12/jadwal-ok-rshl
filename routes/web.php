@@ -34,6 +34,7 @@ Route::post('/update-status/{id}', [JadwalController::class, 'updateStatus'])->n
 
 Route::get('/get-available-times', [JadwalController::class, 'getAvailableTimes']);
 Route::get('/get-available-doctors', [JadwalController::class, 'getAvailableDoctors']);
+Route::get('/dokter/{id}', [DisplayController::class, 'getNamaDokter']);
 
 
 

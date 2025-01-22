@@ -23,23 +23,33 @@ class JadwalController extends Controller
     {
 
         // Hapus session pencarian jika "Hapus Filter" diakses
-        if ($request->input('clear_filter')) {
-            session()->forget('date');
-        }
+    if ($request->input('clear_filter')) {
+        session()->forget('date');
+        session()->forget('no_cm');
+    }
 
-        $query = JadwalOK::query();
+    $query = JadwalOK::query();
 
-        // Ambil parameter pencarian dari query string atau session
-        $date = $request->input('start_date') ?? session('date');
+    // Ambil parameter pencarian dari query string atau session
+    $date = $request->input('start_date') ?? session('date');
+    $no_cm = $request->input('no_cm') ?? session('no_cm');
 
-        if ($date) {
-            // Simpan ke session
-            session(['date' => $date]);
+    if ($date) {
+        // Simpan ke session
+        session(['date' => $date]);
 
-            // Format tanggal dan filter data
-            $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
-            $query->where('tgl_operasi', $formattedDate);
-        }
+        // Format tanggal dan filter data
+        $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
+        $query->where('tgl_operasi', $formattedDate);
+    }
+
+    if ($no_cm) {
+        // Simpan ke session
+        session(['no_cm' => $no_cm]);
+
+        // Filter data berdasarkan no_cm
+        $query->where('no_cm', 'like', '%' . $no_cm . '%');
+    }
 
         // Data tambahan lainnya
         $now = Carbon::now()->setTimezone('Asia/Jakarta');
@@ -72,7 +82,7 @@ class JadwalController extends Controller
         // $operators = ['dr. Ade Aria Nugraha, Sp.An', 'dr. Ahmad Angga Luthfi, Sp.An', 'dr. Ali Satria, Sp.B', 'dr. Ary Rachmanto, Sp.B', 'dr. Bima Ananta Bukhori, Sp.OG', 'dr. Budi Syamhudi, Sp.OG', 'dr. Defayudina Dafilianty R., Sp.M', 'dr. Dino Rinaldi, Sp.OG(Onk)', 'dr. Gunawan Yudhistira, Sp.THT-KL', 'dr. Ikrizal, Sp.U', 'drg. Irsan Kurniawan, Sp.BM,Subsp.T.M.T.M.J(K)', 'dr. Joel Purba, Sp.OG', 'drg. Kustini Indah S, Sp.KGA', 'dr. Muhammad Dwi Nugroho, Sp.M', 'dr. Muhammad Fajrin Armin F, Sp.OT', 'dr. Muhammad Zulkarnain Hussein, Sp.OG(K)', 'dr. Nurul Islami, Sp.OG', 'dr. Nurul Azizah Busatam, Sp.BA', 'dr. Putu Junita, Sp.An (K)IC', 'dr. Ratna Dewi Puspita Sari, Sp.OG', 'dr. Ratu Fajaria, Sp.THT-KL', 'dr.  Risal Wintoko, Sp.B', 'dr. Rodiani, Sp.OG', 'dr. Sabasdin Harahap, Sp.B, MARS, FICS', 'dr. Sarlita Indah Permatasari, Sp.OG', 'dr. Taufiqurahman Rahim, Sp.OG(K)', 'dr. Teguh Astanto, Sp. B', 'dr. Fachry Rafiq Iwan, Sp.B', 'dr. Idris, Sp.OG', 'dr. Zulfadli, Sp.OG'];
         $operators = Dokter::orderBy('nama_dokter')->get();
         $optionKamar = ['KAMAR 1', 'KAMAR 2', 'KAMAR 3'];
-        $statuses = ['Belum Terlaksana', 'Terlaksana', 'On-Process', 'Reschedule'];
+        $statuses = ['BELUM TERLAKSANA', 'ON-PROCESS', 'TERLAKSANA', 'RESCHEDULE'];
         $docs = ['Ada', 'Tidak Ada'];
         $penjamin = ['A1', 'A2', 'A3'];
         return view('pages.input_jadwal', compact('operators', 'optionKamar', 'statuses', 'docs', 'penjamin'));
@@ -86,15 +96,11 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-
-        $now = Carbon::now();
-        $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
-
         $validated = $request->validate([
             'tgl_operasi' => 'required',
             'jam_operasi' => 'nullable',
             'jam_operasi2' => 'nullable',
+            'prefix' => 'nullable',
             'nama_pasien' => 'required',
             'usia' => 'required',
             's_usia' => 'nullable',
@@ -158,6 +164,16 @@ class JadwalController extends Controller
 
         $data = JadwalOK::create($validated);
 
+        $now = Carbon::now();
+        $now->setTimezone('Asia/Jakarta');
+        $today = $now->format('Y-m-d');
+
+        // Muat relasi dokter
+        $data->load('dokter');
+
+        // Gabungkan usia dan s_usia
+        $data->usia_s_usia = $data->usia . ' ' . $data->s_usia;
+
         // broadcast(new DataUpdated($data));
         if ($data->tgl_operasi === $today) {
             broadcast(new DataAdded($data));
@@ -187,7 +203,7 @@ class JadwalController extends Controller
     {
         $data = JadwalOK::with('dokter')->findOrFail($id);
         $optionKamar = ['KAMAR 1', 'KAMAR 2', 'KAMAR 3'];
-        $statuses = ['BELUM TERLAKSANA', 'TERLAKSANA', 'ON-PROCESS', 'RESCHEDULE'];
+        $statuses = ['BELUM TERLAKSANA', 'ON-PROCESS', 'TERLAKSANA', 'RESCHEDULE'];
         $operators = Dokter::orderBy('nama_dokter')->get();
         $docs = ['Ada', 'Tidak Ada'];
         // $operators = ['dr. Ade Aria Nugraha, Sp.An', 'dr. Ahmad Angga Luthfi, Sp.An', 'dr. Ali Satria, Sp.B', 'dr. Ary Rachmanto, Sp.B', 'dr. Bima Ananta Bukhori, Sp.OG', 'dr. Budi Syamhudi, Sp.OG', 'dr. Defayudina Dafilianty R., Sp.M', 'dr. Dino Rinaldi, Sp.OG(Onk)', 'dr. Gunawan Yudhistira, Sp.THT-KL', 'dr. Ikrizal, Sp.U', 'drg. Irsan Kurniawan, Sp.BM,Subsp.T.M.T.M.J(K)', 'dr. Joel Purba, Sp.OG', 'drg. Kustini Indah S, Sp.KGA', 'dr. Muhammad Dwi Nugroho, Sp.M', 'dr. Muhammad Fajrin Armin F, Sp.OT', 'dr. Muhammad Zulkarnain Hussein, Sp.OG(K)', 'dr. Nurul Islami, Sp.OG', 'dr. Nurul Azizah Busatam, Sp.BA', 'dr. Putu Junita, Sp.An (K)IC', 'dr. Ratna Dewi Puspita Sari, Sp.OG', 'dr. Ratu Fajaria, Sp.THT-KL', 'dr.  Risal Wintoko, Sp.B', 'dr. Rodiani, Sp.OG', 'dr. Sabasdin Harahap, Sp.B, MARS, FICS', 'dr. Sarlita Indah Permatasari, Sp.OG', 'dr. Taufiqurahman Rahim, Sp.OG(K)', 'dr. Teguh Astanto, Sp. B', 'dr. Fachry Rafiq Iwan, Sp.B', 'dr. Idris, Sp.OG', 'dr. Zulfadli, Sp.OG'];
@@ -203,10 +219,6 @@ class JadwalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $now = Carbon::now();
-        $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
-
         $data = JadwalOK::find($id);
         $oldDate = $data->tgl_operasi;
         // $data->update($request->all());
@@ -215,6 +227,7 @@ class JadwalController extends Controller
             'tgl_operasi' => 'required',
             'jam_operasi' => 'nullable',
             'jam_operasi2' => 'nullable',
+            'prefix' => 'nullable',
             'nama_pasien' => 'required',
             'usia' => 'required',
             's_usia' => 'nullable',
@@ -259,6 +272,16 @@ class JadwalController extends Controller
         $validated['tgl_operasi'] = Carbon::createFromFormat('d-m-Y', $validated['tgl_operasi'])->format('Y-m-d'); // Konversi ke format Y-m-d
 
         $data->update($validated);
+
+        $now = Carbon::now();
+        $now->setTimezone('Asia/Jakarta');
+        $today = $now->format('Y-m-d');
+
+        // Muat relasi dokter
+        $data->load('dokter');
+
+        // Gabungkan usia dan s_usia
+        $data->usia_s_usia = $data->usia . ' ' . $data->s_usia;
 
         $newDate = $validated['tgl_operasi'];
         // if ($data->tgl_operasi === $today) {
@@ -318,7 +341,7 @@ class JadwalController extends Controller
     {
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
-        $today = $now->format('d-m-Y');
+        $today = $now->format('Y-m-d');
         $data = JadwalOK::find($id);
         if ($data->tgl_operasi === $today) {
             broadcast(new DataDeleted($id));
@@ -326,120 +349,6 @@ class JadwalController extends Controller
         $data->delete();
         return redirect()->back()->with('success', 'Data Pasien berhasil dihapus');
     }
-
-    // public function getAvailableTimes(Request $request)
-    // {
-    //     // Ambil input dari request
-    //     $date = $request->tgl_operasi;
-    //     $room = $request->ruang_operasi;
-
-    //     // Pastikan input ruangan dan tanggal ada
-    //     if (!$date || !$room) {
-    //         return response()->json([], 200); // Kembalikan data kosong jika salah satu input tidak ada
-    //     }
-
-    //     // Format tanggal ke Y-m-d
-    //     $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
-
-    //     // Ambil jadwal operasi berdasarkan filter tanggal dan ruangan
-    //     $existingSchedules = JadwalOK::query()
-    //         ->where('tgl_operasi', $formattedDate)
-    //         ->where('ruang_operasi', $room)
-    //         ->orderBy('jam_operasi')
-    //         ->get();
-
-    //     // Definisikan jam operasi mulai dari 08:00 hingga 17:00
-    //     $allTimes = [];
-    //     $startTime = Carbon::createFromTime(8, 0);
-    //     $endOfDay = Carbon::createFromTime(17, 0);
-
-    //     while ($startTime < $endOfDay) {
-    //         $allTimes[] = $startTime->format('H:i');
-    //         $startTime->addMinutes(30);
-    //     }
-
-    //     // Filter waktu yang tidak tersedia
-    //     $blockedTimes = [];
-    //     foreach ($existingSchedules as $schedule) {
-    //         $start = Carbon::createFromFormat('H:i', $schedule->jam_operasi);
-    //         $end = Carbon::createFromFormat('H:i', $schedule->jam_operasi2);
-
-    //         // Tambahkan semua waktu dalam rentang mulai hingga selesai ke blockedTimes
-    //         $current = $start->copy();
-    //         while ($current <= $end) { // Termasuk jam selesai
-    //             $blockedTimes[] = $current->format('H:i');
-    //             $current->addMinutes(30);
-    //         }
-    //     }
-
-    //     // Filter hanya waktu yang tidak ada di blockedTimes
-    //     $availableTimes = array_diff($allTimes, $blockedTimes);
-
-    //     // Urutkan waktu
-    //     sort($availableTimes);
-
-    //     return response()->json(array_values($availableTimes));
-    // }
-
-    // public function getAvailableTimes(Request $request)
-    // {
-    //     // Ambil input dari request
-    //     $date = $request->tgl_operasi;
-    //     $room = $request->ruang_operasi;
-    //     $editId = $request->id; // Ambil ID jika ada, untuk edit
-
-    //     // Pastikan input ruangan dan tanggal ada
-    //     if (!$date || !$room) {
-    //         return response()->json([], 200); // Kembalikan data kosong jika salah satu input tidak ada
-    //     }
-
-    //     // Format tanggal ke Y-m-d
-    //     $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
-
-    //     // Ambil jadwal operasi berdasarkan filter tanggal dan ruangan
-    //     $existingSchedules = JadwalOK::query()
-    //         ->where('tgl_operasi', $formattedDate)
-    //         ->where('ruang_operasi', $room)
-    //         ->orderBy('jam_operasi')
-    //         ->get();
-
-    //     // Jika sedang mengedit jadwal, kecualikan jadwal yang sedang diubah
-    //     if ($editId) {
-    //         $existingSchedules = $existingSchedules->where('id', '!=', $editId);
-    //     }
-
-    //     // Definisikan jam operasi mulai dari 08:00 hingga 17:00
-    //     $allTimes = [];
-    //     $startTime = Carbon::createFromTime(8, 0);
-    //     $endOfDay = Carbon::createFromTime(17, 0);
-
-    //     while ($startTime < $endOfDay) {
-    //         $allTimes[] = $startTime->format('H:i');
-    //         $startTime->addMinutes(30);
-    //     }
-
-    //     // Filter waktu yang tidak tersedia
-    //     $blockedTimes = [];
-    //     foreach ($existingSchedules as $schedule) {
-    //         $start = Carbon::createFromFormat('H:i', $schedule->jam_operasi);
-    //         $end = Carbon::createFromFormat('H:i', $schedule->jam_operasi2);
-
-    //         // Tambahkan semua waktu dalam rentang mulai hingga selesai ke blockedTimes
-    //         $current = $start->copy();
-    //         while ($current <= $end) { // Termasuk jam selesai
-    //             $blockedTimes[] = $current->format('H:i');
-    //             $current->addMinutes(30);
-    //         }
-    //     }
-
-    //     // Filter hanya waktu yang tidak ada di blockedTimes
-    //     $availableTimes = array_diff($allTimes, $blockedTimes);
-
-    //     // Urutkan waktu
-    //     sort($availableTimes);
-
-    //     return response()->json(array_values($availableTimes));
-    // }
 
     public function getAvailableTimes(Request $request)
     {
@@ -543,7 +452,6 @@ class JadwalController extends Controller
         $date = $request->tgl_operasi;
         $room = $request->ruang_operasi;
         $startTime = $request->jam_operasi;
-        // $editId = $request->edit_id; // Ambil edit_id jika ada
         $editId = $request->edit_id; // ID untuk jadwal yang sedang diedit
 
         // Validasi input
@@ -567,19 +475,26 @@ class JadwalController extends Controller
 
         // Jika edit_id ada, maka kecualikan jadwal yang sedang diedit
         if ($editId) {
+            // Kecualikan dokter yang sedang diedit
             $conflictedDoctorsQuery->where('id', '!=', $editId);
         }
 
+        // Ambil dokter yang memiliki konflik
         $conflictedDoctors = $conflictedDoctorsQuery->pluck('dokter_id')->toArray();
 
         // Ambil dokter yang tidak memiliki konflik jadwal
-        $availableDoctors = Dokter::whereNotIn('id', $conflictedDoctors)->get();
+        $availableDoctors = Dokter::whereNotIn('id', $conflictedDoctors);
+
+        // Jika edit_id ada, tambahkan dokter yang sedang diedit dalam hasil
+        if ($editId) {
+            $doctorBeingEdited = Dokter::find($editId);
+            if ($doctorBeingEdited) {
+                $availableDoctors->union(Dokter::where('id', $doctorBeingEdited->id));
+            }
+        }
 
         // Kembalikan hasil
-        return response()->json($availableDoctors);
+        return response()->json($availableDoctors->get());
     }
-
-
-
 
 }

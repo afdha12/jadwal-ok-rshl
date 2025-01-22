@@ -28,7 +28,7 @@
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="text-center">{{ $item->tanggal }}</td>
-                            <td class="text-center">{{ $item->nama_dokter }}</td>
+                            <td class="text-center">{{ $item->dokter['nama_dokter'] }}</td>
                             <td class="text-center">
                                 <a href="{{ route('dokter-anestesi.edit', $item->id) }}"
                                     class="btn btn-outline-primary btn-sm mr-2" data-bs-toggle="modal"

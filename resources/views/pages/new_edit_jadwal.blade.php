@@ -89,8 +89,15 @@
                                 <label for="colFormLabel" class="col-form-label">Nama Pasien</label>
                             </div>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control form-control-sm required text-uppercase"
-                                    id="nama_pasien" name="nama_pasien" value="{{ $data->nama_pasien }}">
+                                <div class="input-group input-group-sm">
+                                    <select class="input-group-text" id="prefix" name="prefix">
+                                        <option value="an" {{ $data->prefix == 'an' ? 'selected' : '' }}>AN.</option>
+                                        <option value="ny" {{ $data->prefix == 'ny' ? 'selected' : '' }}>NY.</option>
+                                        <option value="tn" {{ $data->prefix == 'tn' ? 'selected' : '' }}>TN.</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm required text-uppercase"
+                                        id="nama_pasien" name="nama_pasien" value="{{ $data->nama_pasien }}">
+                                </div>
                             </div>
                         </div>
                         <div class="row d-flex justify-content-start align-items-center">
@@ -106,8 +113,8 @@
                                                 aria-describedby="basic-addon1"> --}}
                                     {{-- <span class="input-group-text" id="basic-addon1">thn</span> --}}
                                     <select class="input-group-text" id="s_usia" name="s_usia">
-                                        <option value="thn">thn</option>
-                                        <option value="bln">bln</option>
+                                        <option value="thn" {{ $data->s_usia == 'thn' ? 'selected' : '' }}>thn</option>
+                                        <option value="bln" {{ $data->s_usia == 'bln' ? 'selected' : '' }}>bln</option>
                                     </select>
                                     @error('usia')
                                         <div class="invalid-feedback">
@@ -454,10 +461,10 @@
                         <div class="col-sm-5">
                             {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="verifikasi"
                                 name="verifikasi" value="{{ $data->verifikasi }}"> --}}
-                                <select name="verifikasi" class="form-control form-control-sm required">
-                                    <option value="sudah" {{ $data->verifikasi == 'sudah' ? 'selected' : '' }}>Sudah</option>
-                                    <option value="belum" {{ $data->verifikasi == 'belum' ? 'selected' : '' }}>Belum</option>
-                                </select>                                
+                            <select name="verifikasi" class="form-control form-control-sm required">
+                                <option value="sudah" {{ $data->verifikasi == 'sudah' ? 'selected' : '' }}>Sudah</option>
+                                <option value="belum" {{ $data->verifikasi == 'belum' ? 'selected' : '' }}>Belum</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row d-flex justify-content-start align-items-center">
@@ -468,7 +475,7 @@
                             <select name="pengingat" class="form-control form-control-sm required">
                                 <option value="sudah" {{ $data->pengingat == 'sudah' ? 'selected' : '' }}>Sudah</option>
                                 <option value="belum" {{ $data->pengingat == 'belum' ? 'selected' : '' }}>Belum</option>
-                            </select>                            
+                            </select>
                             {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="pengingat"
                                 name="pengingat" value="{{ $data->pengingat }}"> --}}
                         </div>
@@ -482,10 +489,6 @@
                                 name="keterangan" value="{{ $data->keterangan }}">
                         </div>
                     </div>
-                    {{-- <div class="col">
-                    </div>
-                    <div class="col ms-auto">
-                    </div> --}}
                 </div>
             </div>
         </div>
@@ -517,58 +520,6 @@
         </div>
     </form>
 
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ambil elemen input
-            const dateInput = document.querySelector('#tgl_operasi');
-            const roomInput = document.querySelector('#ruang_operasi');
-            const timeSelect = document.querySelector('#jam_operasi');
-            const editId = document.querySelector('#edit-id') ? document.querySelector('#edit-id').value : null;
-
-            // Fungsi untuk mengambil jam yang tersedia
-            function fetchAvailableTimes() {
-                const date = dateInput.value;
-                const room = roomInput.value;
-
-                // Jika salah satu belum dipilih, kosongkan dropdown
-                if (!date || !room) {
-                    timeSelect.innerHTML =
-                        '<option value="">Pilih tanggal dan ruang operasi terlebih dahulu</option>';
-                    return;
-                }
-
-                // Kirim permintaan AJAX untuk mengambil waktu yang tersedia
-                let url = `/get-available-times?tgl_operasi=${date}&ruang_operasi=${room}`;
-                if (editId) {
-                    url += `&id=${editId}`; // Jika di halaman edit, tambahkan ID untuk pengecekan yang lebih spesifik
-                }
-
-                console.log('Fetching available times from URL:', url); // Debugging statement
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Available times:', data); // Debugging statement
-                        timeSelect.innerHTML = '<option value="">Pilih Jam</option>';
-                        data.forEach(time => {
-                            timeSelect.innerHTML += `<option value="${time}">${time}</option>`;
-                        });
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
-
-            // Tambahkan event listener untuk kedua input (tanggal dan ruang operasi)
-            dateInput.addEventListener('change', fetchAvailableTimes);
-            roomInput.addEventListener('change', fetchAvailableTimes);
-
-            // Jika halaman edit, langsung jalankan fetch untuk mendapatkan waktu yang tersedia
-            if (editId) {
-                fetchAvailableTimes();
-            }
-        });
-    </script> --}}
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil elemen input
@@ -577,6 +528,9 @@
             const timeSelect = document.querySelector('#jam_operasi');
             const doctorSelect = document.querySelector('#dokter_id');
             const editId = document.querySelector('#edit-id') ? document.querySelector('#edit-id').value : null;
+
+            // Ambil nilai dokter yang sebelumnya dipilih dari data-selected
+            const selectedDoctorId = doctorSelect.dataset.selected;
 
             // Fungsi untuk mengambil jam yang tersedia
             function fetchAvailableTimes() {
@@ -594,7 +548,7 @@
                 let url = `/get-available-times?tgl_operasi=${date}&ruang_operasi=${room}`;
                 if (editId) {
                     url +=
-                        `&edit_id=${editId}`; // Jika di halaman edit, tambahkan ID untuk pengecekan yang lebih spesifik
+                    `&edit_id=${editId}`; // Jika di halaman edit, tambahkan ID untuk pengecekan yang lebih spesifik
                 }
 
                 fetch(url)
@@ -622,7 +576,6 @@
                 const date = dateInput.value;
                 const room = roomInput.value;
                 const time = timeSelect.value;
-                const selectedDoctorId = doctorSelect.dataset.selected; // Ambil nilai dari atribut data-selected
 
                 if (!date || !room || !time) {
                     doctorSelect.innerHTML =
@@ -631,16 +584,15 @@
                 }
 
                 fetch(
-                        `/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}&edit_id=${editId}`
-                        )
+                        `/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}&edit_id=${editId}`)
                     .then(response => response.json())
                     .then(data => {
                         doctorSelect.innerHTML = '<option value="">Pilih Dokter</option>';
                         data.forEach(doctor => {
                             doctorSelect.innerHTML +=
                                 `<option value="${doctor.id}" ${doctor.id == selectedDoctorId ? 'selected' : ''}>
-                    ${doctor.nama_dokter}
-                </option>`;
+                            ${doctor.nama_dokter}
+                        </option>`;
                         });
 
                         // Kosongkan data-selected setelah digunakan
@@ -648,7 +600,6 @@
                     })
                     .catch(error => console.error("Error fetching doctors:", error));
             }
-
 
             // Tambahkan event listener untuk kedua input (tanggal dan ruang operasi)
             dateInput.addEventListener('change', fetchAvailableTimes);
@@ -659,79 +610,5 @@
             fetchAvailableTimes();
         });
     </script>
-
-
-    {{-- <script>
-        const dateInput = document.querySelector('#tgl_operasi');
-        const roomInput = document.querySelector('#ruang_operasi');
-        const timeInput = document.querySelector('#jam_operasi');
-        const timeSelect = document.querySelector('#jam_operasi');
-        const doctorSelect = document.querySelector('#dokter_id');
-        // Ambil ID jadwal dari URL
-        const editId = window.location.pathname.split('/').slice(-2, -1)[0];
-
-        // AJAX untuk halaman edit
-        function fetchAvailableTimes() {
-            const date = dateInput.value;
-            const room = roomInput.value;
-            // const timeSelect = document.querySelector('#jam_operasi');
-
-            if (!date || !room) {
-                timeSelect.innerHTML = '<option value="">Pilih tanggal dan ruang operasi terlebih dahulu</option>';
-                return;
-            }
-
-            // Fetch data
-            fetch(`/get-available-times?tgl_operasi=${date}&ruang_operasi=${room}&edit_id=${editId}`)
-                .then(response => response.json())
-                .then(data => {
-                    timeSelect.innerHTML = '<option value="">Pilih Jam</option>';
-                    data.forEach(time => {
-                        timeSelect.innerHTML += `<option value="${time}">${time}</option>`;
-                    });
-
-                    // Tetapkan nilai default dari jadwal yang sedang diedit
-                    const currentTime = document.querySelector('#jam_operasi').dataset.selected;
-                    if (currentTime) {
-                        const option = timeSelect.querySelector(`option[value="${currentTime}"]`);
-                        if (option) option.selected = true;
-                    }
-                });
-        }
-
-        // Tambahkan event listener
-        document.querySelector('#tgl_operasi').addEventListener('change', fetchAvailableTimes);
-        document.querySelector('#ruang_operasi').addEventListener('change', fetchAvailableTimes);
-
-        // Panggil fungsi awal
-        fetchAvailableTimes();
-
-        function fetchAvailableDoctors() {
-            const date = dateInput.value;
-            const room = roomInput.value;
-            const time = timeInput.value;
-            // const editId = editIdInput.value; // Pastikan ada input tersembunyi untuk schedule_id
-
-            if (!date || !room || !time) {
-                doctorSelect.innerHTML =
-                    '<option value="">Pilih tanggal, ruangan, dan jam operasi terlebih dahulu</option>';
-                return;
-            }
-
-            fetch(
-                    `/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}&schedule_id=${editId}`)
-                .then(response => response.json())
-                .then(data => {
-                    doctorSelect.innerHTML = '<option value="">Pilih Dokter</option>';
-                    data.forEach(doctor => {
-                        doctorSelect.innerHTML +=
-                            `<option value="${doctor.id}">${doctor.nama_dokter}</option>`;
-                    });
-                });
-        }
-        fetchAvailableDoctors();
-    </script> --}}
-
-
 
 @endsection

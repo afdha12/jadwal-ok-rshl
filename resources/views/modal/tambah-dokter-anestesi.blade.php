@@ -16,9 +16,9 @@
                     <div class="mb-3">
                         <label for="textNamaDokter" class="form-label">Dokter Anestesi</label>
                         {{-- <input type="text" class="form-control" id="nama_dokter" name="nama_dokter"> --}}
-                        <select name="nama_dokter" id="nama_dokter" class="form-control required">
+                        <select name="dokter_id" id="dokter_id" class="form-control required">
                             @foreach ($operators as $operator)
-                                <option value="{{ $operator->nama_dokter }}">{{ $operator->nama_dokter }}</option>
+                                <option value="{{ $operator->id }}">{{ $operator->nama_dokter }}</option>
                             @endforeach
                         </select>
                     </div>
