@@ -495,8 +495,8 @@
                         </div>
                         <div class="col-sm-5">
                             <select name="verifikasi" class="form-control form-control-sm required">
-                                <option value="sudah">Sudah</option>
                                 <option value="belum">Belum</option>
+                                <option value="sudah">Sudah</option>
                             </select>
                             {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="verifikasi"
                                 name="verifikasi"> --}}
@@ -508,8 +508,8 @@
                         </div>
                         <div class="col-sm-5">
                             <select name="pengingat" class="form-control form-control-sm required">
-                                <option value="sudah">Sudah</option>
                                 <option value="belum">Belum</option>
+                                <option value="sudah">Sudah</option>
                             </select>
                             {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="pengingat"
                                 name="pengingat"> --}}

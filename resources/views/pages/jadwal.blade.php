@@ -184,9 +184,9 @@
                 {{ $data->links('pagination::bootstrap-5') }}
             </div> --}}
             <div class="d-flex justify-content-between align-items-center">
-                <div>
+                {{-- <div>
                     Menampilkan {{ $data->firstItem() }} sampai {{ $data->lastItem() }} dari {{ $data->total() }} data
-                </div>
+                </div> --}}
                 <div>
                     {{ $data->links('pagination::bootstrap-5') }}
                 </div>

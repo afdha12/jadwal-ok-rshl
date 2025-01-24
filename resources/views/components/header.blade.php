@@ -10,20 +10,24 @@
                 <div class="align-self-center font-monospace fs-4 fw-bold">JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG
                 </div>
             </a>
-            <div class="ms-auto me-2 px-2 justify-content-end">
+            {{-- <div class="ms-auto me-2 px-2 justify-content-end">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button class="btn btn-sm btn-outline-danger font-monospace">Logout <i
                             class="bi bi-box-arrow-right"></i></button>
                 </form>
-            </div>
+            </div> --}}
+            @if (Route::currentRouteName() == 'schedule.index')
+                <div class="ms-auto me-2 px-2 justify-content-end">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-sm btn-outline-danger font-monospace">Logout <i
+                                class="bi bi-box-arrow-right"></i></button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
-    {{-- <div class="d-flex">
-        <div class="p-2">Flex item</div>
-        <div class="p-2">Flex item</div>
-        <div class="ms-auto p-2 justify-content-end">Flex item</div>
-    </div> --}}
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
         aria-labelledby="offcanvasWithBothOptionsLabel">

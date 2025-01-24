@@ -63,7 +63,7 @@ class JadwalController extends Controller
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
 
-        $data = $query->orderBy('tgl_operasi', 'desc')
+        $data = $query->orderByRaw("CASE WHEN tgl_operasi = ? THEN 0 ELSE 1 END, tgl_operasi DESC", [$today])
             ->orderBy('ruang_operasi', 'asc')
             ->orderBy('jam_operasi', 'asc')
             ->paginate(30);
