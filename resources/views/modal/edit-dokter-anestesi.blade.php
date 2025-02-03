@@ -15,14 +15,14 @@
                         <div class="mb-3">
                             <label for="textTanggal" class="form-label">Tanggal</label>
                             <input type="text" class="form-control" id="tanggal" name="tanggal"
-                                value="{{ $data->tanggal }}">
+                                value="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y') }}">
                         </div>
                         <div class="mb-3">
                             <label for="textNamaDokter" class="form-label">Dokter Anestesi</label>
                             {{-- <input type="text" class="form-control" id="nama_dokter" name="nama_dokter"> --}}
                             <select name="dokter_id" id="dokter_id" class="form-control required">
                                 @foreach ($operators as $operator)
-                                    <option value="{{ $operator->id }}" @if ($operator == $data->dokter_id) selected @endif>
+                                    <option value="{{ $operator->id }}" @if ($operator->id == $data->dokter_id) selected @endif>
                                         {{ $operator->nama_dokter }}</option>
                                 @endforeach
                                 {{-- @foreach ($operators as $operator)

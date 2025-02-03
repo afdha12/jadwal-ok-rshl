@@ -27,7 +27,7 @@
                     @foreach ($data as $item)
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
-                            <td class="text-center">{{ $item->tanggal }}</td>
+                            <td class="text-center">{{ \Carbon\Carbon::createFromFormat('Y-m-d', $item->tanggal)->format('d-m-Y') }}</td>
                             <td class="text-center">{{ $item->dokter['nama_dokter'] }}</td>
                             <td class="text-center">
                                 <a href="{{ route('dokter-anestesi.edit', $item->id) }}"

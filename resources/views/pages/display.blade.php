@@ -55,7 +55,7 @@
                         <tr data-id="{{ $item->id }}">
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="text-center">{{ $item->jam_operasi }}</td>
-                            <td class="text-center">{{ $item->nama_pasien }}</td>
+                            <td class="text-center">{{ $item->prefix .' '. $item->nama_pasien }}</td>
                             <td class="text-center">{{ $item->usia . ' ' . $item->s_usia }}</td>
                             <td class="text-center">{{ $item->no_cm }}</td>
                             <td>{{ $item->diagnosa }}</td>

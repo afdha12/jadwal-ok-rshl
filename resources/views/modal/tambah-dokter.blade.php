@@ -22,6 +22,10 @@
                                 @endforeach
                             </select> --}}
                         </div>
+                        <div class="mb-3">
+                            <label for="textNamaDokter" class="form-label">Spesialis</label>
+                            <input type="text" class="form-control" id="spesialis" name="spesialis">
+                        </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

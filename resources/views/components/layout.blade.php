@@ -26,6 +26,9 @@
 
     <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/hermina.png') }}">
+
+    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script type="text/javascript" src="{{ asset('js/app.js') }}" defer></script> --}}
     {{-- <script src="js/functions.js"></script> --}}
 
     <style>
@@ -52,14 +55,14 @@
             font-weight: bold;
         }
     </style>
-    
+
 </head>
 
 <body>
     <div>
         @include('components.header')
-        <div class="p-3">
-            {{-- @include('components.sidebar') --}}
+        <div>
+            {{-- @include('components.side-bar') --}}
             <main>
                 @yield('content')
             </main>
@@ -209,7 +212,7 @@
                 const [hours, minutes] = startTime.split(':').map(Number);
 
                 // Tambahkan durasi operasi, misalnya 1 jam (60 menit)
-                const endTime = new Date(0, 0, 0, hours, minutes + 60);
+                const endTime = new Date(0, 0, 0, hours, minutes + 30);
 
                 // Format waktu ke HH:MM
                 const formattedEndTime = endTime

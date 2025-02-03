@@ -15,6 +15,10 @@
                             <label for="textNamaDokter" class="form-label">Nama Dokter</label>
                             <input type="text" class="form-control" id="nama_dokter" name="nama_dokter" value="{{ $data->nama_dokter }}">
                         </div>
+                        <div class="mb-3">
+                            <label for="text" class="form-label">Spesialis</label>
+                            <input type="text" class="form-control" id="spesialis" name="spesialis" value="{{ $data->spesialis }}">
+                        </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

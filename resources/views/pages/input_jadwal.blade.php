@@ -99,9 +99,9 @@
                             <div class="col-sm-5">
                                 <div class="input-group input-group-sm">
                                     <select class="input-group-text" id="prefix" name="prefix">
-                                        <option value="an">AN.</option>
-                                        <option value="ny">NY.</option>
-                                        <option value="tn">TN.</option>
+                                        <option value="an.">AN.</option>
+                                        <option value="ny.">NY.</option>
+                                        <option value="tn.">TN.</option>
                                     </select>
                                     <input type="text"
                                         class="form-control form-control-sm required text-uppercase @error('nama_pasien') is-invalid @enderror"
@@ -141,7 +141,7 @@
 
                         <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
-                                <label for="colFormLabel" class="col-form-label required">BB</label>
+                                <label for="colFormLabel" class="col-form-label">BB</label>
                             </div>
                             <div class="col-sm-5">
                                 <input type="text" class="form-control form-control-sm text-uppercase" id="bb"

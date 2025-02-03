@@ -113,7 +113,7 @@
                                 {{ $item->jam_operasi2 ?? 'Belum Ditentukan' }}</td>
                             {{-- <td class="text-center">{{ $item->jam_operasi2 ??'-' }}</td> --}}
                             <td class="text-center px-2 text-nowrap">{{ $item->ruang_operasi }}</td>
-                            <td class="text-center px-2 text-nowrap text-uppercase">{{ $item->prefix .'. '. $item->nama_pasien }}</td>
+                            <td class="text-center px-2 text-nowrap text-uppercase">{{ $item->prefix .' '. $item->nama_pasien }}</td>
                             <td class="text-center px-2 text-nowrap">{{ $item->usia .' '. $item->s_usia }}</td>
                             <td class="text-center px-2">{{ $item->no_cm }}</td>
                             <td class="text-center px-2">{{ $item->bb }}</td>

@@ -91,9 +91,9 @@
                             <div class="col-sm-5">
                                 <div class="input-group input-group-sm">
                                     <select class="input-group-text" id="prefix" name="prefix">
-                                        <option value="an" {{ $data->prefix == 'an' ? 'selected' : '' }}>AN.</option>
-                                        <option value="ny" {{ $data->prefix == 'ny' ? 'selected' : '' }}>NY.</option>
-                                        <option value="tn" {{ $data->prefix == 'tn' ? 'selected' : '' }}>TN.</option>
+                                        <option value="an." {{ $data->prefix == 'an.' ? 'selected' : '' }}>AN.</option>
+                                        <option value="ny." {{ $data->prefix == 'ny.' ? 'selected' : '' }}>NY.</option>
+                                        <option value="tn." {{ $data->prefix == 'tn.' ? 'selected' : '' }}>TN.</option>
                                     </select>
                                     <input type="text" class="form-control form-control-sm required text-uppercase"
                                         id="nama_pasien" name="nama_pasien" value="{{ $data->nama_pasien }}">
