@@ -376,7 +376,7 @@ class JadwalController extends Controller
         // Ambil semua jam dari 08:00 hingga 17:00
         $allTimes = [];
         $startTime = Carbon::createFromTime(8, 0);
-        $endOfDay = Carbon::createFromTime(17, 0);
+        $endOfDay = Carbon::createFromTime(24, 0);
 
         while ($startTime < $endOfDay) {
             $allTimes[] = $startTime->format('H:i');
