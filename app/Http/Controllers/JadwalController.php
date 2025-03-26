@@ -68,7 +68,8 @@ class JadwalController extends Controller
             ->orderBy('jam_operasi', 'asc')
             ->paginate(30);
 
-        return view('pages.jadwal', compact('data', 'dokter', 'statuses', 'optionKamar', 'operators', 'date'));
+        // return view('pages.jadwal', compact('data', 'dokter', 'statuses', 'optionKamar', 'operators', 'date'));
+        return view('pages.jadwal', compact('data', 'date'));
     }
 
 
