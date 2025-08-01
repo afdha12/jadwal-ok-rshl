@@ -37,8 +37,6 @@
             </div>
         </form>
 
-
-
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped align-middle w-auto" id="myTable">
                 <thead class="table-secondary align-middle">

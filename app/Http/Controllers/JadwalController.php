@@ -221,6 +221,7 @@ class JadwalController extends Controller
     {
         $data = JadwalOK::find($id);
         $oldDate = $data->tgl_operasi;
+
         // $data->update($request->all());
 
         $validated = $request->validate([
@@ -283,6 +284,9 @@ class JadwalController extends Controller
         // Gabungkan usia dan s_usia
         $data->usia_s_usia = $data->usia . ' ' . $data->s_usia;
 
+        $now = Carbon::now();
+        $now->setTimezone('Asia/Jakarta');
+        $today = $now->format('Y-m-d');
         $newDate = $validated['tgl_operasi'];
         // if ($data->tgl_operasi === $today) {
         //     broadcast(new DataUpdated($data));
