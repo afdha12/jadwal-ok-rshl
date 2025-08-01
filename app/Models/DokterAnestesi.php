@@ -13,7 +13,7 @@ class DokterAnestesi extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [ 'tanggal', 'nama_dokter'];
+    protected $fillable = [ 'tanggal', 'dokter_id' ];
 
     public function dokter()
     {

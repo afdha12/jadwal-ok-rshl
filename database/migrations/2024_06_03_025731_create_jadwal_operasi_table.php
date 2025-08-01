@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('no_cm');
             $table->string('diagnosa');
             $table->string('tindakan');
-            $table->string('operator');
+            $table->string('dokter_id');
             $table->string('ruang_operasi');
             $table->string('jaminan');
             $table->string('profilaksis')->nullable();

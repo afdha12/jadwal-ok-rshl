@@ -13,5 +13,5 @@ class Dokter extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [ 'nama_dokter'];
+    protected $fillable = [ 'nama_dokter', 'spesialis' ];
 }

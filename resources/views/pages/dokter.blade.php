@@ -16,6 +16,7 @@
                     <tr>
                         <th class="text-center ">No.</th>
                         <th class="text-center">Nama Dokter</th>
+                        <th class="text-center">Spesialis</th>
                         <th colspan="2" class="text-center">Action</th>
                         <!-- Add more table headers as needed -->
                     </tr>
@@ -25,6 +26,7 @@
                         <tr>
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="text-center">{{ $item->nama_dokter }}</td>
+                            <td class="text-center text-capitalize">{{ $item->spesialis }}</td>
                             <td class="text-center">
                                 <a href="{{ route('dokter.edit', $item->id) }}" class="btn btn-outline-primary btn-sm mr-2"
                                     data-bs-toggle="modal" data-bs-target="#editDokter{{ $item->id }}"><i

@@ -24,7 +24,22 @@ class DataAdded implements ShouldBroadcast
      */
     public function __construct($data)
     {
-        $this->data = $data;
+        // $this->data = $data;
+        $this->data = [
+            'id' => $data->id,
+            'tgl_operasi' => $data->tgl_operasi,
+            'jam_operasi' => $data->jam_operasi,
+            'nama_pasien' => $data->nama_pasien,
+            'usia_s_usia' => $data->usia . ' ' . $data->s_usia, // Gabungkan usia dan s_usia
+            // 'usia' => $data->usia,
+            // 's_usia' => $data->s_usia,
+            'no_cm' => $data->no_cm,
+            'diagnosa' => $data->diagnosa,
+            'tindakan' => $data->tindakan,
+            'dokter' => ['nama_dokter' => $data->dokter->nama_dokter], // Nama dokter dari relasi
+            'ruang_operasi' => $data->ruang_operasi,
+            'status' => $data->status,
+        ];
     }
 
     /**

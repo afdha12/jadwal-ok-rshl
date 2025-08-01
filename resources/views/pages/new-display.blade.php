@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta http-equiv="refresh" content="360">
-    <title>Display Jadwal Operasi</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/hermina.png') }}">
+    {{-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> --}}
+    <meta http-equiv="refresh" content="60">
+    <title>Display</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -17,7 +16,6 @@
 
     {{-- Flatpickr --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -33,8 +31,8 @@
                 </tr>
                 <thead class="table-secondary align-middle">
                     <tr>
-                        <td colspan="10" class="pe-1">Dokter Anestesi hari ini : @foreach ($dokters as $anesthesiologist)
-                                {{ $anesthesiologist->dokter['nama_dokter'] }}
+                        <td colspan="10" class="pe-1">Dokter Anestesi hari ini : @foreach ($dokter as $anesthesiologist)
+                                {{ $anesthesiologist->nama_dokter }}
                             @endforeach
                         </td>
                     </tr>
@@ -47,7 +45,6 @@
                         <th class="text-center">Diagnosa</th>
                         <th class="text-center">Tindakan</th>
                         <th class="text-center">Operator</th>
-                        {{-- <th class="text-center">Anestesi</th> --}}
                         <th class="text-center">Ruang Operasi</th>
                         <th class="text-center">Status</th>
                     </tr>
@@ -57,18 +54,16 @@
                         <tr data-id="{{ $item->id }}">
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="text-center">{{ $item->jam_operasi }}</td>
-                            <td class="text-center">{{ $item->prefix .' '. $item->nama_pasien }}</td>
-                            <td class="text-center">{{ $item->usia . ' ' . $item->s_usia }}</td>
+                            <td class="text-center">{{ $item->nama_pasien }}</td>
+                            <td class="text-center">{{ $item->usia }}</td>
                             <td class="text-center">{{ $item->no_cm }}</td>
                             <td>{{ $item->diagnosa }}</td>
                             <td>{{ $item->tindakan }}</td>
-                            <td class="text-center">{{ $item->dokter['nama_dokter'] }}</td>
-                            {{-- <td class="text-center">{{ $item->ruang_operasi }}</td> --}}
+                            <td class="text-center">{{ $item->operator }}</td>
                             <td class="text-center">{{ $item->ruang_operasi }}</td>
                             <td class="text-center"
                                 style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : ($item->status === 'RESCHEDULE' ? '#FF6500' : '#697565')) }}; color: white;">
-                                {{ $item->status }}
-                            </td>
+                                {{ $item->status }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -89,31 +84,20 @@
         var today = '{{ $today }}';
 
         var dataAddedChannel = pusher.subscribe('data-added.' + today);
-        dataAddedChannel.bind('App\\Events\\DataAdded', function(data) {
-            console.log('Data received from Pusher:', data);
-
-            // Tambahkan row baru ke tabel
-            const newRow = `<tr data-id="${data.data.id}">
-                      <td class="text-center"></td>
-                      <td class="text-center">${data.data.jam_operasi}</td>
-                      <td class="text-center">${data.data.nama_pasien}</td>
-                      <td class="text-center">${data.data.usia_s_usia}</td>
-                      <td class="text-center">${data.data.no_cm}</td>
-                      <td>${data.data.diagnosa}</td>
-                      <td>${data.data.tindakan}</td>
-                      <td class="text-center">${data.data.dokter ? data.data.dokter.nama_dokter : '-'}</td>
-                      <td class="text-center">${data.data.ruang_operasi}</td>
-                      <td class="text-center" style="background-color: ${
-                      data.data.status === 'TERLAKSANA' ? 'green' :
-                      data.data.status === 'ON-PROCESS' ? 'blue' :
-                      data.data.status === 'RESCHEDULE' ? 'blue' : '#697565'
-                      }; color: white;">${data.data.status}</td>
-                    </tr>`;
-
+        dataAddedChannel.bind('App\\Events\\DataUpdated', function(data) {
+            var newRow = `<tr data-id="${data.data.id}">
+                            <td class="text-center"></td>
+                            <td class="text-center">${data.data.jam_operasi}</td>
+                            <td class="text-center">${data.data.nama_pasien}</td>
+                            <td class="text-center">${data.data.usia}</td>
+                            <td class="text-center">${data.data.no_cm}</td>
+                            <td>${data.data.diagnosa}</td>
+                            <td>${data.data.tindakan}</td>
+                            <td class="text-center">${data.data.operator}</td>
+                            <td class="text-center">${data.data.ruang_operasi}</td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? 'blue' : '#697565'))}; color: white;">${data.data.status}</td>
+                          </tr>`;
             $('#data-table-body').append(newRow);
-
-            // Urutkan tabel
-            sortTable();
             updateRowNumbers();
         });
 
@@ -122,14 +106,13 @@
             var row = $(`tr[data-id="${data.data.id}"]`);
             if (data.data.tgl_operasi === today) {
                 if (row.length) {
-                    // Update data yang ada
                     row.find('td:eq(1)').text(data.data.jam_operasi);
                     row.find('td:eq(2)').text(data.data.nama_pasien);
-                    row.find('td:eq(3)').text(data.data.usia_s_usia);
+                    row.find('td:eq(3)').text(data.data.usia);
                     row.find('td:eq(4)').text(data.data.no_cm);
                     row.find('td:eq(5)').text(data.data.diagnosa);
                     row.find('td:eq(6)').text(data.data.tindakan);
-                    row.find('td:eq(7)').text(data.data.dokter.nama_dokter);
+                    row.find('td:eq(7)').text(data.data.operator);
                     row.find('td:eq(8)').text(data.data.ruang_operasi);
                     row.find('td:eq(9)').text(data.data.status)
                         .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status ===
@@ -137,32 +120,27 @@
                         ))
                         .css('color', 'white');
                 } else {
-                    // Tambahkan baris baru jika tidak ada row yang ditemukan
                     var newRow = `<tr data-id="${data.data.id}">
-                <td class="text-center"></td>
-                <td class="text-center">${data.data.jam_operasi}</td>
-                <td class="text-center">${data.data.nama_pasien}</td>
-                <td class="text-center">${data.data.usia_s_usia}</td>
-                <td class="text-center">${data.data.no_cm}</td>
-                <td>${data.data.diagnosa}</td>
-                <td>${data.data.tindakan}</td>
-                <td class="text-center">${data.data.dokter ? data.data.dokter.nama_dokter : '-'}</td>
-                <td class="text-center">${data.data.ruang_operasi}</td>
-                <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : data.data.status === 'ON-PROCESS' ? 'blue' : data.data.status === 'RESCHEDULE' ? 'blue' : '#697565'}; color: white;">${data.data.status}</td>
-            </tr>`;
+                            <td class="text-center"></td>
+                            <td class="text-center">${data.data.jam_operasi}</td>
+                            <td class="text-center">${data.data.nama_pasien}</td>
+                            <td class="text-center">${data.data.usia}</td>
+                            <td class="text-center">${data.data.no_cm}</td>
+                            <td>${data.data.diagnosa}</td>
+                            <td>${data.data.tindakan}</td>
+                            <td class="text-center">${data.data.operator}</td>
+                            <td class="text-center">${data.data.ruang_operasi}</td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565'))}; color: white;">${data.data.status}</td>
+                          </tr>`;
                     $('#data-table-body').append(newRow);
                     updateRowNumbers();
                 }
             } else {
-                // Jika tidak ada pada tanggal hari ini, hapus baris
                 if (row.length) {
                     row.remove();
                     updateRowNumbers();
                 }
             }
-
-            // Urutkan ulang tabel setelah update
-            sortTable();
         });
 
         var dataDeletedChannel = pusher.subscribe('data-deleted.' + today);
@@ -171,38 +149,28 @@
             updateRowNumbers();
         });
 
-        // Fungsi untuk mengurutkan tabel berdasarkan kolom tertentu
-        function sortTable() {
-            const tableBody = $('#data-table-body');
-            const rows = tableBody.find('tr').get();
+        var statusUpdatedChannel = pusher.subscribe('status-updated');
+        dataUpdatedChannel.bind('App\\Events\\DataUpdated', function(data) {
+            var row = $(`tr[data-id="${data.data.id}"]`);
+            if (row.length) {
+                row.find('td:eq(9)').text(data.data.status)
+                    .css('background-color', data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status ===
+                        'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565')
+                    ))
+                    .css('color', 'white');
+            } else {
+                var newRow = `<tr data-id="${data.data.id}">
+                            <td class="text-center"></td>
+                            <td class="text-center" style="background-color: ${data.data.status === 'TERLAKSANA' ? 'green' : (data.data.status === 'ON-PROCESS' ? 'blue' : (data.data.status === 'RESCHEDULE' ? '#FF6500' : '#697565'))}; color: white;">${data.data.status}</td>
+                          </tr>`;
+                $('#data-table-body').append(newRow);
+                updateRowNumbers();
+            }
+        });
 
-            rows.sort((a, b) => {
-                const jamOperasiA = $(a).find('td:nth-child(2)').text(); // Kolom jam_operasi
-                const jamOperasiB = $(b).find('td:nth-child(2)').text();
-
-                const ruangOperasiA = $(a).find('td:nth-child(9)').text(); // Kolom ruang_operasi
-                const ruangOperasiB = $(b).find('td:nth-child(9)').text();
-
-                // Bandingkan berdasarkan jam_operasi lebih dulu, lalu ruang_operasi
-                if (jamOperasiA < jamOperasiB) return -1;
-                if (jamOperasiA > jamOperasiB) return 1;
-
-                if (ruangOperasiA < ruangOperasiB) return -1;
-                if (ruangOperasiA > ruangOperasiB) return 1;
-
-                return 0;
-            });
-
-            // Tambahkan ulang baris ke tabel sesuai urutan
-            $.each(rows, (index, row) => {
-                tableBody.append(row);
-            });
-        }
-
-        // Fungsi untuk memperbarui nomor urut setelah pengurutan
         function updateRowNumbers() {
-            $('#data-table-body tr').each(function(index) {
-                $(this).find('td:first-child').text(index + 1);
+            $('#data-table-body tr').each(function(index, tr) {
+                $(tr).find('td').first().text(index + 1);
             });
         }
     </script>
