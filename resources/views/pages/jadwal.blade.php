@@ -3,10 +3,6 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <!-- Modals -->
-    <div>
-        @include('modal.edit-jadwal-operasi')
-    </div>
     <div class="m-2">
         <form method="GET" action="{{ route('schedule.index') }}" class="form-inline my-4">
             @csrf
@@ -15,7 +11,7 @@
                     <div class="pe-3 font-monospace">
                         <a href="{{ route('schedule.create') }}" class="btn btn-sm btn-success">Tambah Data</a>
                     </div>
-        
+
                     <div class="ms-auto justify-content-end font-monospace">
                         <div class="pe-3 font-monospace">
                             Filter Jadwal Operasi
@@ -29,7 +25,7 @@
                             <button type="submit" class="btn btn-sm btn-primary font-monospace">Cari</button>
                         </div>
                     </div>
-        
+
                     <div class="ps-3 font-monospace">
                         <a href="{{ route('schedule.index', ['clear_filter' => true]) }}" class="btn btn-sm btn-secondary">Hapus Filter</a>
                     </div>
@@ -40,12 +36,6 @@
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped align-middle w-auto" id="myTable">
                 <thead class="table-secondary align-middle">
-                    {{-- <tr>
-                        <td colspan="16" class="pe-1">Dokter Anestesi hari ini : @foreach ($dokter as $anesthesiologist)
-                                {{ $anesthesiologist->nama_dokter }}
-                            @endforeach
-                        </td>
-                    </tr> --}}
                     <tr>
                         <th rowspan="3" class="text-center">No.</th>
                         <th rowspan="3" class="text-center">Tanggal Operasi</th>
@@ -67,7 +57,6 @@
                         <th rowspan="3" colspan="2" class="text-center">Action</th>
                     </tr>
                     <tr>
-                        {{-- <th class="text-center">Operasi Berakhir</th> --}}
                         <th rowspan="2" class="text-center">Nama Pasien</th>
                         <th rowspan="2" class="text-center">Usia</th>
                         <th rowspan="2" class="text-center">No. CM</th>
@@ -88,7 +77,6 @@
                         <th colspan="2" class="text-center">JANTUNG</th>
                         <th colspan="2" class="text-center">ANASTHESI</th>
                         <th colspan="2" class="text-center">LAIN-LAIN</th>
-                        <!-- Add more table headers as needed -->
                     </tr>
                     <tr>
                         <th>TGL</th>
@@ -109,7 +97,6 @@
                                 {{ \Carbon\Carbon::createFromFormat('Y-m-d', $item->tgl_operasi)->format('d-m-Y') }}</td>
                             <td class="text-center text-nowrap">{{ $item->jam_operasi ?? 'Belum Ditentukan' }} -
                                 {{ $item->jam_operasi2 ?? 'Belum Ditentukan' }}</td>
-                            {{-- <td class="text-center">{{ $item->jam_operasi2 ??'-' }}</td> --}}
                             <td class="text-center px-2 text-nowrap">{{ $item->ruang_operasi }}</td>
                             <td class="text-center px-2 text-nowrap text-uppercase">{{ $item->prefix .' '. $item->nama_pasien }}</td>
                             <td class="text-center px-2 text-nowrap">{{ $item->usia .' '. $item->s_usia }}</td>
@@ -146,31 +133,15 @@
                                 <i class="fa fa-check"></i> {{-- Tanda checklist menggunakan ikon --}}
                             @endif</td>
                             <td></td>
-                            {{-- <td class="text-center">{{ $item->profilaksis ?? '-' }}</td> --}}
                             <td class="text-center text-nowrap"
                                 style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : ($item->status === 'RESCHEDULE' ? '#FF6500' : '#697565')) }}; color: white;">
-                                {{-- <select onchange="updateStatus({{ $item->id }}, this.value)">
-                                    @foreach ($statuses as $value => $status)
-                                        <option value="{{ $value }}"
-                                            {{ $item->status == $value ? 'selected' : '' }}>{{ $status }}</option>
-                                    @endforeach
-                                </select> --}}
                                 {{ $item->status }}
                             </td>
-                            {{-- <td class="text-center"
-                                style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : ($item->status === 'RESCHEDULE' ? '#FF6500' : '#697565')) }}; color: white;">
-                                {{ $item->status }}</td> --}}
                             <td class="text-center">
                                 <a href="{{ route('schedule.edit', $item->id) }}"
                                     class="btn btn-outline-primary btn-sm mr-2"><i class="bi bi-pencil"></i></a>
                             </td>
                             <td class="text-center">
-                                {{-- <form id="deleteForm" action="{{ route('schedule.destroy', $item->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger btn-sm" data-confirm-delete="true"><i
-                                    class="bi bi-trash"></i></button>
-                            </form> --}}
                                 <a href="{{ route('schedule.destroy', $item->id) }}" class="btn btn-outline-danger btn-sm"
                                     data-confirm-delete="true"><i class="bi bi-trash"></i></a>
                             </td>
@@ -178,17 +149,13 @@
                     @endforeach
                 </tbody>
             </table>
-            {{-- <div class="d-flex justify-content-start">
-                {{ $data->links('pagination::bootstrap-5') }}
-            </div> --}}
             <div class="d-flex justify-content-between align-items-center">
-                {{-- <div>
-                    Menampilkan {{ $data->firstItem() }} sampai {{ $data->lastItem() }} dari {{ $data->total() }} data
-                </div> --}}
                 <div>
                     {{ $data->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
     </div>
+
+    @include('modal.edit-jadwal-operasi')
 @endsection
