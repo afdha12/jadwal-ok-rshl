@@ -1,34 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Override DaisyUI modal styles to not conflict with Bootstrap modals */
-/* Use html body to increase specificity and target Bootstrap modals */
-html body .modal.fade,
-html body .modal.fade.show {
-  display: none !important;
-  z-index: 1055 !important;
-}
-html body .modal.fade.show {
-  display: block !important;
-}
-html body .modal.fade::backdrop {
-  background-color: transparent !important;
-  animation: none !important;
-}
-html body .modal-backdrop {
-  z-index: 1050 !important;
-}
-html body .modal-backdrop.show {
-  opacity: .5 !important;
-}
-html body .modal-dialog {
-  z-index: 1055 !important;
-}
-html body .modal-content {
-  box-shadow: 0 .5rem 1rem #00000026 !important;
-}
-html body .modal:not(.fade):not(dialog) {
-  background-color: transparent !important;
-  animation: none !important;
-}

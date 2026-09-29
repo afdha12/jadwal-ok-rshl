@@ -2,7 +2,7 @@
     <div class="navbar w-full">
         <!-- Sidebar Toggle -->
         <div class="flex-none">
-            <button class="btn btn-square btn-ghost" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+            <button class="btn btn-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
                 aria-controls="offcanvasWithBothOptions">
                 <i class="bi bi-list text-2xl"></i>
             </button>
@@ -21,7 +21,7 @@
             <div class="flex-none">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button class="btn btn-sm btn-outline btn-error font-mono">
+                    <button class="btn btn-sm btn-outline-danger font-monospace">
                         Logout <i class="bi bi-box-arrow-right ml-1"></i>
                     </button>
                 </form>

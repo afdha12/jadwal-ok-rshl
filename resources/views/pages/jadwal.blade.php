@@ -22,15 +22,15 @@
                 <div class="flex flex-wrap items-center gap-2">
                     <span class="font-semibold text-sm mr-2">Filter Jadwal Operasi</span>
 
-                    <div class="join">
-                        <input type="text" class="input input-sm input-bordered join-item datepicker"
+                    <div class="input-group input-group-sm" style="width: auto;">
+                        <input type="text" class="form-control form-control-sm datepicker"
                             placeholder="Pilih Tanggal Mulai" id="start_date" name="start_date"
                             value="{{ request('start_date') ?? session('date') }}">
-                        <button type="submit" class="btn btn-sm btn-primary join-item">Cari</button>
+                        <button type="submit" class="btn btn-sm btn-primary">Cari</button>
                     </div>
 
                     <a href="{{ route('schedule.index', ['clear_filter' => true]) }}"
-                        class="btn btn-sm btn-ghost border border-gray-300">Hapus Filter</a>
+                        class="btn btn-sm btn-outline-secondary">Hapus Filter</a>
                 </div>
             </div>
         </form>
@@ -88,32 +88,49 @@
 
 @push('scripts')
     <style>
-        /* DataTables Professional Styling with Tailwind/DaisyUI flavor */
+        /* DataTables Professional Styling */
         #jadwalTable_wrapper .dataTables_length,
         #jadwalTable_wrapper .dataTables_filter,
         #jadwalTable_wrapper .dataTables_info,
         #jadwalTable_wrapper .dataTables_paginate {
-            @apply font-sans text-sm py-3 text-gray-600;
+            font-size: 0.875rem;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            color: #4b5563;
         }
 
         #jadwalTable_wrapper .dataTables_length select {
-            @apply select select-bordered select-sm mx-1;
+            display: inline-block;
+            width: auto;
+            margin: 0 0.25rem;
         }
 
         #jadwalTable_wrapper .dataTables_filter input {
-            @apply input input-bordered input-sm ml-2;
+            display: inline-block;
+            width: auto;
+            margin-left: 0.5rem;
         }
 
         #jadwalTable thead th {
-            @apply bg-base-200 border-b-2 border-base-300 text-xs font-bold uppercase tracking-wider py-3 px-2 align-middle whitespace-nowrap text-base-content;
+            background-color: #e5e7eb;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.75rem 0.5rem;
+            vertical-align: middle;
+            white-space: nowrap;
         }
 
         #jadwalTable tbody td {
-            @apply text-sm py-2 px-2 align-middle border-b border-base-200;
+            font-size: 0.875rem;
+            padding: 0.5rem;
+            vertical-align: middle;
         }
 
         #jadwalTable tbody tr:hover {
-            @apply bg-base-200/50 transition-colors duration-150;
+            background-color: rgba(243, 244, 246, 0.7);
+            transition: background-color 150ms ease-in-out;
         }
 
         #jadwalTable_wrapper .dataTables_paginate .page-link {

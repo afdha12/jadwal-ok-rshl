@@ -8,11 +8,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [
-    require('daisyui'),
-  ],
-  daisyui: {
-    themes: ["light"], // Tetap light theme by default
-  },
+  plugins: [],
 }
 

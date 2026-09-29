@@ -5,55 +5,46 @@
 @section('content')
     <div class="px-4 py-8 max-w-7xl mx-auto">
         <div class="mb-8">
-            <h2 class="text-3xl font-bold text-base-content">Tambah Jadwal Operasi Baru</h2>
-            <p class="text-base-content/70 mt-1">Isi detail jadwal operasi pasien baru</p>
+            <h2 class="text-3xl font-bold text-gray-800">Tambah Jadwal Operasi Baru</h2>
+            <p class="text-muted mt-1">Isi detail jadwal operasi pasien baru</p>
         </div>
 
         <form action="{{ route('schedule.store') }}" method="POST" class="space-y-6" novalidate>
             @csrf
 
             @if ($errors->any())
-                <div class="alert alert-error shadow-lg">
+                <div class="alert alert-danger shadow-sm">
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <div>
-                            <h3 class="font-bold">Terdapat kesalahan pada form:</h3>
-                            <ul class="list-disc ml-4 mt-1 text-sm">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        <h5 class="font-bold">Terdapat kesalahan pada form:</h5>
+                        <ul class="list-disc ml-4 mt-1 text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             @endif
 
             <!-- Informasi Jadwal -->
-            <div class="card bg-base-100 shadow-xl border border-base-200">
+            <div class="card bg-white shadow-sm border mb-4">
                 <div class="card-body">
                     <h3 class="card-title text-lg border-b pb-2 mb-4">Informasi Jadwal</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Tgl Operasi -->
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Tanggal Operasi <span
-                                        class="text-error">*</span></span></label>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Tanggal Operasi <span class="text-danger">*</span></label>
                             <input type="date" id="tgl_operasi" name="tgl_operasi"
-                                class="input input-bordered w-full uppercase @error('tgl_operasi') input-error @enderror"
+                                class="form-control text-uppercase @error('tgl_operasi') is-invalid @enderror"
                                 value="{{ old('tgl_operasi') }}" required />
                             @error('tgl_operasi')
-                                <label class="label"><span class="label-text-alt text-error">{{ $message }}</span></label>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Ruang Operasi -->
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Ruang Operasi <span
-                                        class="text-error">*</span></span></label>
-                            <select name="ruang_operasi" id="ruang_operasi" class="select select-bordered w-full uppercase"
+                        <div class="w-full">
+                            <label class="form-label font-medium">Ruang Operasi <span class="text-danger">*</span></label>
+                            <select name="ruang_operasi" id="ruang_operasi" class="form-select text-uppercase @error('ruang_operasi') is-invalid @enderror"
                                 required>
                                 @foreach ($optionKamar as $room)
                                     <option value="{{ $room }}"
@@ -62,29 +53,28 @@
                                 @endforeach
                             </select>
                             @error('ruang_operasi')
-                                <label class="label"><span class="label-text-alt text-error">{{ $message }}</span></label>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Jam Operasi -->
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Jam Operasi</span></label>
-                            <div class="join w-full">
-                                <select name="jam_operasi" id="jam_operasi" class="select select-bordered join-item w-1/2"
-                                    required>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Jam Operasi</label>
+                            <div class="input-group">
+                                <select name="jam_operasi" id="jam_operasi" class="form-select" required>
                                     <option value="">-- Pilih Jam --</option>
                                 </select>
-                                <span class="btn btn-disabled join-item">s.d.</span>
+                                <span class="input-group-text">s.d.</span>
                                 <input type="text" name="jam_operasi2" id="jam_operasi2"
-                                    class="input input-bordered join-item w-1/2 uppercase"
+                                    class="form-control text-uppercase"
                                     value="{{ old('jam_operasi2') }}">
                             </div>
                         </div>
 
                         <!-- Status Operasi -->
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Status Operasi</span></label>
-                            <select name="status" class="select select-bordered w-full uppercase">
+                        <div class="w-full">
+                            <label class="form-label font-medium">Status Operasi</label>
+                            <select name="status" class="form-select text-uppercase">
                                 @foreach ($statuses as $status)
                                     <option value="{{ $status }}" {{ old('status') == $status ? 'selected' : '' }}>
                                         {{ $status }}</option>
@@ -96,27 +86,24 @@
             </div>
 
             <!-- Informasi Pasien -->
-            <div class="card bg-base-100 shadow-xl border border-base-200">
+            <div class="card bg-white shadow-sm border mb-4">
                 <div class="card-body">
                     <h3 class="card-title text-lg border-b pb-2 mb-4">Informasi Pasien</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">No. CM <span
-                                        class="text-error">*</span></span></label>
+                        <div class="w-full">
+                            <label class="form-label font-medium">No. CM <span class="text-danger">*</span></label>
                             <input type="number" name="no_cm" id="no_cm"
-                                class="input input-bordered w-full uppercase @error('no_cm') input-error @enderror"
+                                class="form-control text-uppercase @error('no_cm') is-invalid @enderror"
                                 value="{{ old('no_cm') }}" required />
                             @error('no_cm')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Nama Pasien <span
-                                        class="text-error">*</span></span></label>
-                            <div class="join w-full">
-                                <select name="prefix" id="prefix" class="select select-bordered join-item">
+                        <div class="w-full">
+                            <label class="form-label font-medium">Nama Pasien <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <select name="prefix" id="prefix" class="form-select" style="max-width: 90px;">
                                     <option value="tn." {{ old('prefix') == 'tn.' ? 'selected' : '' }}>Tn.</option>
                                     <option value="ny." {{ old('prefix') == 'ny.' ? 'selected' : '' }}>Ny.</option>
                                     <option value="nn." {{ old('prefix') == 'nn.' ? 'selected' : '' }}>Nn.</option>
@@ -124,55 +111,43 @@
                                     <option value="an." {{ old('prefix') == 'an.' ? 'selected' : '' }}>An.</option>
                                 </select>
                                 <input type="text" name="nama_pasien" id="nama_pasien"
-                                    class="input input-bordered w-full join-item uppercase @error('nama_pasien') input-error @enderror"
+                                    class="form-control text-uppercase @error('nama_pasien') is-invalid @enderror"
                                     value="{{ old('nama_pasien') }}" required>
+                                @error('nama_pasien')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                            @error('nama_pasien')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
-                            @enderror
                         </div>
 
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Usia <span
-                                        class="text-error">*</span></span></label>
-                            <div class="join w-full">
+                        <div class="w-full">
+                            <label class="form-label font-medium">Usia <span class="text-danger">*</span></label>
+                            <div class="input-group">
                                 <input type="number" name="usia" id="usia"
-                                    class="input input-bordered w-full join-item @error('usia') input-error @enderror"
+                                    class="form-control @error('usia') is-invalid @enderror"
                                     value="{{ old('usia') }}" required>
-                                <select name="s_usia" id="s_usia" class="select select-bordered join-item">
+                                <select name="s_usia" id="s_usia" class="form-select" style="max-width: 90px;">
                                     <option value="Tahun" {{ old('s_usia') == 'Tahun' ? 'selected' : '' }}>thn</option>
                                     <option value="Bulan" {{ old('s_usia') == 'Bulan' ? 'selected' : '' }}>bln</option>
                                 </select>
+                                @error('usia')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                            @error('usia')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
-                            @enderror
                         </div>
 
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Berat Badan (BB)</span></label>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Berat Badan (BB)</label>
                             <input type="text" name="bb" id="bb"
-                                class="input input-bordered w-full uppercase" value="{{ old('bb') }}" />
+                                class="form-control text-uppercase" value="{{ old('bb') }}" />
                         </div>
 
-                        <div class="form-control w-full md:col-span-2">
-                            <label class="label"><span class="label-text font-medium">Jaminan <span
-                                        class="text-error">*</span></span></label>
-                            {{-- <select name="jaminan" class="select select-bordered w-full uppercase" required>
-                                <option value="">-- Pilih Jaminan --</option>
-                                @foreach ($penjamin as $kelas)
-                                    <option value="{{ $kelas }}" {{ old('jaminan') == $kelas ? 'selected' : '' }}>
-                                        {{ $kelas }}</option>
-                                @endforeach
-                            </select> --}}
+                        <div class="w-full md:col-span-2">
+                            <label class="form-label font-medium">Jaminan <span class="text-danger">*</span></label>
                             <input type="text" name="jaminan" id="jaminan"
-                                class="input input-bordered w-full join-item uppercase @error('jaminan') input-error @enderror"
+                                class="form-control text-uppercase @error('jaminan') is-invalid @enderror"
                                 value="{{ old('jaminan') }}" required>
                             @error('jaminan')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
@@ -180,54 +155,48 @@
             </div>
 
             <!-- Informasi Medis -->
-            <div class="card bg-base-100 shadow-xl border border-base-200">
+            <div class="card bg-white shadow-sm border mb-4">
                 <div class="card-body">
                     <h3 class="card-title text-lg border-b pb-2 mb-4">Informasi Medis & Prosedur</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Diagnosa <span
-                                        class="text-error">*</span></span></label>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Diagnosa <span class="text-danger">*</span></label>
                             <input type="text" name="diagnosa" id="diagnosa"
-                                class="input input-bordered w-full uppercase @error('diagnosa') input-error @enderror"
+                                class="form-control text-uppercase @error('diagnosa') is-invalid @enderror"
                                 value="{{ old('diagnosa') }}" required />
                             @error('diagnosa')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Tindakan <span
-                                        class="text-error">*</span></span></label>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Tindakan <span class="text-danger">*</span></label>
                             <input type="text" name="tindakan" id="tindakan"
-                                class="input input-bordered w-full uppercase @error('tindakan') input-error @enderror"
+                                class="form-control text-uppercase @error('tindakan') is-invalid @enderror"
                                 value="{{ old('tindakan') }}" required />
                             @error('tindakan')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Operator <span
-                                        class="text-error">*</span></span></label>
-                            <select name="dokter_id" id="dokter_id" class="select select-bordered w-full" required>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Operator <span class="text-danger">*</span></label>
+                            <select name="dokter_id" id="dokter_id" class="form-select @error('operator') is-invalid @enderror" required>
                                 <option value="">-- Pilih Operator --</option>
                             </select>
                             @error('operator')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Asisten</span></label>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Asisten</label>
                             <input type="text" name="asisten" id="asisten"
-                                class="input input-bordered w-full uppercase" value="{{ old('asisten') }}" />
+                                class="form-control text-uppercase" value="{{ old('asisten') }}" />
                         </div>
 
-                        <div class="form-control w-full">
-                            <label class="label"><span class="label-text font-medium">Anestesi</span></label>
-                            <select name="anestesi" id="anestesi" class="select select-bordered w-full" required>
+                        <div class="w-full">
+                            <label class="form-label font-medium">Anestesi</label>
+                            <select name="anestesi" id="anestesi" class="form-select" required>
                                 <option value="">-- Pilih Anestesiologis --</option>
                                 @foreach ($operators as $operator)
                                     <option value="{{ $operator->nama_dokter }}"
@@ -238,27 +207,26 @@
                             </select>
                         </div>
 
-                        <div class="form-control w-full justify-center mt-6">
+                        <div class="w-full flex items-center mt-4">
                             <input type="hidden" name="verifikasi" value="belum">
-                            <div class="flex items-center gap-2 cursor-pointer">
+                            <div class="form-check">
                                 <input type="checkbox" name="verifikasi" value="sudah" id="verifikasi"
-                                    class="checkbox checkbox-xs" {{ old('verifikasi') == 'sudah' ? 'checked' : '' }} />
+                                    class="form-check-input" {{ old('verifikasi') == 'sudah' ? 'checked' : '' }} />
                                 <label for="verifikasi"
-                                    class="font-medium text-base cursor-pointer select-none">Verifikasi Persiapan
+                                    class="form-check-label font-medium cursor-pointer select-none">Verifikasi Persiapan
                                     Operasi</label>
                             </div>
                         </div>
 
-                        <div class="form-control w-full md:col-span-2">
-                            <label class="label"><span class="label-text font-medium">Catatan Hasil Pemeriksaan
-                                    Penunjang</span></label>
+                        <div class="w-full md:col-span-2">
+                            <label class="form-label font-medium">Catatan Hasil Pemeriksaan Penunjang</label>
                             <input type="text" name="catatan_hasil_penunjang" id="catatan_hasil_penunjang"
-                                class="input input-bordered w-full" value="{{ old('catatan_hasil_penunjang') }}" />
+                                class="form-control" value="{{ old('catatan_hasil_penunjang') }}" />
                         </div>
 
-                        <div class="form-control w-full md:col-span-2">
-                            <label class="label"><span class="label-text font-medium">Keterangan</span></label>
-                            <input type="text" name="keterangan" id="keterangan" class="input input-bordered w-full"
+                        <div class="w-full md:col-span-2">
+                            <label class="form-label font-medium">Keterangan</label>
+                            <input type="text" name="keterangan" id="keterangan" class="form-control"
                                 value="{{ old('keterangan') }}" />
                         </div>
                     </div>
@@ -266,13 +234,13 @@
             </div>
 
             <!-- Konsultasi -->
-            <div class="card bg-base-100 shadow-xl border border-base-200">
+            <div class="card bg-white shadow-sm border mb-4">
                 <div class="card-body">
                     <h3 class="card-title text-lg border-b pb-2 mb-4">Konsultasi Pre-Operatif</h3>
 
                     <div class="overflow-x-auto">
-                        <table class="table table-zebra border w-full hidden md:table">
-                            <thead class="bg-base-200 font-bold text-base-content">
+                        <table class="table table-striped table-bordered w-full hidden md:table align-middle">
+                            <thead class="table-light font-bold">
                                 <tr>
                                     <th>Jenis Konsul</th>
                                     <th>Tanggal Konsul</th>
@@ -281,39 +249,39 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="font-medium">IPD</td>
+                                    <td class="font-medium align-middle">IPD</td>
                                     <td><input id="tgl_ipd" type="date" name="tgl_ipd"
-                                            class="input input-bordered input-sm w-full" value="{{ old('tgl_ipd') }}">
+                                            class="form-control form-control-sm" value="{{ old('tgl_ipd') }}">
                                     </td>
                                     <td><input type="text" name="hasil_ipd"
-                                            class="input input-bordered input-sm w-full" value="{{ old('hasil_ipd') }}">
+                                            class="form-control form-control-sm" value="{{ old('hasil_ipd') }}">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="font-medium">Jantung</td>
+                                    <td class="font-medium align-middle">Jantung</td>
                                     <td><input id="tgl_jantung" type="date" name="tgl_jantung"
-                                            class="input input-bordered input-sm w-full"
+                                            class="form-control form-control-sm"
                                             value="{{ old('tgl_jantung') }}"></td>
                                     <td><input type="text" name="hasil_jantung"
-                                            class="input input-bordered input-sm w-full"
+                                            class="form-control form-control-sm"
                                             value="{{ old('hasil_jantung') }}"></td>
                                 </tr>
                                 <tr>
-                                    <td class="font-medium">Anasthesi</td>
+                                    <td class="font-medium align-middle">Anasthesi</td>
                                     <td><input id="tgl_anasthesi" type="date" name="tgl_anasthesi"
-                                            class="input input-bordered input-sm w-full"
+                                            class="form-control form-control-sm"
                                             value="{{ old('tgl_anasthesi') }}"></td>
                                     <td><input type="text" name="hasil_anasthesi"
-                                            class="input input-bordered input-sm w-full"
+                                            class="form-control form-control-sm"
                                             value="{{ old('hasil_anasthesi') }}"></td>
                                 </tr>
                                 <tr>
-                                    <td class="font-medium">Lain-lain</td>
+                                    <td class="font-medium align-middle">Lain-lain</td>
                                     <td><input id="tgl_lain" type="date" name="tgl_lain"
-                                            class="input input-bordered input-sm w-full" value="{{ old('tgl_lain') }}">
+                                            class="form-control form-control-sm" value="{{ old('tgl_lain') }}">
                                     </td>
                                     <td><input type="text" name="hasil_lain"
-                                            class="input input-bordered input-sm w-full" value="{{ old('hasil_lain') }}">
+                                            class="form-control form-control-sm" value="{{ old('hasil_lain') }}">
                                     </td>
                                 </tr>
                             </tbody>
@@ -321,67 +289,67 @@
 
                         <!-- Mobile view alternative -->
                         <div class="md:hidden space-y-4 pt-2">
-                            <div class="bg-base-200 p-4 rounded-lg">
-                                <h4 class="font-bold border-b border-base-300 pb-2 mb-3">Konsul IPD</h4>
+                            <div class="bg-light p-4 rounded mb-3 border">
+                                <h6 class="font-bold border-bottom pb-2 mb-3">Konsul IPD</h6>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Tanggal</span></label>
+                                        <label class="form-label text-sm mb-1">Tanggal</label>
                                         <input type="date" id="tgl_ipd" name="tgl_ipd"
-                                            class="input input-bordered w-full input-sm" value="{{ old('tgl_ipd') }}">
+                                            class="form-control form-control-sm" value="{{ old('tgl_ipd') }}">
                                     </div>
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Hasil</span></label>
+                                        <label class="form-label text-sm mb-1">Hasil</label>
                                         <input type="text" name="hasil_ipd"
-                                            class="input input-bordered w-full input-sm" value="{{ old('hasil_ipd') }}">
+                                            class="form-control form-control-sm" value="{{ old('hasil_ipd') }}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-base-200 p-4 rounded-lg">
-                                <h4 class="font-bold border-b border-base-300 pb-2 mb-3">Konsul Jantung</h4>
+                            <div class="bg-light p-4 rounded mb-3 border">
+                                <h6 class="font-bold border-bottom pb-2 mb-3">Konsul Jantung</h6>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Tanggal</span></label>
+                                        <label class="form-label text-sm mb-1">Tanggal</label>
                                         <input type="date" id="tgl_jantung" name="tgl_jantung"
-                                            class="input input-bordered w-full input-sm"
+                                            class="form-control form-control-sm"
                                             value="{{ old('tgl_jantung') }}">
                                     </div>
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Hasil</span></label>
+                                        <label class="form-label text-sm mb-1">Hasil</label>
                                         <input type="text" name="hasil_jantung"
-                                            class="input input-bordered w-full input-sm"
+                                            class="form-control form-control-sm"
                                             value="{{ old('hasil_jantung') }}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-base-200 p-4 rounded-lg">
-                                <h4 class="font-bold border-b border-base-300 pb-2 mb-3">Konsul Anasthesi</h4>
+                            <div class="bg-light p-4 rounded mb-3 border">
+                                <h6 class="font-bold border-bottom pb-2 mb-3">Konsul Anasthesi</h6>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Tanggal</span></label>
+                                        <label class="form-label text-sm mb-1">Tanggal</label>
                                         <input type="date" id="tgl_anasthesi" name="tgl_anasthesi"
-                                            class="input input-bordered w-full input-sm"
+                                            class="form-control form-control-sm"
                                             value="{{ old('tgl_anasthesi') }}">
                                     </div>
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Hasil</span></label>
+                                        <label class="form-label text-sm mb-1">Hasil</label>
                                         <input type="text" name="hasil_anasthesi"
-                                            class="input input-bordered w-full input-sm"
+                                            class="form-control form-control-sm"
                                             value="{{ old('hasil_anasthesi') }}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="bg-base-200 p-4 rounded-lg">
-                                <h4 class="font-bold border-b border-base-300 pb-2 mb-3">Konsul Lain-lain</h4>
+                            <div class="bg-light p-4 rounded mb-3 border">
+                                <h6 class="font-bold border-bottom pb-2 mb-3">Konsul Lain-lain</h6>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Tanggal</span></label>
+                                        <label class="form-label text-sm mb-1">Tanggal</label>
                                         <input type="date" id="tgl_lain" name="tgl_lain"
-                                            class="input input-bordered w-full input-sm" value="{{ old('tgl_lain') }}">
+                                            class="form-control form-control-sm" value="{{ old('tgl_lain') }}">
                                     </div>
                                     <div>
-                                        <label class="label pt-0"><span class="label-text">Hasil</span></label>
+                                        <label class="form-label text-sm mb-1">Hasil</label>
                                         <input type="text" name="hasil_lain"
-                                            class="input input-bordered w-full input-sm" value="{{ old('hasil_lain') }}">
+                                            class="form-control form-control-sm" value="{{ old('hasil_lain') }}">
                                     </div>
                                 </div>
                             </div>
@@ -392,7 +360,7 @@
 
             <!-- Submit Buttons -->
             <div class="flex flex-col-reverse md:flex-row justify-end gap-3 pb-8">
-                <a href="{{ route('schedule.index') }}" class="btn btn-error btn-outline w-full md:w-32">Batal</a>
+                <a href="{{ route('schedule.index') }}" class="btn btn-outline-danger w-full md:w-32">Batal</a>
                 <button type="submit" class="btn btn-primary w-full md:w-auto px-8">Simpan</button>
             </div>
         </form>
