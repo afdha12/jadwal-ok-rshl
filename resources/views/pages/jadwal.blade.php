@@ -84,8 +84,6 @@
             </tbody>
         </table>
     </div>
-
-    @include('modal.edit-jadwal-operasi')
 @endsection
 
 @push('scripts')
