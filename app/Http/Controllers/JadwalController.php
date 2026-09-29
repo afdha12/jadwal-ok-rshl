@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Dokter;
-use App\Models\JadwalOK;
 use App\Events\DataAdded;
 use App\Events\DataDeleted;
 use App\Events\DataUpdated;
-use Illuminate\Http\Request;
 use App\Events\StatusUpdated;
+use App\Models\Dokter;
 use App\Models\DokterAnestesi;
+use App\Models\JadwalOK;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class JadwalController extends Controller
 {
@@ -32,7 +33,6 @@ class JadwalController extends Controller
 
         // Ambil parameter pencarian dari query string atau session
         $date = $request->input('start_date') ?? session('date');
-        $no_cm = $request->input('no_cm') ?? session('no_cm');
 
         if ($date) {
             // Simpan ke session
@@ -41,14 +41,6 @@ class JadwalController extends Controller
             // Format tanggal dan filter data
             $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
             $query->where('tgl_operasi', $formattedDate);
-        }
-
-        if ($no_cm) {
-            // Simpan ke session
-            session(['no_cm' => $no_cm]);
-
-            // Filter data berdasarkan no_cm
-            $query->where('no_cm', 'like', '%' . $no_cm . '%');
         }
 
         // Data tambahan lainnya
@@ -60,17 +52,71 @@ class JadwalController extends Controller
         $optionKamar = ['Kamar 1', 'Kamar 2', 'Kamar 3'];
 
         $title = 'Delete User!';
-        $text = "Are you sure you want to delete?";
+        $text = 'Are you sure you want to delete?';
         confirmDelete($title, $text);
 
-        $data = $query->orderByRaw("CASE WHEN tgl_operasi = ? THEN 0 ELSE 1 END, tgl_operasi DESC", [$today])
+        $dataQuery = $query->orderByRaw('CASE WHEN tgl_operasi = ? THEN 0 ELSE 1 END, tgl_operasi DESC', [$today])
             ->orderBy('ruang_operasi', 'asc')
-            ->orderBy('jam_operasi', 'asc')
-            ->paginate(30);
+            ->orderBy('jam_operasi', 'asc');
 
-        return view('pages.jadwal', compact('data', 'dokter', 'statuses', 'optionKamar', 'operators', 'date'));
+        if ($request->ajax()) {
+            return DataTables::of($dataQuery)
+                ->addIndexColumn()
+                ->editColumn('tgl_operasi', function ($item) {
+                    return \Carbon\Carbon::createFromFormat('Y-m-d', $item->tgl_operasi)->format('d-m-Y');
+                })
+                ->addColumn('jam_operasi_full', function ($item) {
+                    $start = $item->jam_operasi ?? 'Belum Ditentukan';
+                    $end = $item->jam_operasi2 ?? 'Belum Ditentukan';
+
+                    return $start.' - '.$end;
+                })
+                ->addColumn('nama_pasien_full', function ($item) {
+                    return ucwords($item->prefix.' '.$item->nama_pasien);
+                })
+                ->addColumn('usia_full', function ($item) {
+                    return $item->usia.' '.$item->s_usia;
+                })
+                ->addColumn('nama_dokter', function ($item) {
+                    return $item->dokter ? $item->dokter->nama_dokter : '-';
+                })
+                ->editColumn('verifikasi', function ($item) {
+                    if ($item->verifikasi === 'sudah') {
+                        return '<i class="fa fa-check"></i>';
+                    }
+
+                    return '';
+                })
+                ->editColumn('status', function ($item) {
+                    if ($item->status == 'TERLAKSANA') {
+                        $bg = 'green';
+                    } elseif ($item->status == 'ON-PROCESS') {
+                        $bg = 'blue';
+                    } elseif ($item->status === 'RESCHEDULE') {
+                        $bg = '#FF6500';
+                    } else {
+                        $bg = '#697565';
+                    }
+
+                    return '<div class="text-center text-nowrap rounded" style="background-color: '.$bg.'; color: white; padding: 2px 5px;">'.$item->status.'</div>';
+                })
+                ->addColumn('action', function ($item) {
+                    $editUrl = route('schedule.edit', $item->id);
+                    $deleteUrl = route('schedule.destroy', $item->id);
+
+                    return '
+                        <div class="d-flex justify-content-center">
+                            <a href="'.$editUrl.'" class="btn btn-outline-primary btn-sm me-2"><i class="bi bi-pencil"></i></a>
+                            <a href="'.$deleteUrl.'" class="btn btn-outline-danger btn-sm" data-confirm-delete="true"><i class="bi bi-trash"></i></a>
+                        </div>
+                    ';
+                })
+                ->rawColumns(['verifikasi', 'status', 'action'])
+                ->make(true);
+        }
+
+        return view('pages.jadwal', compact('dokter', 'statuses', 'optionKamar', 'operators', 'date'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -82,16 +128,16 @@ class JadwalController extends Controller
         // $operators = ['dr. Ade Aria Nugraha, Sp.An', 'dr. Ahmad Angga Luthfi, Sp.An', 'dr. Ali Satria, Sp.B', 'dr. Ary Rachmanto, Sp.B', 'dr. Bima Ananta Bukhori, Sp.OG', 'dr. Budi Syamhudi, Sp.OG', 'dr. Defayudina Dafilianty R., Sp.M', 'dr. Dino Rinaldi, Sp.OG(Onk)', 'dr. Gunawan Yudhistira, Sp.THT-KL', 'dr. Ikrizal, Sp.U', 'drg. Irsan Kurniawan, Sp.BM,Subsp.T.M.T.M.J(K)', 'dr. Joel Purba, Sp.OG', 'drg. Kustini Indah S, Sp.KGA', 'dr. Muhammad Dwi Nugroho, Sp.M', 'dr. Muhammad Fajrin Armin F, Sp.OT', 'dr. Muhammad Zulkarnain Hussein, Sp.OG(K)', 'dr. Nurul Islami, Sp.OG', 'dr. Nurul Azizah Busatam, Sp.BA', 'dr. Putu Junita, Sp.An (K)IC', 'dr. Ratna Dewi Puspita Sari, Sp.OG', 'dr. Ratu Fajaria, Sp.THT-KL', 'dr.  Risal Wintoko, Sp.B', 'dr. Rodiani, Sp.OG', 'dr. Sabasdin Harahap, Sp.B, MARS, FICS', 'dr. Sarlita Indah Permatasari, Sp.OG', 'dr. Taufiqurahman Rahim, Sp.OG(K)', 'dr. Teguh Astanto, Sp. B', 'dr. Fachry Rafiq Iwan, Sp.B', 'dr. Idris, Sp.OG', 'dr. Zulfadli, Sp.OG'];
         $operators = Dokter::where('spesialis', 'anestesi')->get();
         $optionKamar = ['KAMAR 1', 'KAMAR 2', 'KAMAR 3'];
-        $statuses = ['BELUM TERLAKSANA', 'ON-PROCESS', 'TERLAKSANA', 'RESCHEDULE'];
+        $statuses = ['BELUM TERLAKSANA', 'TERLAKSANA', 'RESCHEDULE', 'TIDAK TERLAKSANA'];
         $docs = ['Ada', 'Tidak Ada'];
         $penjamin = ['A1', 'A2', 'A3'];
+
         return view('pages.input_jadwal', compact('operators', 'optionKamar', 'statuses', 'docs', 'penjamin'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -105,11 +151,11 @@ class JadwalController extends Controller
             'usia' => 'required',
             's_usia' => 'nullable',
             'no_cm' => 'required',
-            'diagnosa' => 'nullable',
-            'tindakan' => 'nullable',
-            'dokter_id' => 'nullable',
-            'ruang_operasi' => 'nullable',
-            'jaminan' => 'nullable',
+            'diagnosa' => 'required',
+            'tindakan' => 'required',
+            'dokter_id' => 'required',
+            'ruang_operasi' => 'required',
+            'jaminan' => 'required',
             'profilaksis' => 'nullable',
             'status' => 'nullable',
             'bb' => 'nullable',
@@ -130,10 +176,13 @@ class JadwalController extends Controller
             'hasil_jantung' => 'nullable',
             'tgl_lain' => 'nullable',
             'hasil_lain' => 'nullable',
+            'tgl_anasthesi' => 'nullable',
+            'hasil_anasthesi' => 'nullable',
             'pkkt' => 'nullable',
             'verifikasi' => 'nullable',
             'pengingat' => 'nullable',
             'keterangan' => 'nullable',
+            'catatan_hasil_penunjang' => 'nullable',
         ]);
 
         // Gabungkan usia dengan satuan dan masukkan ke dalam array $validated
@@ -141,6 +190,14 @@ class JadwalController extends Controller
         // unset($validated['age'], $validated['satuan_usia']); // Hapus field 'usia' dan 'satuan_usia' dari array $validated
 
         $validated['tgl_operasi'] = Carbon::createFromFormat('d-m-Y', $validated['tgl_operasi'])->format('Y-m-d'); // Konversi ke format Y-m-d
+
+        // Format tanggal pre-operative (yang dikirim sebagai Y-m-d dari date picker) menjadi d-m-Y untuk DB
+        $date_fields = ['tgl_ipd', 'tgl_jantung', 'tgl_anasthesi', 'tgl_lain'];
+        foreach ($date_fields as $field) {
+            if (!empty($validated[$field])) {
+                $validated[$field] = Carbon::parse($validated[$field])->format('d-m-Y');
+            }
+        }
 
         // Hitung jam selesai operasi dengan durasi operasi
         // $duration = $validated['duration'] ?? 0; // Default 0 jika tidak ada durasi
@@ -172,7 +229,7 @@ class JadwalController extends Controller
         $data->load('dokter');
 
         // Gabungkan usia dan s_usia
-        $data->usia_s_usia = $data->usia . ' ' . $data->s_usia;
+        $data->usia_s_usia = $data->usia.' '.$data->s_usia;
 
         // broadcast(new DataUpdated($data));
         if ($data->tgl_operasi === $today) {
@@ -203,17 +260,17 @@ class JadwalController extends Controller
     {
         $data = JadwalOK::with('dokter')->findOrFail($id);
         $optionKamar = ['KAMAR 1', 'KAMAR 2', 'KAMAR 3'];
-        $statuses = ['BELUM TERLAKSANA', 'ON-PROCESS', 'TERLAKSANA', 'RESCHEDULE'];
+        $statuses = ['BELUM TERLAKSANA', 'TERLAKSANA', 'RESCHEDULE', 'TIDAK TERLAKSANA'];
         $operators = Dokter::where('spesialis', 'anestesi')->get();
         $docs = ['Ada', 'Tidak Ada'];
+
         // $operators = ['dr. Ade Aria Nugraha, Sp.An', 'dr. Ahmad Angga Luthfi, Sp.An', 'dr. Ali Satria, Sp.B', 'dr. Ary Rachmanto, Sp.B', 'dr. Bima Ananta Bukhori, Sp.OG', 'dr. Budi Syamhudi, Sp.OG', 'dr. Defayudina Dafilianty R., Sp.M', 'dr. Dino Rinaldi, Sp.OG(Onk)', 'dr. Gunawan Yudhistira, Sp.THT-KL', 'dr. Ikrizal, Sp.U', 'drg. Irsan Kurniawan, Sp.BM,Subsp.T.M.T.M.J(K)', 'dr. Joel Purba, Sp.OG', 'drg. Kustini Indah S, Sp.KGA', 'dr. Muhammad Dwi Nugroho, Sp.M', 'dr. Muhammad Fajrin Armin F, Sp.OT', 'dr. Muhammad Zulkarnain Hussein, Sp.OG(K)', 'dr. Nurul Islami, Sp.OG', 'dr. Nurul Azizah Busatam, Sp.BA', 'dr. Putu Junita, Sp.An (K)IC', 'dr. Ratna Dewi Puspita Sari, Sp.OG', 'dr. Ratu Fajaria, Sp.THT-KL', 'dr.  Risal Wintoko, Sp.B', 'dr. Rodiani, Sp.OG', 'dr. Sabasdin Harahap, Sp.B, MARS, FICS', 'dr. Sarlita Indah Permatasari, Sp.OG', 'dr. Taufiqurahman Rahim, Sp.OG(K)', 'dr. Teguh Astanto, Sp. B', 'dr. Fachry Rafiq Iwan, Sp.B', 'dr. Idris, Sp.OG', 'dr. Zulfadli, Sp.OG'];
-        return view('pages.new_edit_jadwal', compact('data', 'optionKamar', 'statuses', 'operators', 'docs'));
+        return view('pages.edit_jadwal_daisy', compact('data', 'optionKamar', 'statuses', 'operators', 'docs'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -233,11 +290,11 @@ class JadwalController extends Controller
             'usia' => 'required',
             's_usia' => 'nullable',
             'no_cm' => 'required',
-            'diagnosa' => 'nullable',
-            'tindakan' => 'nullable',
-            'dokter_id' => 'nullable',
-            'ruang_operasi' => 'nullable',
-            'jaminan' => 'nullable',
+            'diagnosa' => 'required',
+            'tindakan' => 'required',
+            'dokter_id' => 'required',
+            'ruang_operasi' => 'required',
+            'jaminan' => 'required',
             'profilaksis' => 'nullable',
             'status' => 'nullable',
             'bb' => 'nullable',
@@ -264,6 +321,7 @@ class JadwalController extends Controller
             'verifikasi' => 'nullable',
             'pengingat' => 'nullable',
             'keterangan' => 'nullable',
+            'catatan_hasil_penunjang' => 'nullable',
         ]);
 
         // Gabungkan usia dengan satuan dan masukkan ke dalam array $validated
@@ -271,6 +329,14 @@ class JadwalController extends Controller
         // unset($validated['age'], $validated['satuan_usia']); // Hapus field 'usia' dan 'satuan_usia' dari array $validated
 
         $validated['tgl_operasi'] = Carbon::createFromFormat('d-m-Y', $validated['tgl_operasi'])->format('Y-m-d'); // Konversi ke format Y-m-d
+
+        // Format tanggal pre-operative (yang dikirim sebagai Y-m-d dari date picker) menjadi d-m-Y untuk DB
+        $date_fields = ['tgl_ipd', 'tgl_jantung', 'tgl_anasthesi', 'tgl_lain'];
+        foreach ($date_fields as $field) {
+            if (!empty($validated[$field])) {
+                $validated[$field] = Carbon::parse($validated[$field])->format('d-m-Y');
+            }
+        }
 
         $data->update($validated);
 
@@ -282,7 +348,7 @@ class JadwalController extends Controller
         $data->load('dokter');
 
         // Gabungkan usia dan s_usia
-        $data->usia_s_usia = $data->usia . ' ' . $data->s_usia;
+        $data->usia_s_usia = $data->usia.' '.$data->s_usia;
 
         $now = Carbon::now();
         $now->setTimezone('Asia/Jakarta');
@@ -334,7 +400,6 @@ class JadwalController extends Controller
         return response()->with('success', 'Data berhasil diubah.');
     }
 
-
     /**
      * Remove the specified resource from storage.
      *
@@ -351,6 +416,7 @@ class JadwalController extends Controller
             broadcast(new DataDeleted($id));
         }
         $data->delete();
+
         return redirect()->back()->with('success', 'Data Pasien berhasil dihapus');
     }
 
@@ -422,7 +488,7 @@ class JadwalController extends Controller
         $room = $request->ruang_operasi;
         $editId = $request->edit_id; // ID untuk jadwal yang sedang diedit
 
-        if (!$date || !$room) {
+        if (! $date || ! $room) {
             return response()->json([], 200);
         }
 
@@ -511,7 +577,6 @@ class JadwalController extends Controller
         return response()->json(array_values($availableTimes));
     }
 
-
     // public function getAvailableDoctors(Request $request)
     // {
     //     $date = $request->tgl_operasi;
@@ -554,7 +619,7 @@ class JadwalController extends Controller
         $editId = $request->edit_id; // ID untuk jadwal yang sedang diedit
 
         // Validasi input
-        if (!$date || !$room || !$startTime) {
+        if (! $date || ! $room || ! $startTime) {
             return response()->json([], 200); // Kembalikan data kosong jika input tidak lengkap
         }
 
@@ -595,5 +660,4 @@ class JadwalController extends Controller
         // Kembalikan hasil
         return response()->json($availableDoctors->get());
     }
-
 }

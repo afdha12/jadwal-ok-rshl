@@ -1,16 +1,18 @@
 @extends('components.layout')
 
-@section('title', 'Input Jadwal Operasi')
+@section('title', 'Edit Jadwal Operasi')
 
 @section('content')
     <div class="px-4 py-8 max-w-7xl mx-auto">
         <div class="mb-8">
-            <h2 class="text-3xl font-bold text-base-content">Tambah Jadwal Operasi Baru</h2>
-            <p class="text-base-content/70 mt-1">Isi detail jadwal operasi pasien baru</p>
+            <h2 class="text-3xl font-bold text-base-content">Edit Jadwal Operasi</h2>
+            <p class="text-base-content/70 mt-1">Perbarui detail jadwal operasi pasien</p>
         </div>
 
-        <form action="{{ route('schedule.store') }}" method="POST" class="space-y-6" novalidate>
+        <form action="{{ route('schedule.update', $data->id) }}" method="POST" class="space-y-6" novalidate>
             @csrf
+            @method('PUT')
+            <input type="hidden" id="edit-id" value="{{ $data->id }}">
 
             @if ($errors->any())
                 <div class="alert alert-error shadow-lg">
@@ -41,9 +43,10 @@
                         <div class="form-control w-full">
                             <label class="label"><span class="label-text font-medium">Tanggal Operasi <span
                                         class="text-error">*</span></span></label>
-                            <input type="date" id="tgl_operasi" name="tgl_operasi"
+                            <input type="text" id="tgl_operasi" name="tgl_operasi"
                                 class="input input-bordered w-full uppercase @error('tgl_operasi') input-error @enderror"
-                                value="{{ old('tgl_operasi') }}" required />
+                                value="{{ \Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_operasi)->format('d-m-Y') }}"
+                                required />
                             @error('tgl_operasi')
                                 <label class="label"><span class="label-text-alt text-error">{{ $message }}</span></label>
                             @enderror
@@ -56,14 +59,10 @@
                             <select name="ruang_operasi" id="ruang_operasi" class="select select-bordered w-full uppercase"
                                 required>
                                 @foreach ($optionKamar as $room)
-                                    <option value="{{ $room }}"
-                                        {{ old('ruang_operasi') == $room ? 'selected' : '' }}>
+                                    <option value="{{ $room }}" @if ($room == $data->ruang_operasi) selected @endif>
                                         {{ $room }}</option>
                                 @endforeach
                             </select>
-                            @error('ruang_operasi')
-                                <label class="label"><span class="label-text-alt text-error">{{ $message }}</span></label>
-                            @enderror
                         </div>
 
                         <!-- Jam Operasi -->
@@ -71,13 +70,13 @@
                             <label class="label"><span class="label-text font-medium">Jam Operasi</span></label>
                             <div class="join w-full">
                                 <select name="jam_operasi" id="jam_operasi" class="select select-bordered join-item w-1/2"
-                                    required>
-                                    <option value="">-- Pilih Jam --</option>
+                                    data-selected="{{ $data->jam_operasi }}" required>
+                                    <!-- options via js -->
                                 </select>
                                 <span class="btn btn-disabled join-item">s.d.</span>
                                 <input type="text" name="jam_operasi2" id="jam_operasi2"
                                     class="input input-bordered join-item w-1/2 uppercase"
-                                    value="{{ old('jam_operasi2') }}">
+                                    value="{{ $data->jam_operasi2 }}">
                             </div>
                         </div>
 
@@ -86,7 +85,7 @@
                             <label class="label"><span class="label-text font-medium">Status Operasi</span></label>
                             <select name="status" class="select select-bordered w-full uppercase">
                                 @foreach ($statuses as $status)
-                                    <option value="{{ $status }}" {{ old('status') == $status ? 'selected' : '' }}>
+                                    <option value="{{ $status }}" @if ($status == $data->status) selected @endif>
                                         {{ $status }}</option>
                                 @endforeach
                             </select>
@@ -105,7 +104,7 @@
                                         class="text-error">*</span></span></label>
                             <input type="number" name="no_cm" id="no_cm"
                                 class="input input-bordered w-full uppercase @error('no_cm') input-error @enderror"
-                                value="{{ old('no_cm') }}" required />
+                                value="{{ $data->no_cm }}" required />
                             @error('no_cm')
                                 <label class="label"><span
                                         class="label-text-alt text-error">{{ $message }}</span></label>
@@ -117,20 +116,16 @@
                                         class="text-error">*</span></span></label>
                             <div class="join w-full">
                                 <select name="prefix" id="prefix" class="select select-bordered join-item">
-                                    <option value="tn." {{ old('prefix') == 'tn.' ? 'selected' : '' }}>Tn.</option>
-                                    <option value="ny." {{ old('prefix') == 'ny.' ? 'selected' : '' }}>Ny.</option>
-                                    <option value="nn." {{ old('prefix') == 'nn.' ? 'selected' : '' }}>Nn.</option>
-                                    <option value="by." {{ old('prefix') == 'by.' ? 'selected' : '' }}>By.</option>
-                                    <option value="an." {{ old('prefix') == 'an.' ? 'selected' : '' }}>An.</option>
+                                    <option value="tn." {{ $data->prefix == 'tn.' ? 'selected' : '' }}>Tn.</option>
+                                    <option value="ny." {{ $data->prefix == 'ny.' ? 'selected' : '' }}>Ny.</option>
+                                    <option value="nn." {{ $data->prefix == 'nn.' ? 'selected' : '' }}>Nn.</option>
+                                    <option value="by." {{ $data->prefix == 'by.' ? 'selected' : '' }}>By.</option>
+                                    <option value="an." {{ $data->prefix == 'an.' ? 'selected' : '' }}>An.</option>
                                 </select>
                                 <input type="text" name="nama_pasien" id="nama_pasien"
-                                    class="input input-bordered w-full join-item uppercase @error('nama_pasien') input-error @enderror"
-                                    value="{{ old('nama_pasien') }}" required>
+                                    class="input input-bordered w-full join-item uppercase"
+                                    value="{{ $data->nama_pasien }}" required>
                             </div>
-                            @error('nama_pasien')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
-                            @enderror
                         </div>
 
                         <div class="form-control w-full">
@@ -139,10 +134,12 @@
                             <div class="join w-full">
                                 <input type="number" name="usia" id="usia"
                                     class="input input-bordered w-full join-item @error('usia') input-error @enderror"
-                                    value="{{ old('usia') }}" required>
+                                    value="{{ $data->usia }}" required>
                                 <select name="s_usia" id="s_usia" class="select select-bordered join-item">
-                                    <option value="Tahun" {{ old('s_usia') == 'Tahun' ? 'selected' : '' }}>thn</option>
-                                    <option value="Bulan" {{ old('s_usia') == 'Bulan' ? 'selected' : '' }}>bln</option>
+                                    <option value="Tahun"
+                                        {{ in_array($data->s_usia, ['Tahun', 'thn']) ? 'selected' : '' }}>thn</option>
+                                    <option value="Bulan"
+                                        {{ in_array($data->s_usia, ['Bulan', 'bln']) ? 'selected' : '' }}>bln</option>
                                 </select>
                             </div>
                             @error('usia')
@@ -154,22 +151,15 @@
                         <div class="form-control w-full">
                             <label class="label"><span class="label-text font-medium">Berat Badan (BB)</span></label>
                             <input type="text" name="bb" id="bb"
-                                class="input input-bordered w-full uppercase" value="{{ old('bb') }}" />
+                                class="input input-bordered w-full uppercase" value="{{ $data->bb }}" />
                         </div>
 
                         <div class="form-control w-full md:col-span-2">
                             <label class="label"><span class="label-text font-medium">Jaminan <span
                                         class="text-error">*</span></span></label>
-                            {{-- <select name="jaminan" class="select select-bordered w-full uppercase" required>
-                                <option value="">-- Pilih Jaminan --</option>
-                                @foreach ($penjamin as $kelas)
-                                    <option value="{{ $kelas }}" {{ old('jaminan') == $kelas ? 'selected' : '' }}>
-                                        {{ $kelas }}</option>
-                                @endforeach
-                            </select> --}}
                             <input type="text" name="jaminan" id="jaminan"
-                                class="input input-bordered w-full join-item uppercase @error('jaminan') input-error @enderror"
-                                value="{{ old('jaminan') }}" required>
+                                class="input input-bordered w-full uppercase @error('jaminan') input-error @enderror"
+                                value="{{ $data->jaminan }}" required />
                             @error('jaminan')
                                 <label class="label"><span
                                         class="label-text-alt text-error">{{ $message }}</span></label>
@@ -189,7 +179,7 @@
                                         class="text-error">*</span></span></label>
                             <input type="text" name="diagnosa" id="diagnosa"
                                 class="input input-bordered w-full uppercase @error('diagnosa') input-error @enderror"
-                                value="{{ old('diagnosa') }}" required />
+                                value="{{ $data->diagnosa }}" required />
                             @error('diagnosa')
                                 <label class="label"><span
                                         class="label-text-alt text-error">{{ $message }}</span></label>
@@ -200,7 +190,7 @@
                                         class="text-error">*</span></span></label>
                             <input type="text" name="tindakan" id="tindakan"
                                 class="input input-bordered w-full uppercase @error('tindakan') input-error @enderror"
-                                value="{{ old('tindakan') }}" required />
+                                value="{{ $data->tindakan }}" required />
                             @error('tindakan')
                                 <label class="label"><span
                                         class="label-text-alt text-error">{{ $message }}</span></label>
@@ -210,19 +200,16 @@
                         <div class="form-control w-full">
                             <label class="label"><span class="label-text font-medium">Operator <span
                                         class="text-error">*</span></span></label>
-                            <select name="dokter_id" id="dokter_id" class="select select-bordered w-full" required>
-                                <option value="">-- Pilih Operator --</option>
+                            <select name="dokter_id" id="dokter_id" class="select select-bordered w-full"
+                                data-selected="{{ $data->dokter_id ?? '' }}" required>
+                                <!-- options via js -->
                             </select>
-                            @error('operator')
-                                <label class="label"><span
-                                        class="label-text-alt text-error">{{ $message }}</span></label>
-                            @enderror
                         </div>
 
                         <div class="form-control w-full">
                             <label class="label"><span class="label-text font-medium">Asisten</span></label>
                             <input type="text" name="asisten" id="asisten"
-                                class="input input-bordered w-full uppercase" value="{{ old('asisten') }}" />
+                                class="input input-bordered w-full uppercase" value="{{ $data->asisten }}" />
                         </div>
 
                         <div class="form-control w-full">
@@ -231,8 +218,7 @@
                                 <option value="">-- Pilih Anestesiologis --</option>
                                 @foreach ($operators as $operator)
                                     <option value="{{ $operator->nama_dokter }}"
-                                        {{ old('anestesi') == $operator->nama_dokter ? 'selected' : '' }}>
-                                        {{ $operator->nama_dokter }}
+                                        @if ($operator->nama_dokter == $data->anestesi) selected @endif>{{ $operator->nama_dokter }}
                                     </option>
                                 @endforeach
                             </select>
@@ -242,7 +228,7 @@
                             <input type="hidden" name="verifikasi" value="belum">
                             <div class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" name="verifikasi" value="sudah" id="verifikasi"
-                                    class="checkbox checkbox-xs" {{ old('verifikasi') == 'sudah' ? 'checked' : '' }} />
+                                    class="checkbox checkbox-xs" {{ $data->verifikasi == 'sudah' ? 'checked' : '' }} />
                                 <label for="verifikasi"
                                     class="font-medium text-base cursor-pointer select-none">Verifikasi Persiapan
                                     Operasi</label>
@@ -253,13 +239,14 @@
                             <label class="label"><span class="label-text font-medium">Catatan Hasil Pemeriksaan
                                     Penunjang</span></label>
                             <input type="text" name="catatan_hasil_penunjang" id="catatan_hasil_penunjang"
-                                class="input input-bordered w-full" value="{{ old('catatan_hasil_penunjang') }}" />
+                                class="input input-bordered w-full uppercase"
+                                value="{{ $data->catatan_hasil_penunjang }}" />
                         </div>
 
                         <div class="form-control w-full md:col-span-2">
                             <label class="label"><span class="label-text font-medium">Keterangan</span></label>
                             <input type="text" name="keterangan" id="keterangan" class="input input-bordered w-full"
-                                value="{{ old('keterangan') }}" />
+                                value="{{ $data->keterangan }}" />
                         </div>
                     </div>
                 </div>
@@ -283,38 +270,42 @@
                                 <tr>
                                     <td class="font-medium">IPD</td>
                                     <td><input id="tgl_ipd" type="date" name="tgl_ipd"
-                                            class="input input-bordered input-sm w-full" value="{{ old('tgl_ipd') }}">
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ strtotime($data->tgl_ipd) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_ipd))) : '' }}">
                                     </td>
                                     <td><input type="text" name="hasil_ipd"
-                                            class="input input-bordered input-sm w-full" value="{{ old('hasil_ipd') }}">
-                                    </td>
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ $data->hasil_ipd }}"></td>
                                 </tr>
                                 <tr>
                                     <td class="font-medium">Jantung</td>
                                     <td><input id="tgl_jantung" type="date" name="tgl_jantung"
-                                            class="input input-bordered input-sm w-full"
-                                            value="{{ old('tgl_jantung') }}"></td>
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ strtotime($data->tgl_jantung) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_jantung))) : '' }}">
+                                    </td>
                                     <td><input type="text" name="hasil_jantung"
-                                            class="input input-bordered input-sm w-full"
-                                            value="{{ old('hasil_jantung') }}"></td>
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ $data->hasil_jantung }}"></td>
                                 </tr>
                                 <tr>
                                     <td class="font-medium">Anasthesi</td>
                                     <td><input id="tgl_anasthesi" type="date" name="tgl_anasthesi"
-                                            class="input input-bordered input-sm w-full"
-                                            value="{{ old('tgl_anasthesi') }}"></td>
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ strtotime($data->tgl_anasthesi) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_anasthesi))) : '' }}">
+                                    </td>
                                     <td><input type="text" name="hasil_anasthesi"
-                                            class="input input-bordered input-sm w-full"
-                                            value="{{ old('hasil_anasthesi') }}"></td>
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ $data->hasil_anasthesi }}"></td>
                                 </tr>
                                 <tr>
                                     <td class="font-medium">Lain-lain</td>
                                     <td><input id="tgl_lain" type="date" name="tgl_lain"
-                                            class="input input-bordered input-sm w-full" value="{{ old('tgl_lain') }}">
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ strtotime($data->tgl_lain) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_lain))) : '' }}">
                                     </td>
                                     <td><input type="text" name="hasil_lain"
-                                            class="input input-bordered input-sm w-full" value="{{ old('hasil_lain') }}">
-                                    </td>
+                                            class="input input-bordered input-sm w-full uppercase"
+                                            value="{{ $data->hasil_lain }}"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -326,13 +317,15 @@
                                 <div class="space-y-3">
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Tanggal</span></label>
-                                        <input type="date" id="tgl_ipd" name="tgl_ipd"
-                                            class="input input-bordered w-full input-sm" value="{{ old('tgl_ipd') }}">
+                                        <input id="tgl_ipd" type="date" name="tgl_ipd"
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ strtotime($data->tgl_ipd) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_ipd))) : '' }}">
                                     </div>
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Hasil</span></label>
                                         <input type="text" name="hasil_ipd"
-                                            class="input input-bordered w-full input-sm" value="{{ old('hasil_ipd') }}">
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ $data->hasil_ipd }}">
                                     </div>
                                 </div>
                             </div>
@@ -341,15 +334,15 @@
                                 <div class="space-y-3">
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Tanggal</span></label>
-                                        <input type="date" id="tgl_jantung" name="tgl_jantung"
-                                            class="input input-bordered w-full input-sm"
-                                            value="{{ old('tgl_jantung') }}">
+                                        <input id="tgl_jantung" type="date" name="tgl_jantung"
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ strtotime($data->tgl_jantung) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_jantung))) : '' }}">
                                     </div>
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Hasil</span></label>
                                         <input type="text" name="hasil_jantung"
-                                            class="input input-bordered w-full input-sm"
-                                            value="{{ old('hasil_jantung') }}">
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ $data->hasil_jantung }}">
                                     </div>
                                 </div>
                             </div>
@@ -358,15 +351,15 @@
                                 <div class="space-y-3">
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Tanggal</span></label>
-                                        <input type="date" id="tgl_anasthesi" name="tgl_anasthesi"
-                                            class="input input-bordered w-full input-sm"
-                                            value="{{ old('tgl_anasthesi') }}">
+                                        <input id="tgl_anasthesi" type="date" name="tgl_anasthesi"
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ strtotime($data->tgl_anasthesi) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_anasthesi))) : '' }}">
                                     </div>
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Hasil</span></label>
                                         <input type="text" name="hasil_anasthesi"
-                                            class="input input-bordered w-full input-sm"
-                                            value="{{ old('hasil_anasthesi') }}">
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ $data->hasil_anasthesi }}">
                                     </div>
                                 </div>
                             </div>
@@ -375,13 +368,15 @@
                                 <div class="space-y-3">
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Tanggal</span></label>
-                                        <input type="date" id="tgl_lain" name="tgl_lain"
-                                            class="input input-bordered w-full input-sm" value="{{ old('tgl_lain') }}">
+                                        <input id="tgl_lain" type="date" name="tgl_lain"
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ strtotime($data->tgl_lain) ? date('Y-m-d', strtotime(str_replace('/', '-', $data->tgl_lain))) : '' }}">
                                     </div>
                                     <div>
                                         <label class="label pt-0"><span class="label-text">Hasil</span></label>
                                         <input type="text" name="hasil_lain"
-                                            class="input input-bordered w-full input-sm" value="{{ old('hasil_lain') }}">
+                                            class="input input-bordered w-full input-sm uppercase"
+                                            value="{{ $data->hasil_lain }}">
                                     </div>
                                 </div>
                             </div>
@@ -393,7 +388,7 @@
             <!-- Submit Buttons -->
             <div class="flex flex-col-reverse md:flex-row justify-end gap-3 pb-8">
                 <a href="{{ route('schedule.index') }}" class="btn btn-error btn-outline w-full md:w-32">Batal</a>
-                <button type="submit" class="btn btn-primary w-full md:w-auto px-8">Simpan</button>
+                <button type="submit" class="btn btn-primary w-full md:w-auto px-8">Simpan Perubahan</button>
             </div>
         </form>
     </div>
@@ -404,6 +399,7 @@
             const roomInput = document.querySelector('#ruang_operasi');
             const timeSelect = document.querySelector('#jam_operasi');
             const doctorSelect = document.querySelector('#dokter_id');
+            const editId = document.querySelector('#edit-id') ? document.querySelector('#edit-id').value : null;
             const form = document.querySelector('form');
 
             form.addEventListener('submit', function() {
@@ -418,6 +414,8 @@
                 }
             });
 
+            const selectedDoctorId = doctorSelect.dataset.selected;
+
             function fetchAvailableTimes() {
                 const date = dateInput.value;
                 const room = roomInput.value;
@@ -427,13 +425,24 @@
                     return;
                 }
 
-                fetch(`/get-available-times?tgl_operasi=${date}&ruang_operasi=${room}`)
+                let url = `/get-available-times?tgl_operasi=${date}&ruang_operasi=${room}`;
+                if (editId) url += `&edit_id=${editId}`;
+
+                fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         timeSelect.innerHTML = '<option value="">Pilih Jam</option>';
                         data.forEach(time => {
                             timeSelect.innerHTML += `<option value="${time}">${time}</option>`;
                         });
+
+                        const currentTime = document.querySelector('#jam_operasi').dataset.selected;
+                        if (currentTime) {
+                            const option = timeSelect.querySelector(`option[value="${currentTime}"]`);
+                            if (option) option.selected = true;
+                        }
+
+                        fetchAvailableDoctors();
                     })
                     .catch(error => console.error("Error fetching times:", error));
             }
@@ -449,14 +458,17 @@
                 }
 
                 fetch(
-                        `/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}`)
+                        `/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}&edit_id=${editId}`
+                    )
                     .then(response => response.json())
                     .then(data => {
                         doctorSelect.innerHTML = '<option value="">Pilih Dokter</option>';
                         data.forEach(doctor => {
                             doctorSelect.innerHTML +=
-                                `<option value="${doctor.id}">${doctor.nama_dokter}</option>`;
+                                `<option value="${doctor.id}" ${doctor.id == selectedDoctorId ? 'selected' : ''}>${doctor.nama_dokter}</option>`;
                         });
+
+                        doctorSelect.dataset.selected = '';
                     })
                     .catch(error => console.error("Error fetching doctors:", error));
             }
@@ -464,6 +476,8 @@
             dateInput.addEventListener('change', fetchAvailableTimes);
             roomInput.addEventListener('change', fetchAvailableTimes);
             timeSelect.addEventListener('change', fetchAvailableDoctors);
+
+            fetchAvailableTimes();
         });
     </script>
 @endsection

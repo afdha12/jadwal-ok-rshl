@@ -24,6 +24,12 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- DataTables Bootstrap 5 --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
     <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/hermina.png') }}">
 
@@ -33,8 +39,8 @@
 
     <style>
         body {
-            padding-top: 64px;
-            /* Sesuaikan dengan tinggi navbar */
+            /* padding-top: 64px;
+            Sesuaikan dengan tinggi navbar */
         }
 
         /* Chrome, Safari, Edge, Opera */
@@ -61,7 +67,7 @@
 <body>
     <div>
         @include('components.header')
-        <div>
+        <div class="m-2">
             {{-- @include('components.side-bar') --}}
             <main>
                 @yield('content')
@@ -87,6 +93,12 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    {{-- DataTables JS --}}
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
     <script>
         function updateStatus(id, status) {
@@ -228,6 +240,8 @@
             }
         });
     </script>
+
+    @stack('scripts')
 
 </body>
 

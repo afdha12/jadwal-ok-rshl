@@ -3,159 +3,339 @@
 @section('title', 'Dashboard')
 
 @section('content')
+    <!-- Modals dihilangkan karena menggunakan halaman edit terpisah -->
     <div class="m-2">
-        <form method="GET" action="{{ route('schedule.index') }}" class="form-inline my-4">
+        <form method="GET" action="{{ route('schedule.index') }}" class="my-4">
             @csrf
-            <div class="container-fluid">
-                <div class="d-flex align-items-center">
-                    <div class="pe-3 font-monospace">
-                        <a href="{{ route('schedule.create') }}" class="btn btn-sm btn-success">Tambah Data</a>
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
+                <!-- Tambah Data -->
+                <div>
+                    <a href="{{ route('schedule.create') }}" class="btn btn-sm btn-success text-white">
+                        <i class="bi bi-plus-lg"></i> Tambah Data
+                    </a>
+                </div>
+
+                <!-- Spacer on large screens, pushes filter to the right -->
+                <div class="flex-grow hidden md:block"></div>
+
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="font-semibold text-sm mr-2">Filter Jadwal Operasi</span>
+
+                    <div class="join">
+                        <input type="text" class="input input-sm input-bordered join-item datepicker"
+                            placeholder="Pilih Tanggal Mulai" id="start_date" name="start_date"
+                            value="{{ request('start_date') ?? session('date') }}">
+                        <button type="submit" class="btn btn-sm btn-primary join-item">Cari</button>
                     </div>
 
-                    <div class="ms-auto justify-content-end font-monospace">
-                        <div class="pe-3 font-monospace">
-                            Filter Jadwal Operasi
-                        </div>
-                    </div>
-                    <div class="font-monospace">
-                        <div class="input-group">
-                            <input type="text" class="form-control-sm datepicker" placeholder="Pilih Tanggal Mulai"
-                                id="start_date" name="start_date" value="{{ request('start_date') ?? session('date') }}">
-                            <input type="text" class="form-control-sm" placeholder="Cari No. CM" id="no_cm" name="no_cm" value="{{ request('no_cm') }}">
-                            <button type="submit" class="btn btn-sm btn-primary font-monospace">Cari</button>
-                        </div>
-                    </div>
-
-                    <div class="ps-3 font-monospace">
-                        <a href="{{ route('schedule.index', ['clear_filter' => true]) }}" class="btn btn-sm btn-secondary">Hapus Filter</a>
-                    </div>
+                    <a href="{{ route('schedule.index', ['clear_filter' => true]) }}"
+                        class="btn btn-sm btn-ghost border border-gray-300">Hapus Filter</a>
                 </div>
             </div>
         </form>
 
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered table-striped align-middle w-auto" id="myTable">
-                <thead class="table-secondary align-middle">
-                    <tr>
-                        <th rowspan="3" class="text-center">No.</th>
-                        <th rowspan="3" class="text-center">Tanggal Operasi</th>
-                        <th rowspan="3" class="text-center">Jam Operasi</th>
-                        <th rowspan="3" class="text-center">Kamar Operasi</th>
-                        <th colspan="4" class="text-center">Data Pasien</th>
-                        <th rowspan="3" class="text-center">Penjamin & Kelas</th>
-                        <th rowspan="3" class="text-center">INDIKASI</th>
-                        <th rowspan="3" class="text-center">TINDAKAN</th>
-                        <th colspan="7" class="text-center">NAMA TIM OPERASI</th>
-                        <th colspan="2" class="text-center">EDUKASI PERSIAPAN OPERASI</th>
-                        <th colspan="3" class="text-center">HASIL PEMERIKSAAN PENUNJANG</th>
-                        <th colspan="8" class="text-center">PELAKSANAAN KONSULTASI</th>
-                        <th rowspan="3" class="text-center">PEMBAHASAN KELENGKAPAN KESIAPAN TINDAKAN</th>
-                        <th rowspan="3" class="text-center">Verifikasi Persiapan Operasi</th>
-                        <th rowspan="3" class="text-center">Mengingatkan Tim H-1</th>
-                        <th rowspan="3" class="text-center">Keterangan</th>
-                        <th rowspan="3" class="text-center">Status</th>
-                        <th rowspan="3" colspan="2" class="text-center">Action</th>
-                    </tr>
-                    <tr>
-                        <th rowspan="2" class="text-center">Nama Pasien</th>
-                        <th rowspan="2" class="text-center">Usia</th>
-                        <th rowspan="2" class="text-center">No. CM</th>
-                        <th rowspan="2" class="text-center">BB</th>
-                        <th rowspan="2" class="text-center">OPERATOR</th>
-                        <th rowspan="2" class="text-center">ASISTEN</th>
-                        <th rowspan="2" class="text-center">INSTRUMENTATOR</th>
-                        <th rowspan="2" class="text-center">SIRKULASI</th>
-                        <th rowspan="2" class="text-center">ANESTESI</th>
-                        <th rowspan="2" class="text-center">PENATA ANESTESI</th>
-                        <th rowspan="2" class="text-center">ANAK</th>
-                        <th rowspan="2" class="text-center">JAM PUASA</th>
-                        <th rowspan="2" class="text-center">JAM KEDATANGAN</th>
-                        <th rowspan="2" class="text-center">LAB </th>
-                        <th rowspan="2" class="text-center">RO</th>
-                        <th rowspan="2" class="text-center">CT-SCAN</th>
-                        <th colspan="2" class="text-center">IPD</th>
-                        <th colspan="2" class="text-center">JANTUNG</th>
-                        <th colspan="2" class="text-center">ANASTHESI</th>
-                        <th colspan="2" class="text-center">LAIN-LAIN</th>
-                    </tr>
-                    <tr>
-                        <th>TGL</th>
-                        <th>HASIL</th>
-                        <th>TGL</th>
-                        <th>HASIL</th>
-                        <th>TGL</th>
-                        <th>HASIL</th>
-                        <th>TGL</th>
-                        <th>HASIL</th>
-                    </tr>
-                </thead>
-                <tbody class="px-3">
-                    @foreach ($data as $key => $item)
-                        <tr>
-                            <td class="text-center">{{ $data->firstItem() + $key }}</td>
-                            <td class="text-center text-nowrap">
-                                {{ \Carbon\Carbon::createFromFormat('Y-m-d', $item->tgl_operasi)->format('d-m-Y') }}</td>
-                            <td class="text-center text-nowrap">{{ $item->jam_operasi ?? 'Belum Ditentukan' }} -
-                                {{ $item->jam_operasi2 ?? 'Belum Ditentukan' }}</td>
-                            <td class="text-center px-2 text-nowrap">{{ $item->ruang_operasi }}</td>
-                            <td class="text-center px-2 text-nowrap text-uppercase">{{ $item->prefix .' '. $item->nama_pasien }}</td>
-                            <td class="text-center px-2 text-nowrap">{{ $item->usia .' '. $item->s_usia }}</td>
-                            <td class="text-center px-2">{{ $item->no_cm }}</td>
-                            <td class="text-center px-2">{{ $item->bb }}</td>
-                            <td class="text-center px-2">{{ $item->jaminan }}</td>
-                            <td class="text-nowrap">{{ $item->diagnosa }}</td>
-                            <td class="text-nowrap">{{ $item->tindakan }}</td>
-                            <td class="text-center text-nowrap">{{ $item->dokter['nama_dokter'] }}</td>
-                            <td class="text-nowrap">{{ $item->asisten }}</td>
-                            <td class="text-nowrap">{{ $item->instrumentator }}</td>
-                            <td class="text-nowrap">{{ $item->sirkulasi }}</td>
-                            <td class="text-nowrap">{{ $item->anestesi }}</td>
-                            <td class="text-nowrap">{{ $item->p_anestesi }}</td>
-                            <td class="text-nowrap">{{ $item->anak }}</td>
-                            <td class="text-nowrap">{{ $item->jam_puasa }}</td>
-                            <td class="text-nowrap">{{ $item->jam_kedatangan }}</td>
-                            <td class="text-nowrap">{{ $item->lab }}</td>
-                            <td class="text-nowrap">{{ $item->ro }}</td>
-                            <td class="text-nowrap">{{ $item->ct_scan }}</td>
-                            <td class="text-nowrap">{{ $item->tgl_ipd }}</td>
-                            <td class="text-nowrap">{{ $item->hasil_ipd }}</td>
-                            <td class="text-nowrap">{{ $item->tgl_jantung }}</td>
-                            <td class="text-nowrap">{{ $item->hasil_jantung }}</td>
-                            <td class="text-nowrap">{{ $item->tgl_anasthesi }}</td>
-                            <td class="text-nowrap">{{ $item->hasil_anasthesi }}</td>
-                            <td class="text-nowrap">{{ $item->tgl_lain }}</td>
-                            <td class="text-nowrap">{{ $item->hasil_lain }}</td>
-                            <td class="text-nowrap">{{ $item->pkkt }}</td>
-                            <td class="text-center">@if ($item->verifikasi === 'sudah')
-                                <i class="fa fa-check"></i> {{-- Tanda checklist menggunakan ikon --}}
-                            @endif</td>
-                            <td class="text-center">@if ($item->pengingat === 'sudah')
-                                <i class="fa fa-check"></i> {{-- Tanda checklist menggunakan ikon --}}
-                            @endif</td>
-                            <td></td>
-                            <td class="text-center text-nowrap"
-                                style="background-color: {{ $item->status == 'TERLAKSANA' ? 'green' : ($item->status == 'ON-PROCESS' ? 'blue' : ($item->status === 'RESCHEDULE' ? '#FF6500' : '#697565')) }}; color: white;">
-                                {{ $item->status }}
-                            </td>
-                            <td class="text-center">
-                                <a href="{{ route('schedule.edit', $item->id) }}"
-                                    class="btn btn-outline-primary btn-sm mr-2"><i class="bi bi-pencil"></i></a>
-                            </td>
-                            <td class="text-center">
-                                <a href="{{ route('schedule.destroy', $item->id) }}" class="btn btn-outline-danger btn-sm"
-                                    data-confirm-delete="true"><i class="bi bi-trash"></i></a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    {{ $data->links('pagination::bootstrap-5') }}
-                </div>
-            </div>
-        </div>
+        <table class="table table-sm table-bordered table-striped align-middle w-100" id="jadwalTable"
+            style="min-width: 1000px;">
+            <thead class="table-secondary align-middle">
+                <tr>
+                    <th rowspan="3" class="text-center">No.</th>
+                    <th rowspan="3" class="text-center">Tanggal Operasi</th>
+                    <th rowspan="3" class="text-center">Jam Operasi</th>
+                    <th rowspan="3" class="text-center">Kamar Operasi</th>
+                    <th colspan="4" class="text-center">Data Pasien</th>
+                    <th rowspan="3" class="text-center">Penjamin & Kelas</th>
+                    <th rowspan="3" class="text-center">INDIKASI</th>
+                    <th rowspan="3" class="text-center">TINDAKAN</th>
+                    <th colspan="3" class="text-center">NAMA TIM OPERASI</th>
+                    <th rowspan="3" class="text-center">CATATAN HASIL PEMERIKSAAN PENUNJANG</th>
+                    <th colspan="8" class="text-center">PELAKSANAAN KONSULTASI</th>
+                    <th rowspan="3" class="text-center">Verifikasi Persiapan Operasi</th>
+                    <th rowspan="3" class="text-center">Keterangan</th>
+                    <th rowspan="3" class="text-center">Status</th>
+                    <th rowspan="3" colspan="2" class="text-center">Action</th>
+                </tr>
+                <tr>
+                    <th rowspan="2" class="text-center">Nama Pasien</th>
+                    <th rowspan="2" class="text-center">Usia</th>
+                    <th rowspan="2" class="text-center">No. CM</th>
+                    <th rowspan="2" class="text-center">BB</th>
+                    <th rowspan="2" class="text-center">OPERATOR</th>
+                    <th rowspan="2" class="text-center">ASISTEN</th>
+                    <th rowspan="2" class="text-center">ANESTESI</th>
+                    <th colspan="2" class="text-center">IPD</th>
+                    <th colspan="2" class="text-center">JANTUNG</th>
+                    <th colspan="2" class="text-center">ANASTHESI</th>
+                    <th colspan="2" class="text-center">LAIN-LAIN</th>
+                </tr>
+                <tr>
+                    <th>TGL</th>
+                    <th>HASIL</th>
+                    <th>TGL</th>
+                    <th>HASIL</th>
+                    <th>TGL</th>
+                    <th>HASIL</th>
+                    <th>TGL</th>
+                    <th>HASIL</th>
+                </tr>
+            </thead>
+            <tbody class="px-3">
+                <!-- DataTables will populate this -->
+            </tbody>
+        </table>
     </div>
 
     @include('modal.edit-jadwal-operasi')
 @endsection
+
+@push('scripts')
+    <style>
+        /* DataTables Professional Styling with Tailwind/DaisyUI flavor */
+        #jadwalTable_wrapper .dataTables_length,
+        #jadwalTable_wrapper .dataTables_filter,
+        #jadwalTable_wrapper .dataTables_info,
+        #jadwalTable_wrapper .dataTables_paginate {
+            @apply font-sans text-sm py-3 text-gray-600;
+        }
+
+        #jadwalTable_wrapper .dataTables_length select {
+            @apply select select-bordered select-sm mx-1;
+        }
+
+        #jadwalTable_wrapper .dataTables_filter input {
+            @apply input input-bordered input-sm ml-2;
+        }
+
+        #jadwalTable thead th {
+            @apply bg-base-200 border-b-2 border-base-300 text-xs font-bold uppercase tracking-wider py-3 px-2 align-middle whitespace-nowrap text-base-content;
+        }
+
+        #jadwalTable tbody td {
+            @apply text-sm py-2 px-2 align-middle border-b border-base-200;
+        }
+
+        #jadwalTable tbody tr:hover {
+            @apply bg-base-200/50 transition-colors duration-150;
+        }
+
+        #jadwalTable_wrapper .dataTables_paginate .page-link {
+            font-size: 0.85rem;
+            padding: 0.35rem 0.7rem;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#jadwalTable').DataTable({
+                processing: true,
+                serverSide: true,
+                scrollX: true,
+                ajax: {
+                    url: '{{ route('schedule.index') }}',
+                    data: function(d) {
+                        d.start_date = $('#start_date').val();
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'tgl_operasi',
+                        name: 'tgl_operasi',
+                        className: 'text-center text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'jam_operasi_full',
+                        name: 'jam_operasi',
+                        className: 'text-center text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'ruang_operasi',
+                        name: 'ruang_operasi',
+                        className: 'text-center px-2 text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_pasien_full',
+                        name: 'nama_pasien',
+                        className: 'text-center px-2 text-nowrap text-capitalize',
+                        searchable: true
+                    },
+                    {
+                        data: 'usia_full',
+                        name: 'usia',
+                        className: 'text-center px-2 text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'no_cm',
+                        name: 'no_cm',
+                        className: 'text-center px-2',
+                        searchable: true
+                    },
+                    {
+                        data: 'bb',
+                        name: 'bb',
+                        className: 'text-center px-2',
+                        searchable: false
+                    },
+                    {
+                        data: 'jaminan',
+                        name: 'jaminan',
+                        className: 'text-center px-2',
+                        searchable: false
+                    },
+                    {
+                        data: 'diagnosa',
+                        name: 'diagnosa',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'tindakan',
+                        name: 'tindakan',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_dokter',
+                        name: 'dokter.nama_dokter',
+                        className: 'text-center text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'asisten',
+                        name: 'asisten',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'anestesi',
+                        name: 'anestesi',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'catatan_hasil_penunjang',
+                        name: 'catatan_hasil_penunjang',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'tgl_ipd',
+                        name: 'tgl_ipd',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'hasil_ipd',
+                        name: 'hasil_ipd',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'tgl_jantung',
+                        name: 'tgl_jantung',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'hasil_jantung',
+                        name: 'hasil_jantung',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'tgl_anasthesi',
+                        name: 'tgl_anasthesi',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'hasil_anasthesi',
+                        name: 'hasil_anasthesi',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'tgl_lain',
+                        name: 'tgl_lain',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'hasil_lain',
+                        name: 'hasil_lain',
+                        className: 'text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'verifikasi',
+                        name: 'verifikasi',
+                        className: 'text-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'keterangan',
+                        name: 'keterangan',
+                        className: 'text-nowrap',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        className: 'text-center text-nowrap',
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        className: 'text-center',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                paging: true,
+                pageLength: 25,
+                lengthMenu: [10, 25, 50, 100],
+                ordering: false,
+                searching: true,
+                info: true,
+                autoWidth: false,
+                language: {
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    zeroRecords: "Data tidak ditemukan",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    search: "Cari:",
+                    paginate: {
+                        first: '<i class="bi bi-chevron-double-left"></i>',
+                        last: '<i class="bi bi-chevron-double-right"></i>',
+                        next: '<i class="bi bi-chevron-right"></i>',
+                        previous: '<i class="bi bi-chevron-left"></i>'
+                    }
+                },
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+            });
+
+            // Prevent default form submission and reload datatable instead
+            $('form').on('submit', function(e) {
+                if ($(this).find('#start_date').length > 0) {
+                    e.preventDefault();
+                    table.draw();
+                }
+            });
+        });
+    </script>
+@endpush

@@ -1,0 +1,72 @@
+# Dockerfile for Laravel Octane with FrankenPHP and wkhtmltopdf
+FROM php:8.3-cli
+
+WORKDIR /app
+
+# ========================
+# 🧱 System Dependencies
+# ========================
+RUN apt update && apt install -y \
+    curl zip unzip git wget gnupg ca-certificates bash \
+    libzip-dev libjpeg-dev libpng-dev libfreetype6-dev \
+    libonig-dev libxml2-dev
+
+# ========================
+# 🧩 PHP Extensions
+# ========================
+RUN docker-php-ext-install \
+    pdo pdo_mysql mbstring zip exif bcmath gd pcntl \
+    && docker-php-ext-enable zip exif
+
+# Increase PHP memory limit
+RUN echo 'memory_limit = 2G' > /usr/local/etc/php/conf.d/memory.ini
+
+# ========================
+# 📦 Composer
+# ========================
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy dependency declaration files first
+COPY composer.json composer.lock ./
+
+# ✅ Composer install without scripts (to avoid artisan error)
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+
+# ========================
+# 📦 Laravel App Setup
+# ========================
+COPY . .
+# RUN npm install && npm run build
+# RUN npm run build
+# Environment setup
+# RUN if [ ! -f .env ]; then cp .env.prod .env; fi
+
+# Generate app key first
+RUN php artisan key:generate --force
+
+# ========================
+# 🚀 Laravel Octane + FrankenPHP
+# ========================
+RUN php artisan octane:install --server=frankenphp --no-interaction
+
+# Run artisan commands that require database (with error handling)
+RUN php artisan storage:link || true
+
+# Set file permissions
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# ========================
+# ✅ Runtime Setup
+# ========================
+EXPOSE 8003
+
+# COPY entrypoint.sh /entrypoint.sh
+# RUN chown www-data:www-data /entrypoint.sh && chmod +x /entrypoint.sh
+
+USER www-data
+
+# ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8003"]
+
+

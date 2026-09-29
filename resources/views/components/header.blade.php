@@ -1,32 +1,32 @@
-<header class="fixed-top" style="background-color: #F3EEEA">
-    {{-- <nav class="navbar sticky-top" style="background-color: #F3EEEA"> --}}
-    <div class="container-fluid">
-        <div class="d-flex align-items-center">
-            <div class="px-2">
-                <button class="btn btn-outline" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-                    aria-controls="offcanvasWithBothOptions"><i class="bi bi-list fs-3"></i></button>
-            </div>
-            <a href="{{ route('schedule.index') }}" class="text-decoration-none text-reset">
-                <div class="align-self-center font-monospace fs-4 fw-bold">JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG
-                </div>
+<header class="sticky top-0 z-50 bg-[#F3EEEA] shadow-sm">
+    <div class="navbar w-full">
+        <!-- Sidebar Toggle -->
+        <div class="flex-none">
+            <button class="btn btn-square btn-ghost" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+                aria-controls="offcanvasWithBothOptions">
+                <i class="bi bi-list text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Navbar Title -->
+        <div class="flex-1 px-2 mx-2">
+            <a href="{{ route('schedule.index') }}"
+                class="text-xl font-bold font-mono tracking-tight hover:text-gray-700 transition">
+                JADWAL OPERASI RUMAH SAKIT HERMINA LAMPUNG
             </a>
-            {{-- <div class="ms-auto me-2 px-2 justify-content-end">
+        </div>
+
+        <!-- Logout Button -->
+        @if (Route::currentRouteName() == 'schedule.index')
+            <div class="flex-none">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button class="btn btn-sm btn-outline-danger font-monospace">Logout <i
-                            class="bi bi-box-arrow-right"></i></button>
+                    <button class="btn btn-sm btn-outline btn-error font-mono">
+                        Logout <i class="bi bi-box-arrow-right ml-1"></i>
+                    </button>
                 </form>
-            </div> --}}
-            @if (Route::currentRouteName() == 'schedule.index')
-                <div class="ms-auto me-2 px-2 justify-content-end">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button class="btn btn-sm btn-outline-danger font-monospace">Logout <i
-                                class="bi bi-box-arrow-right"></i></button>
-                    </form>
-                </div>
-            @endif
-        </div>
+            </div>
+        @endif
     </div>
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
