@@ -35,8 +35,8 @@
             </div>
         </form>
 
-        <table class="table table-sm table-bordered table-striped align-middle w-100" id="jadwalTable"
-            style="min-width: 1000px;">
+        <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped align-middle" id="jadwalTable" style="width: 100%;">
             <thead class="table-secondary align-middle">
                 <tr>
                     <th rowspan="3" class="text-center">No.</th>
@@ -53,7 +53,7 @@
                     <th rowspan="3" class="text-center">Verifikasi Persiapan Operasi</th>
                     <th rowspan="3" class="text-center">Keterangan</th>
                     <th rowspan="3" class="text-center">Status</th>
-                    <th rowspan="3" colspan="2" class="text-center">Action</th>
+                    <th rowspan="3" class="text-center">Action</th>
                 </tr>
                 <tr>
                     <th rowspan="2" class="text-center">Nama Pasien</th>
@@ -83,6 +83,7 @@
                 <!-- DataTables will populate this -->
             </tbody>
         </table>
+        </div>
     </div>
 @endsection
 
@@ -122,10 +123,12 @@
             white-space: nowrap;
         }
 
-        #jadwalTable tbody td {
+        #jadwalTable th,
+        #jadwalTable td {
             font-size: 0.875rem;
             padding: 0.5rem;
             vertical-align: middle;
+            white-space: nowrap;
         }
 
         #jadwalTable tbody tr:hover {
@@ -137,6 +140,7 @@
             font-size: 0.85rem;
             padding: 0.35rem 0.7rem;
         }
+
     </style>
 
     <script>
@@ -144,7 +148,6 @@
             var table = $('#jadwalTable').DataTable({
                 processing: true,
                 serverSide: true,
-                scrollX: true,
                 ajax: {
                     url: '{{ route('schedule.index') }}',
                     data: function(d) {
@@ -323,7 +326,6 @@
                 lengthMenu: [10, 25, 50, 100],
                 ordering: false,
                 searching: true,
-                info: true,
                 autoWidth: false,
                 language: {
                     lengthMenu: "Tampilkan _MENU_ data per halaman",
