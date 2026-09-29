@@ -1,0 +1,25 @@
+
+services:
+  app_ok:
+    container_name: app_ok
+    image: laravel_app_ok
+    restart: unless-stopped
+    build:
+      context: .
+      # dockerfile: worker.dockerfile
+    ports:
+      - "8003:8003"
+    # volumes:
+    #   - .:/app
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - APP_URL=${APP_URL}
+    networks:
+      - docker_appnet
+
+networks:
+  docker_appnet:
+    external: true  # ← karena jaringan sudah dibuat di luar compose

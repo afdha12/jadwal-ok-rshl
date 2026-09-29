@@ -26,11 +26,9 @@
 
 <body>
     <div class="m-2">
+        <h3 class="text-center py-3">JADWAL OPERASI RS HERMINA LAMPUNG</h3>
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped align-middle" style="width:100%" id="myTable">
-                <tr>
-                    <h3 class="text-center py-3">JADWAL OPERASI RS HERMINA LAMPUNG</h3>
-                </tr>
                 <thead class="table-secondary align-middle">
                     <tr>
                         <td colspan="10" class="pe-1">Dokter Anestesi hari ini : @foreach ($dokters as $anesthesiologist)
@@ -57,7 +55,7 @@
                         <tr data-id="{{ $item->id }}">
                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td class="text-center">{{ $item->jam_operasi }}</td>
-                            <td class="text-center">{{ $item->prefix .' '. $item->nama_pasien }}</td>
+                            <td class="text-center text-capitalize">{{ $item->prefix . ' ' . $item->nama_pasien }}</td>
                             <td class="text-center">{{ $item->usia . ' ' . $item->s_usia }}</td>
                             <td class="text-center">{{ $item->no_cm }}</td>
                             <td>{{ $item->diagnosa }}</td>
