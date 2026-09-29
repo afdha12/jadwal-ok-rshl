@@ -2,6 +2,11 @@
 
 @section('title', 'Data Dokter')
 
+@push('modals')
+    @include('modal.tambah-dokter')
+    @include('modal.edit-dokter')
+@endpush
+
 @section('content')
     <div class="m-3">
         <div class="pt-2 mx-5">
@@ -43,7 +48,4 @@
             </div>
         </div>
     </div>
-
-    @include('modal.tambah-dokter')
-    @include('modal.edit-dokter')
 @endsection

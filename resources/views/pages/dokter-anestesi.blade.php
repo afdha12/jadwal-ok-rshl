@@ -2,6 +2,11 @@
 
 @section('title', 'Jadwal Dokter Anestesi')
 
+@push('modals')
+    @include('modal.tambah-dokter-anestesi')
+    @include('modal.edit-dokter-anestesi')
+@endpush
+
 @section('content')
     <div class="m-3">
         <div class="pt-2 mx-5">
@@ -43,7 +48,4 @@
             </div>
         </div>
     </div>
-
-    @include('modal.tambah-dokter-anestesi')
-    @include('modal.edit-dokter-anestesi')
 @endsection

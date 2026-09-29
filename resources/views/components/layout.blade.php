@@ -75,6 +75,8 @@
         </div>
     </div>
 
+    @stack('modals')
+
     @include('sweetalert::alert')
 
 
