@@ -13,6 +13,18 @@ services:
     #   - .:/app
     env_file:
       - .env
+    # Security: Cegah root privileges escalation
+    security_opt:
+      - no-new-privileges:true
+    # Read-only filesystem + tmpfs untuk hardening tambahan
+    read_only: true
+    tmpfs:
+      - /tmp
+    # Limit penggunaan RAM
+    deploy:
+      resources:
+        limits:
+          memory: 1G
     environment:
       - APP_ENV=${APP_ENV}
       - APP_DEBUG=${APP_DEBUG}

@@ -1,7 +1,7 @@
 # ==========================================
 # 🎨 Stage 1: Build Frontend (Vite) Assets
 # ==========================================
-FROM node:20-alpine AS frontend
+FROM node:22.23.4-alpine AS frontend
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN npm run build
 # ==========================================
 # 🚀 Stage 2: PHP Application (Octane + FrankenPHP)
 # ==========================================
-FROM php:8.3-cli
+FROM php:8.3.36-cli
 
 WORKDIR /app
 
