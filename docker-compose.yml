@@ -16,13 +16,14 @@ services:
     # Read-only filesystem untuk hardening (CVE-2026-109618/109619)
     read_only: true
     # tmpfs untuk direktori yang butuh write access saat runtime
+    # mode=1777 agar www-data (uid=33) bisa menulis
     tmpfs:
-      - /tmp
-      - /app/storage/logs
-      - /app/storage/framework/cache
-      - /app/storage/framework/views
-      - /app/storage/framework/sessions
-      - /app/bootstrap/cache
+      - /tmp:mode=1777
+      - /app/storage/logs:mode=1777
+      - /app/storage/framework/cache:mode=1777
+      - /app/storage/framework/views:mode=1777
+      - /app/storage/framework/sessions:mode=1777
+      - /app/bootstrap/cache:mode=1777
     # Limit penggunaan RAM
     deploy:
       resources:
@@ -37,4 +38,4 @@ services:
 
 networks:
   docker_appnet:
-    external: true  # ← karena jaringan sudah dibuat di luar compose
+    external: true
