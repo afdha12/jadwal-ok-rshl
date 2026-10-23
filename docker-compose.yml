@@ -1,0 +1,41 @@
+
+services:
+  app_ok:
+    container_name: app_ok
+    image: laravel_app_ok
+    restart: unless-stopped
+    build:
+      context: .
+    ports:
+      - "8003:8003"
+    env_file:
+      - .env
+    # Security: Cegah root privileges escalation
+    security_opt:
+      - no-new-privileges:true
+    # Read-only filesystem untuk hardening (CVE-2026-109618/109619)
+    read_only: true
+    # tmpfs untuk direktori yang butuh write access saat runtime
+    # mode=1777 agar www-data (uid=33) bisa menulis
+    tmpfs:
+      - /tmp:mode=1777
+      - /app/storage/logs:mode=1777
+      - /app/storage/framework/cache:mode=1777
+      - /app/storage/framework/views:mode=1777
+      - /app/storage/framework/sessions:mode=1777
+      - /app/bootstrap/cache:mode=1777
+    # Limit penggunaan RAM
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    environment:
+      - APP_ENV=${APP_ENV}
+      - APP_DEBUG=${APP_DEBUG}
+      - APP_URL=${APP_URL}
+    networks:
+      - docker_appnet
+
+networks:
+  docker_appnet:
+    external: true

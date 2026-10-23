@@ -201,7 +201,7 @@
                                     name="asisten" value="{{ $data->asisten }}">
                             </div>
                         </div>
-                        <div class="row d-flex justify-content-start align-items-center">
+                        {{-- <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
                                 <label for="colFormLabel" class="col-form-label">Instrumentator</label>
                             </div>
@@ -218,7 +218,7 @@
                                 <input type="text" class="form-control form-control-sm text-uppercase" id="sirkulasi"
                                     name="sirkulasi" value="{{ $data->sirkulasi }}">
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col ms-auto">
                         <div class="row d-flex justify-content-start align-items-center">
@@ -238,7 +238,7 @@
                                     name="anestesi" value="{{ $data->anestesi }}"> --}}
                             </div>
                         </div>
-                        <div class="row d-flex justify-content-start align-items-center">
+                        {{-- <div class="row d-flex justify-content-start align-items-center">
                             <div class="col-sm-4">
                                 <label for="colFormLabel" class="col-form-label">Penata Anestesi</label>
                             </div>
@@ -255,12 +255,12 @@
                                 <input type="text" class="form-control form-control-sm text-uppercase" id="anak"
                                     name="anak" value="{{ $data->anak }}">
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card my-2">
+        {{-- <div class="card my-2">
             <div class="card-body m-3">
                 <div class="row">
                     <div class="col">
@@ -287,9 +287,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="card my-2">
+        {{-- <div class="card my-2">
             <div class="card-body m-3">
                 <div class="row">
                     <div class="col">
@@ -306,8 +306,6 @@
                                             {{ $doc }}</option>
                                     @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="lab"
-                                    name="lab" value="{{ $data->lab }}"> --}}
                             </div>
                         </div>
                         <div class="row d-flex justify-content-start align-items-center">
@@ -323,8 +321,6 @@
                                             {{ $doc }}</option>
                                     @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="ro"
-                                    name="ro"> --}}
                             </div>
                         </div>
                     </div>
@@ -342,14 +338,12 @@
                                             {{ $doc }}</option>
                                     @endforeach
                                 </select>
-                                {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="ct_scan"
-                                    name="ct_scan" value="{{ $data->ct_scan }}"> --}}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="card my-2">
             <div class="card-body m-3">
@@ -444,7 +438,7 @@
         <div class="card my-2">
             <div class="card-body m-3">
                 <div class="row">
-                    <div class="row d-flex justify-content-start align-items-center">
+                    {{-- <div class="row d-flex justify-content-start align-items-center">
                         <div class="col-sm-4">
                             <label for="colFormLabel" class="col-form-label">Pembahasan Kesiapan Kelengkapan
                                 Tindakan</label>
@@ -453,7 +447,7 @@
                             <input type="text" class="form-control form-control-sm text-uppercase" id="pkkt"
                                 name="pkkt" value="{{ $data->pkkt }}">
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row d-flex justify-content-start align-items-center">
                         <div class="col-sm-4">
                             <label for="colFormLabel" class="col-form-label">Verifikasi Persiapan Operasi</label>
@@ -467,7 +461,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row d-flex justify-content-start align-items-center">
+                    {{-- <div class="row d-flex justify-content-start align-items-center">
                         <div class="col-sm-4">
                             <label for="colFormLabel" class="col-form-label">Mengingatkan Tim H-1</label>
                         </div>
@@ -476,10 +470,8 @@
                                 <option value="sudah" {{ $data->pengingat == 'sudah' ? 'selected' : '' }}>Sudah</option>
                                 <option value="belum" {{ $data->pengingat == 'belum' ? 'selected' : '' }}>Belum</option>
                             </select>
-                            {{-- <input type="text" class="form-control form-control-sm text-uppercase" id="pengingat"
-                                name="pengingat" value="{{ $data->pengingat }}"> --}}
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row d-flex justify-content-start align-items-center">
                         <div class="col-sm-4">
                             <label for="colFormLabel" class="col-form-label">Keterangan</label>
@@ -548,7 +540,7 @@
                 let url = `/get-available-times?tgl_operasi=${date}&ruang_operasi=${room}`;
                 if (editId) {
                     url +=
-                    `&edit_id=${editId}`; // Jika di halaman edit, tambahkan ID untuk pengecekan yang lebih spesifik
+                        `&edit_id=${editId}`; // Jika di halaman edit, tambahkan ID untuk pengecekan yang lebih spesifik
                 }
 
                 fetch(url)
@@ -584,7 +576,8 @@
                 }
 
                 fetch(
-                        `/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}&edit_id=${editId}`)
+                        `/get-available-doctors?tgl_operasi=${date}&ruang_operasi=${room}&jam_operasi=${time}&edit_id=${editId}`
+                    )
                     .then(response => response.json())
                     .then(data => {
                         doctorSelect.innerHTML = '<option value="">Pilih Dokter</option>';
