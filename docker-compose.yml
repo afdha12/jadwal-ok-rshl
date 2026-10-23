@@ -6,20 +6,23 @@ services:
     restart: unless-stopped
     build:
       context: .
-      # dockerfile: worker.dockerfile
     ports:
       - "8003:8003"
-    # volumes:
-    #   - .:/app
     env_file:
       - .env
     # Security: Cegah root privileges escalation
     security_opt:
       - no-new-privileges:true
-    # Read-only filesystem + tmpfs untuk hardening tambahan
+    # Read-only filesystem untuk hardening (CVE-2026-109618/109619)
     read_only: true
+    # tmpfs untuk direktori yang butuh write access saat runtime
     tmpfs:
       - /tmp
+      - /app/storage/logs
+      - /app/storage/framework/cache
+      - /app/storage/framework/views
+      - /app/storage/framework/sessions
+      - /app/bootstrap/cache
     # Limit penggunaan RAM
     deploy:
       resources:

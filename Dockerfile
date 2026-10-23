@@ -78,6 +78,13 @@ RUN php artisan octane:install --server=frankenphp --no-interaction
 # Run artisan storage link
 RUN php artisan storage:link || true
 
+# Pastikan semua direktori writable ada (untuk tmpfs mount di docker-compose)
+RUN mkdir -p storage/logs \
+    storage/framework/cache \
+    storage/framework/views \
+    storage/framework/sessions \
+    bootstrap/cache
+
 # Set file permissions
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
